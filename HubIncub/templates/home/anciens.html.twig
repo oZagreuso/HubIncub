@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Retrouver les anciens - HubIncub{% endblock %}
+
+{% block body %}
+<header class="site-header" data-header>
+    <a class="brand" href="{{ path('app_home') }}" aria-label="Accueil HubIncub">
+        <img src="/images/logo-hubincub.png" alt="HubIncub">
+        <span>HubIncub</span>
+    </a>
+
+    <nav class="main-nav" aria-label="Navigation principale">
+        <a href="{{ path('app_home') }}#reseau">Reseau</a>
+        <a href="{{ path('app_home') }}#projets">Projets</a>
+        <a href="{{ path('app_home') }}#evenements">Evenements</a>
+        <a class="nav-action" href="{{ path('app_home') }}#rejoindre">Rejoindre</a>
+    </nav>
+</header>
+
+<main>
+    <section class="directory-hero">
+        <p class="eyebrow">Portfolios alumni</p>
+        <h1>Retrouver les anciens etudiants.</h1>
+        <p class="hero-text">
+            Cette page rassemble les liens vers les portfolios des anciens etudiants
+            de l'incubateur Metz Numeric School.
+        </p>
+    </section>
+
+    <section class="section">
+        <div class="portfolio-grid" aria-label="Portfolios des anciens etudiants">
+            {% for portfolio in portfolios %}
+                <article class="portfolio-card">
+                    <span>{{ loop.index < 10 ? '0' ~ loop.index : loop.index }}</span>
+                    <h2>{{ portfolio.name }}</h2>
+                    <p>{{ portfolio.role }}</p>
+                    <a class="button secondary" href="{{ portfolio.url }}">Voir le portfolio</a>
+                </article>
+            {% endfor %}
+        </div>
+    </section>
+</main>
+{% endblock %}

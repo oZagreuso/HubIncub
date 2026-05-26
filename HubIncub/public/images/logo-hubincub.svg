@@ -1,0 +1,16 @@
+<svg width="240" height="240" viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+    <title id="title">HubIncub</title>
+    <desc id="desc">Logo temporaire orange HubIncub</desc>
+    <rect width="240" height="240" rx="48" fill="url(#paint0_linear)"/>
+    <path d="M70 72H96V109H144V72H170V168H144V131H96V168H70V72Z" fill="white"/>
+    <path d="M120 38L139 57H101L120 38Z" fill="white" fill-opacity="0.86"/>
+    <path d="M120 202L101 183H139L120 202Z" fill="white" fill-opacity="0.86"/>
+    <circle cx="120" cy="120" r="78" stroke="white" stroke-opacity="0.34" stroke-width="10"/>
+    <defs>
+        <linearGradient id="paint0_linear" x1="28" y1="20" x2="212" y2="220" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#FF9B21"/>
+            <stop offset="0.55" stop-color="#FF7900"/>
+            <stop offset="1" stop-color="#DC5E00"/>
+        </linearGradient>
+    </defs>
+</svg>
