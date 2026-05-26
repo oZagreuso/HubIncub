@@ -4,10 +4,12 @@ RUN apt-get update && apt-get install -y \
     git \
     unzip \
     libicu-dev \
+    libsqlite3-dev \
     libzip-dev \
     && docker-php-ext-install \
     intl \
     opcache \
+    pdo_sqlite \
     zip \
     && rm -rf /var/lib/apt/lists/*
 

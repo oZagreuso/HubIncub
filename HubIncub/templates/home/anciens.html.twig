@@ -10,9 +10,9 @@
     </a>
 
     <nav class="main-nav" aria-label="Navigation principale">
-        <a href="{{ path('app_home') }}#reseau">Reseau</a>
+        <a href="{{ path('app_home') }}#reseau">Réseau</a>
         <a href="{{ path('app_home') }}#projets">Projets</a>
-        <a href="{{ path('app_home') }}#evenements">Evenements</a>
+        <a href="{{ path('app_home') }}#evenements">Événements</a>
         <a class="nav-action" href="{{ path('app_home') }}#rejoindre">Rejoindre</a>
     </nav>
 </header>
@@ -20,19 +20,19 @@
 <main>
     <section class="directory-hero">
         <p class="eyebrow">Portfolios alumni</p>
-        <h1>Retrouver les anciens etudiants.</h1>
+        <h1>Retrouver les anciens étudiants.</h1>
         <p class="hero-text">
-            Cette page rassemble les liens vers les portfolios des anciens etudiants
+            Cette page rassemble les liens vers les portfolios des anciens étudiants
             de l'incubateur Metz Numeric School.
         </p>
     </section>
 
     <section class="section">
-        <div class="portfolio-grid" aria-label="Portfolios des anciens etudiants">
+        <div class="portfolio-grid" aria-label="Portfolios des anciens étudiants">
             {% for portfolio in portfolios %}
                 <article class="portfolio-card">
                     <span>{{ loop.index < 10 ? '0' ~ loop.index : loop.index }}</span>
-                    <h2>{{ portfolio.name }}</h2>
+                    <h2>{{ portfolio.firstName }} {{ portfolio.lastName }}</h2>
                     <p>{{ portfolio.role }}</p>
                     <a class="button secondary" href="{{ portfolio.url }}">Voir le portfolio</a>
                 </article>

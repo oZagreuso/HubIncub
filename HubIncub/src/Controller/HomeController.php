@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\PortfolioRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -15,28 +16,10 @@ final class HomeController extends AbstractController
     }
 
     #[Route('/anciens', name: 'app_anciens')]
-    public function anciens(): Response
+    public function anciens(PortfolioRepository $portfolioRepository): Response
     {
-        $portfolios = [
-            [
-                'name' => 'Dal Ferro',
-                'role' => 'Ancien etudiant',
-                'url' => 'https://dal-ferro.com',
-            ],
-            [
-                'name' => 'Portfolio ancien etudiant',
-                'role' => 'Promotion a renseigner',
-                'url' => '#',
-            ],
-            [
-                'name' => 'Portfolio ancien etudiant',
-                'role' => 'Promotion a renseigner',
-                'url' => '#',
-            ],
-        ];
-
         return $this->render('home/anciens.html.twig', [
-            'portfolios' => $portfolios,
+            'portfolios' => $portfolioRepository->findBy([], ['lastName' => 'ASC', 'firstName' => 'ASC']),
         ]);
     }
 }

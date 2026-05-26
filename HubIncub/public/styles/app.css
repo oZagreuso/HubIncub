@@ -16,15 +16,22 @@
 
 html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
 }
 
 body {
+    width: 100%;
     min-height: 100vh;
     margin: 0;
+    overflow-x: hidden;
     color: var(--ink);
     font-family: Arial, Helvetica, sans-serif;
     background:
         linear-gradient(135deg, rgba(255, 121, 0, 0.22), rgba(255, 255, 255, 0.95) 52%, rgba(234, 240, 248, 0.72) 100%);
+}
+
+img {
+    max-width: 100%;
 }
 
 body.is-scrolled .site-header {
@@ -50,6 +57,7 @@ a {
 }
 
 .brand {
+    min-width: 0;
     display: inline-flex;
     align-items: center;
     gap: 12px;
@@ -66,6 +74,7 @@ a {
 }
 
 .main-nav {
+    min-width: 0;
     display: flex;
     align-items: center;
     gap: 24px;
@@ -100,6 +109,7 @@ a {
 }
 
 .hero-content {
+    min-width: 0;
     max-width: 900px;
 }
 
@@ -167,6 +177,7 @@ h1 {
 }
 
 .hero-panel {
+    min-width: 0;
     padding: 22px;
     display: grid;
     gap: 14px;
@@ -181,6 +192,14 @@ h1 {
     border-radius: 8px;
     background: linear-gradient(135deg, #ffffff, var(--navy-soft));
     border: 1px solid var(--line);
+}
+
+.school-logo {
+    display: block;
+    width: min(120px, 42%);
+    height: auto;
+    margin: 0 auto 4px;
+    mix-blend-mode: multiply;
 }
 
 .metric {
@@ -214,6 +233,7 @@ h2 {
     font-size: clamp(30px, 4vw, 48px);
     line-height: 1.1;
     letter-spacing: 0;
+    overflow-wrap: anywhere;
 }
 
 .features {
@@ -340,6 +360,7 @@ h2 {
 }
 
 .join-section > div {
+    min-width: 0;
     max-width: 680px;
 }
 
@@ -363,6 +384,10 @@ h2 {
         flex-wrap: wrap;
     }
 
+    .main-nav a {
+        overflow-wrap: anywhere;
+    }
+
     .hero {
         min-height: auto;
         padding: 42px 22px 64px;
@@ -372,6 +397,7 @@ h2 {
 
     h1 {
         font-size: 42px;
+        overflow-wrap: anywhere;
     }
 
     .section,

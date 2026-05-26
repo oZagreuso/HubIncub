@@ -9,6 +9,8 @@ services:
             - vendor:/var/www/html/vendor
         environment:
             APP_ENV: dev
+            DATABASE_URL: "sqlite:////var/www/html/var/data/app.db"
+        command: sh -c "composer install --no-interaction --prefer-dist && mkdir -p var/data && php bin/console doctrine:migrations:migrate --no-interaction && php-fpm"
         networks:
             - hubincub
 
