@@ -1,0 +1,15 @@
+/* Design tokens shared by all CSS modules. */
+:root {
+    /* Brand palette. */
+    --orange: #ff7900;
+    --orange-dark: #dc5e00;
+    --orange-soft: #fff1e3;
+
+    /* Structural and text colors. */
+    --navy: #14213d;
+    --navy-soft: #eaf0f8;
+    --ink: #1d2430;
+    --muted: #667085;
+    --line: #dbe3ef;
+    --white: #ffffff;
+}

@@ -1,0 +1,207 @@
+/* Shared primary call-to-action treatment. */
+.nav-action,
+.button.primary {
+    color: var(--white);
+    background: linear-gradient(135deg, var(--orange), var(--orange-dark));
+    box-shadow: 0 14px 30px rgba(255, 121, 0, 0.24);
+}
+
+/* Header-specific call-to-action sizing. */
+.nav-action {
+    padding: 11px 17px;
+    border-radius: 8px;
+}
+
+/* Base button component. */
+.button {
+    min-height: 48px;
+    padding: 0 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+/* Secondary button variant used for navigation and portfolio links. */
+.button.secondary {
+    color: var(--navy);
+    background: var(--white);
+    border: 1px solid rgba(20, 33, 61, 0.16);
+}
+
+.button.danger {
+    min-height: 40px;
+    color: #8a1f11;
+    background: #fff0ec;
+    border: 1px solid #ffd1c6;
+}
+
+/* Small uppercase label used above major headings. */
+.eyebrow {
+    margin: 0 0 14px;
+    color: var(--orange-dark);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0;
+    text-transform: uppercase;
+}
+
+/* Main hero logo sizing. */
+.hero-logo {
+    width: min(440px, 100%);
+    height: auto;
+    margin-bottom: 10px;
+    mix-blend-mode: multiply;
+}
+
+/* Standard lead paragraph style. */
+.hero-text {
+    max-width: 660px;
+    margin-bottom: 0;
+    color: var(--muted);
+    font-size: 20px;
+    line-height: 1.6;
+}
+
+/* Button row in the hero area. */
+.hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 34px;
+}
+
+/* Glass-like summary panel in the hero. */
+.hero-panel {
+    position: relative;
+    min-width: 0;
+    padding: 22px;
+    display: grid;
+    gap: 14px;
+    border: 1px solid rgba(20, 33, 61, 0.12);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.82);
+    box-shadow: 0 30px 70px rgba(20, 33, 61, 0.14);
+    backdrop-filter: blur(10px);
+}
+
+.hero-panel div {
+    padding: 20px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #ffffff, var(--navy-soft));
+    border: 1px solid var(--line);
+}
+
+/* Partner/school logo inside the hero panel. */
+.school-logo {
+    display: block;
+    width: min(120px, 42%);
+    height: auto;
+    margin: 0 auto 4px;
+    mix-blend-mode: multiply;
+}
+
+/* Small orange label inside metric cards. */
+.metric {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--orange-dark);
+    font-weight: 800;
+}
+
+/* Reusable grid containers. */
+.features,
+.event-list,
+.portfolio-grid {
+    display: grid;
+    gap: 18px;
+}
+
+.features {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.event-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.portfolio-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+/* Card surfaces shared across public lists. */
+.features article,
+.event-list article,
+.portfolio-card {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.86);
+    box-shadow: 0 18px 42px rgba(20, 33, 61, 0.06);
+}
+
+/* Feature and event cards can contain stretched links. */
+.features article,
+.event-list article {
+    position: relative;
+    padding: 24px;
+}
+
+.portfolio-card {
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+/* Interactive card affordance for the portfolio directory entry point. */
+.feature-link-card {
+    transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.feature-link-card:hover {
+    border-color: rgba(255, 121, 0, 0.42);
+    box-shadow: 0 18px 36px rgba(20, 33, 61, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Full-card link target. */
+.card-link {
+    position: absolute;
+    inset: 0;
+    border-radius: 8px;
+}
+
+/* Number labels on feature and portfolio cards. */
+.features span,
+.portfolio-card span {
+    color: var(--orange-dark);
+    font-weight: 800;
+}
+
+.features h3 {
+    margin: 14px 0 10px;
+    font-size: 21px;
+}
+
+.portfolio-card h2 {
+    margin: 14px 0 10px;
+    font-size: 24px;
+}
+
+.event-list time {
+    display: block;
+    margin-bottom: 12px;
+    color: var(--orange-dark);
+    font-size: 20px;
+    font-weight: 800;
+}
+
+/* Visible and clickable email in the portfolio cards. */
+.portfolio-email {
+    margin-bottom: 18px;
+    display: inline-flex;
+    color: var(--navy);
+    font-weight: 800;
+    text-decoration-color: rgba(255, 121, 0, 0.55);
+    overflow-wrap: anywhere;
+}

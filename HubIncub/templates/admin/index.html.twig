@@ -1,0 +1,238 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administration - HubIncub{% endblock %}
+
+{% block body %}
+{# Protected administration header. Symfony Security restricts this route to ROLE_ADMIN. #}
+<header class="site-header" data-header>
+    <a class="brand" href="{{ path('app_home') }}" aria-label="Accueil HubIncub">
+        <img src="/images/logo-hubincub.png" alt="HubIncub" width="1448" height="1086" decoding="async">
+        <span>HubIncub</span>
+    </a>
+
+    <nav class="main-nav" aria-label="Navigation principale">
+        <a href="{{ path('app_home') }}#reseau">Réseau</a>
+        <a href="{{ path('app_home') }}#projets">Projets</a>
+        <a href="{{ path('app_anciens') }}">Portfolios</a>
+        <a class="nav-action" href="{{ path('app_logout') }}">Déconnexion</a>
+    </nav>
+</header>
+
+<main>
+    <section class="admin-shell">
+        {# Administration introduction. #}
+        <div class="admin-heading">
+            <p class="eyebrow">Administration</p>
+            <h1>Gérer le réseau HubIncub</h1>
+            <p class="hero-text">Ajoutez les membres de l'annuaire, les projets, les événements et les actualités du réseau.</p>
+        </div>
+
+        {% for message in app.flashes('success') %}
+            <p class="form-success">{{ message }}</p>
+        {% endfor %}
+        {% for message in app.flashes('error') %}
+            <p class="form-alert">{{ message }}</p>
+        {% endfor %}
+
+        {% if is_granted('ROLE_ADMIN') %}
+            <article class="admin-card delegate-card">
+                <h2>Délégué des Incubateurs</h2>
+                <form class="admin-form" method="post">
+                    <input type="hidden" name="type" value="set_delegate">
+                    <input type="hidden" name="_token" value="{{ csrf_token('admin_set_delegate') }}">
+
+                    <label>
+                        Membre délégué unique
+                        <select name="portfolioId" required>
+                            {% for portfolio in portfolios %}
+                                <option value="{{ portfolio.id }}" {{ delegatePortfolioId == portfolio.id ? 'selected' : '' }}>
+                                    {{ portfolio.firstName }} {{ portfolio.lastName }} - {{ portfolio.role }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </label>
+
+                    <button class="button primary" type="submit">Définir le délégué</button>
+                </form>
+            </article>
+        {% endif %}
+
+        {# Creation forms for the three content types managed by the admin. #}
+        <div class="admin-grid">
+            <article class="admin-card">
+                <h2>Ajouter un membre</h2>
+                <form class="admin-form" method="post">
+                    <input type="hidden" name="type" value="portfolio">
+                    <input type="hidden" name="_token" value="{{ csrf_token('admin_portfolio') }}">
+
+                    <label>Prénom obligatoire <input name="firstName" required></label>
+                    <label>Nom obligatoire <input name="lastName" required></label>
+                    <label>
+                        Statut obligatoire
+                        <select name="role" required>
+                            <option value="Incubateur">Incubateur</option>
+                            <option value="Ancien étudiant">Ancien étudiant</option>
+                        </select>
+                    </label>
+                    <label>Email obligatoire <input type="email" name="email" required></label>
+                    <label>Portfolio obligatoire <input type="url" name="url" required></label>
+                    <div class="password-field" data-password-tools>
+                        <label>
+                            Mot de passe obligatoire
+                            <input type="password" name="password" data-password-input required minlength="12" autocomplete="new-password">
+                        </label>
+                        <p class="field-help">Règle CNIL : 12 caractères minimum avec majuscule, minuscule, chiffre et caractère spécial.</p>
+                        <div class="password-actions">
+                            <button class="button secondary" type="button" data-password-generate>Générer</button>
+                            <button class="button secondary" type="button" data-password-toggle>Voir</button>
+                        </div>
+                    </div>
+                    <label>Confirmer le mot de passe obligatoire <input type="password" name="passwordConfirmation" data-password-confirm required minlength="12" autocomplete="new-password"></label>
+
+                    <button class="button primary" type="submit">Ajouter</button>
+                </form>
+            </article>
+
+            <article class="admin-card">
+                <h2>Ajouter un projet</h2>
+                <form class="admin-form" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="type" value="project">
+                    <input type="hidden" name="_token" value="{{ csrf_token('admin_project') }}">
+
+                    <label>Nom du projet <input name="name" required></label>
+                    <label>Lien <input type="url" name="url"></label>
+                    <label>Image <input type="file" name="image" accept="image/*"></label>
+                    <label>Texte alternatif SEO <input name="imageAlt" maxlength="180" placeholder="Ex. Capture du projet HubIncub CRM"></label>
+                    <label>Description <textarea name="description" rows="5" required></textarea></label>
+
+                    <button class="button primary" type="submit">Ajouter</button>
+                </form>
+            </article>
+
+            <article class="admin-card">
+                <h2>Ajouter un événement</h2>
+                <form class="admin-form" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="type" value="event">
+                    <input type="hidden" name="_token" value="{{ csrf_token('admin_event') }}">
+
+                    <label>Titre <input name="title" required></label>
+                    <label>Date <input type="datetime-local" name="startsAt"></label>
+                    <label>Image <input type="file" name="image" accept="image/*"></label>
+                    <label>Texte alternatif SEO <input name="imageAlt" maxlength="180" placeholder="Ex. Photo de l'événement alumni MNS"></label>
+                    <label>Description <textarea name="description" rows="5" required></textarea></label>
+
+                    <button class="button primary" type="submit">Ajouter</button>
+                </form>
+            </article>
+
+            <article class="admin-card">
+                <h2>Ajouter une actualité</h2>
+                <form class="admin-form" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="type" value="news">
+                    <input type="hidden" name="_token" value="{{ csrf_token('admin_news') }}">
+
+                    <label>Titre <input name="title" required></label>
+                    <label>Date de publication <input type="datetime-local" name="publishedAt"></label>
+                    <label>Image <input type="file" name="image" accept="image/*"></label>
+                    <label>Texte alternatif SEO <input name="imageAlt" maxlength="180" placeholder="Ex. Photo de l'actualité HubIncub"></label>
+                    <label>Contenu <textarea name="content" rows="5" required></textarea></label>
+
+                    <button class="button primary" type="submit">Ajouter</button>
+                </form>
+            </article>
+        </div>
+
+        {# Read-only summaries of existing admin-managed content. #}
+        <div class="admin-lists">
+            <article class="admin-card">
+                <h2>Membres</h2>
+                <ul class="admin-list">
+                    {% for portfolio in portfolios %}
+                        <li>
+                            <div class="admin-list-row">
+                                <div>
+                                    {{ portfolio.firstName }} {{ portfolio.lastName }}
+                                    <span>{{ portfolio.role }}</span>
+                                    <span>{{ portfolio.email }}</span>
+                                </div>
+                                <div class="admin-row-actions">
+                                    {% if is_granted('ROLE_ADMIN') and portfolio.role == 'Incubateur' %}
+                                        <form method="post">
+                                            <input type="hidden" name="type" value="graduate_portfolio">
+                                            <input type="hidden" name="portfolioId" value="{{ portfolio.id }}">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('admin_graduate_portfolio') }}">
+                                            <button class="button secondary" type="submit">Passer ancien</button>
+                                        </form>
+                                    {% endif %}
+
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <form method="post" onsubmit="return confirm('Supprimer ce membre ?');">
+                                            <input type="hidden" name="type" value="delete_portfolio">
+                                            <input type="hidden" name="portfolioId" value="{{ portfolio.id }}">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('admin_delete_portfolio') }}">
+                                            <button class="button danger" type="submit">Supprimer</button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </li>
+                    {% else %}
+                        <li>Aucun membre pour le moment.</li>
+                    {% endfor %}
+                </ul>
+            </article>
+
+            <article class="admin-card">
+                <h2>Projets</h2>
+                <ul class="admin-list">
+                    {% for project in projects %}
+                        <li>
+                            {% if project.imageFilename %}
+                                <img class="admin-list-image" src="/uploads/admin/{{ project.imageFilename }}" alt="{{ project.imageAlt ?: 'Illustration du projet ' ~ project.name }}" width="640" height="360" loading="lazy" decoding="async">
+                            {% endif %}
+                            {{ project.name }}
+                            <span>{{ project.description }}</span>
+                        </li>
+                    {% else %}
+                        <li>Aucun projet pour le moment.</li>
+                    {% endfor %}
+                </ul>
+            </article>
+
+            <article class="admin-card">
+                <h2>Événements</h2>
+                <ul class="admin-list">
+                    {% for event in events %}
+                        <li>
+                            {% if event.imageFilename %}
+                                <img class="admin-list-image" src="/uploads/admin/{{ event.imageFilename }}" alt="{{ event.imageAlt ?: 'Illustration de l’événement ' ~ event.title }}" width="640" height="360" loading="lazy" decoding="async">
+                            {% endif %}
+                            {{ event.title }}
+                            <span>{{ event.startsAt ? event.startsAt|date('d/m/Y H:i') : 'Date à préciser' }}</span>
+                        </li>
+                    {% else %}
+                        <li>Aucun événement pour le moment.</li>
+                    {% endfor %}
+                </ul>
+            </article>
+
+            <article class="admin-card">
+                <h2>Actualités</h2>
+                <ul class="admin-list">
+                    {% for news in newsItems %}
+                        <li>
+                            {% if news.imageFilename %}
+                                <img class="admin-list-image" src="/uploads/admin/{{ news.imageFilename }}" alt="{{ news.imageAlt ?: 'Illustration de l’actualité ' ~ news.title }}" width="640" height="360" loading="lazy" decoding="async">
+                            {% endif %}
+                            {{ news.title }}
+                            <span>{{ news.publishedAt|date('d/m/Y H:i') }}</span>
+                        </li>
+                    {% else %}
+                        <li>Aucune actualité pour le moment.</li>
+                    {% endfor %}
+                </ul>
+            </article>
+        </div>
+    </section>
+</main>
+{% endblock %}

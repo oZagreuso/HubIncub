@@ -3,31 +3,33 @@
 {% block title %}HubIncub - Alumni de l'incubateur Metz Numeric School{% endblock %}
 
 {% block body %}
+{# Public header with navigation to the main site sections and the protected admin entry. #}
 <header class="site-header" data-header>
     <a class="brand" href="/" aria-label="Accueil HubIncub">
-        <img src="/images/logo-hubincub.png" alt="HubIncub">
+        <img src="/images/logo-hubincub.png" alt="HubIncub" width="1448" height="1086" decoding="async">
         <span>HubIncub</span>
     </a>
 
     <nav class="main-nav" aria-label="Navigation principale">
         <a href="#reseau">Réseau</a>
         <a href="#projets">Projets</a>
-        <a href="#evenements">Événements</a>
+        <a href="{{ path('app_admin') }}">Administration</a>
         <a class="nav-action" href="#rejoindre">Rejoindre</a>
     </nav>
 </header>
 
 <main>
+    {# Front-page hero introducing the HubIncub network. #}
     <section class="hero">
         <div class="hero-content">
-            <img class="hero-logo" src="/images/logo-hubincub.png" alt="HubIncub">
+            <img class="hero-logo" src="/images/logo-hubincub.png" alt="Logo HubIncub" width="1448" height="1086" fetchpriority="high" decoding="async">
             <p class="eyebrow">Incubateur Metz Numeric School</p>
 
-            <h1>Le hub des anciens élèves qui continuent à construire.</h1>
+            <h1>Le hub des anciens incubateurs de MNS</h1>
 
             <p class="hero-text">
                 Retrouvez les alumni, partagez vos projets, créez des opportunités
-                et gardez le lien avec l'écosystème entrepreneurial de Metz.
+                et conservez des liens.
             </p>
 
             <div class="hero-actions">
@@ -37,7 +39,7 @@
         </div>
 
         <aside class="hero-panel" aria-label="Aperçu du hub">
-            <img class="school-logo" src="/images/logo-mns.webp" alt="Metz Numeric School">
+            <img class="school-logo" src="/images/logo-mns.webp" alt="Logo Metz Numeric School" width="816" height="768" loading="lazy" decoding="async">
             <div>
                 <span class="metric">Alumni</span>
                 <strong>Un réseau vivant</strong>
@@ -53,6 +55,33 @@
         </aside>
     </section>
 
+    {% if latestNews %}
+        {# Latest news item managed from the administration interface. #}
+        <section class="latest-news-section">
+            <article class="latest-news-card">
+                <div class="latest-news-content">
+                    <p class="eyebrow">Actualité</p>
+                    <h2>{{ latestNews.title }}</h2>
+                    <p>{{ latestNews.content }}</p>
+                    <time datetime="{{ latestNews.publishedAt|date('c') }}">{{ latestNews.publishedAt|date('d/m/Y') }}</time>
+                </div>
+
+                {% if latestNews.imageFilename %}
+                    <img
+                        class="latest-news-image"
+                        src="/uploads/admin/{{ latestNews.imageFilename }}"
+                        alt="{{ latestNews.imageAlt ?: 'Illustration de l’actualité ' ~ latestNews.title }}"
+                        width="960"
+                        height="540"
+                        loading="lazy"
+                        decoding="async"
+                    >
+                {% endif %}
+            </article>
+        </section>
+    {% endif %}
+
+    {# Network section linking to the public portfolio directory. #}
     <section id="reseau" class="section">
         <div class="section-heading">
             <p class="eyebrow">Réseau alumni</p>
@@ -81,6 +110,7 @@
         </div>
     </section>
 
+    {# Project teaser section, styled with the light geometric background asset. #}
     <section id="projets" class="split-section">
         <div>
             <p class="eyebrow">Projets</p>
@@ -92,24 +122,7 @@
         </p>
     </section>
 
-    <section id="evenements" class="section section-soft">
-        <div class="section-heading">
-            <p class="eyebrow">Événements</p>
-            <h2>Des rencontres pour garder le lien.</h2>
-        </div>
-
-        <div class="event-list">
-            <article>
-                <time>Afterworks</time>
-                <p>Des rendez-vous simples pour échanger sur les projets, les besoins et les retours d'expérience.</p>
-            </article>
-            <article>
-                <time>Demo days</time>
-                <p>Des moments pour présenter une avancée, demander un avis ou trouver un futur partenaire.</p>
-            </article>
-        </div>
-    </section>
-
+    {# Contact call-to-action shown at the end of the front page. #}
     <section id="rejoindre" class="join-section">
         <div>
             <p class="eyebrow">Rejoindre</p>

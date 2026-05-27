@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion administration - HubIncub{% endblock %}
+
+{% block body %}
+{# Authentication page used by the custom Symfony login authenticator. #}
+<header class="site-header" data-header>
+    <a class="brand" href="{{ path('app_home') }}" aria-label="Accueil HubIncub">
+        <img src="/images/logo-hubincub.png" alt="HubIncub" width="1448" height="1086" decoding="async">
+        <span>HubIncub</span>
+    </a>
+
+    <nav class="main-nav" aria-label="Navigation principale">
+        <a href="{{ path('app_home') }}#reseau">Réseau</a>
+        <a href="{{ path('app_home') }}#projets">Projets</a>
+        <a href="{{ path('app_anciens') }}">Portfolios</a>
+    </nav>
+</header>
+
+<main>
+    <section class="admin-shell auth-shell">
+        <div class="admin-heading">
+            <p class="eyebrow">Administration</p>
+            <h1>Connexion</h1>
+            <p class="hero-text">Accès réservé aux membres disposant du rôle administrateur.</p>
+        </div>
+
+        {# Field names follow Symfony Security form_login defaults. #}
+        <form class="admin-card admin-form auth-form" method="post">
+            {% if error %}
+                <p class="form-alert">{{ error.messageKey|trans(error.messageData, 'security') }}</p>
+            {% endif %}
+
+            <label for="username">Email</label>
+            <input id="username" type="email" name="_username" value="{{ last_username }}" autocomplete="email" required autofocus>
+
+            <label for="password">Mot de passe</label>
+            <input id="password" type="password" name="_password" autocomplete="current-password" required>
+
+            <div class="captcha-field">
+                <label for="captcha">Captcha obligatoire</label>
+                <p class="field-help">Résoudre : <strong>{{ captcha_question }}</strong></p>
+                <input id="captcha" type="number" name="_captcha" inputmode="numeric" autocomplete="off" required>
+            </div>
+
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+            <button class="button primary" type="submit">Se connecter</button>
+        </form>
+    </section>
+</main>
+{% endblock %}

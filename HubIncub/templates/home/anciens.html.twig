@@ -3,21 +3,23 @@
 {% block title %}Retrouver les anciens - HubIncub{% endblock %}
 
 {% block body %}
+{# Public directory header. #}
 <header class="site-header" data-header>
     <a class="brand" href="{{ path('app_home') }}" aria-label="Accueil HubIncub">
-        <img src="/images/logo-hubincub.png" alt="HubIncub">
+        <img src="/images/logo-hubincub.png" alt="HubIncub" width="1448" height="1086" decoding="async">
         <span>HubIncub</span>
     </a>
 
     <nav class="main-nav" aria-label="Navigation principale">
         <a href="{{ path('app_home') }}#reseau">Réseau</a>
         <a href="{{ path('app_home') }}#projets">Projets</a>
-        <a href="{{ path('app_home') }}#evenements">Événements</a>
+        <a href="{{ path('app_admin') }}">Administration</a>
         <a class="nav-action" href="{{ path('app_home') }}#rejoindre">Rejoindre</a>
     </nav>
 </header>
 
 <main>
+    {# Directory introduction. #}
     <section class="directory-hero">
         <p class="eyebrow">Portfolios alumni</p>
         <h1>Retrouver les anciens étudiants.</h1>
@@ -27,6 +29,7 @@
         </p>
     </section>
 
+    {# Portfolio cards are loaded from the Portfolio entity. #}
     <section class="section">
         <div class="portfolio-grid" aria-label="Portfolios des anciens étudiants">
             {% for portfolio in portfolios %}
@@ -34,7 +37,12 @@
                     <span>{{ loop.index < 10 ? '0' ~ loop.index : loop.index }}</span>
                     <h2>{{ portfolio.firstName }} {{ portfolio.lastName }}</h2>
                     <p>{{ portfolio.role }}</p>
-                    <a class="button secondary" href="{{ portfolio.url }}">Voir le portfolio</a>
+                    {% if portfolio.email %}
+                        <a class="portfolio-email" href="mailto:{{ portfolio.email }}">{{ portfolio.email }}</a>
+                    {% endif %}
+                    {% if portfolio.url %}
+                        <a class="button secondary" href="{{ portfolio.url }}">Voir le portfolio</a>
+                    {% endif %}
                 </article>
             {% endfor %}
         </div>

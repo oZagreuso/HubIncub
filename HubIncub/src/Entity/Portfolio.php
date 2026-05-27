@@ -6,8 +6,15 @@ use App\Repository\PortfolioRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PortfolioRepository::class)]
+#[ORM\UniqueConstraint(name: 'UNIQ_PORTFOLIO_EMAIL', fields: ['email'])]
+/**
+ * Member entry displayed in the public portfolio directory.
+ */
 class Portfolio
 {
+    public const ROLE_INCUBATOR = 'Incubateur';
+    public const ROLE_ALUMNI = 'Ancien étudiant';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -24,6 +31,9 @@ class Portfolio
 
     #[ORM\Column(length: 255)]
     private string $url = '';
+
+    #[ORM\Column(length: 180)]
+    private string $email = '';
 
     public function getId(): ?int
     {
@@ -61,6 +71,10 @@ class Portfolio
 
     public function setRole(string $role): self
     {
+        if (!in_array($role, [self::ROLE_INCUBATOR, self::ROLE_ALUMNI], true)) {
+            throw new \InvalidArgumentException('Invalid portfolio role.');
+        }
+
         $this->role = $role;
 
         return $this;
@@ -74,6 +88,18 @@ class Portfolio
     public function setUrl(string $url): self
     {
         $this->url = $url;
+
+        return $this;
+    }
+
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
 
         return $this;
     }
