@@ -186,10 +186,7 @@
                 <h2>Projets</h2>
                 <ul class="admin-list">
                     {% for project in projects %}
-                        <li>
-                            {% if project.imageFilename %}
-                                <img class="admin-list-image" src="/uploads/admin/{{ project.imageFilename }}" alt="{{ project.imageAlt ?: 'Illustration du projet ' ~ project.name }}" width="640" height="360" loading="lazy" decoding="async">
-                            {% endif %}
+                        <li class="admin-media-item" {% if project.imageFilename %}style="--admin-media-image: url('/uploads/admin/{{ project.imageFilename }}');"{% endif %}>
                             {{ project.name }}
                             <span>{{ project.description }}</span>
                         </li>
@@ -203,10 +200,7 @@
                 <h2>Événements</h2>
                 <ul class="admin-list">
                     {% for event in events %}
-                        <li>
-                            {% if event.imageFilename %}
-                                <img class="admin-list-image" src="/uploads/admin/{{ event.imageFilename }}" alt="{{ event.imageAlt ?: 'Illustration de l’événement ' ~ event.title }}" width="640" height="360" loading="lazy" decoding="async">
-                            {% endif %}
+                        <li class="admin-media-item" {% if event.imageFilename %}style="--admin-media-image: url('/uploads/admin/{{ event.imageFilename }}');"{% endif %}>
                             {{ event.title }}
                             <span>{{ event.startsAt ? event.startsAt|date('d/m/Y H:i') : 'Date à préciser' }}</span>
                         </li>
@@ -220,10 +214,7 @@
                 <h2>Actualités</h2>
                 <ul class="admin-list">
                     {% for news in newsItems %}
-                        <li>
-                            {% if news.imageFilename %}
-                                <img class="admin-list-image" src="/uploads/admin/{{ news.imageFilename }}" alt="{{ news.imageAlt ?: 'Illustration de l’actualité ' ~ news.title }}" width="640" height="360" loading="lazy" decoding="async">
-                            {% endif %}
+                        <li class="admin-media-item" {% if news.imageFilename %}style="--admin-media-image: url('/uploads/admin/{{ news.imageFilename }}');"{% endif %}>
                             {{ news.title }}
                             <span>{{ news.publishedAt|date('d/m/Y H:i') }}</span>
                         </li>
