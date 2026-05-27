@@ -22,7 +22,7 @@ L'administration est accessible depuis le menu principal ou directement via :
 http://localhost:8000/admin
 ```
 
-L'accès est protégé par Symfony Security. Seuls les utilisateurs disposant du rôle `ROLE_ADMIN` peuvent accéder à cette page. La connexion admin exige aussi un captcha arithmétique.
+L'accès est protégé par Symfony Security. Les utilisateurs disposant du rôle `ROLE_ADMIN` ou `ROLE_DELEGATE` peuvent accéder à cette page. La connexion admin exige aussi un captcha arithmétique.
 
 Compte administrateur initial :
 
@@ -35,15 +35,18 @@ Le mot de passe initial a été généré pendant la mise en place de l'administ
 ## Fonctionnalités
 
 - Page d'accueil HubIncub.
-- Annuaire des anciens avec portfolio et email visible.
+- Annuaire des anciens avec portfolio et email visible, réservé aux membres connectés.
+- Pages publiques `Projets` et `Événements`.
 - L'email et le lien portfolio d'un membre sont obligatoires.
+- Le profil LinkedIn d'un membre peut être renseigné de façon optionnelle avec une URL `linkedin.com` valide.
 - L'ajout d'un membre crée aussi un compte utilisateur avec mot de passe hashé.
+- L'administrateur et le délégué peuvent modifier les informations de base d'un membre dans leur champ de compétence.
 - Un membre est soit `Incubateur`, soit `Ancien étudiant`.
 - L'administrateur peut passer un membre incubateur en ancien étudiant.
 - L'administrateur peut désigner un unique `Délégué des Incubateurs`.
 - Le délégué peut accéder à l'administration et ajouter membres, projets, événements et actualités, sans supprimer de membre.
 - Connexion administrateur.
-- Captcha obligatoire sur la connexion administrateur.
+- Captcha obligatoire sur la connexion membre et administrateur.
 - Ajout de membres à l'annuaire.
 - Suppression de membres depuis l'administration.
 - Ajout de projets.

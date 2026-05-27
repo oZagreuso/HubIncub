@@ -35,6 +35,9 @@ class Portfolio
     #[ORM\Column(length: 180)]
     private string $email = '';
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $linkedinUrl = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -100,6 +103,18 @@ class Portfolio
     public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function getLinkedinUrl(): ?string
+    {
+        return $this->linkedinUrl;
+    }
+
+    public function setLinkedinUrl(?string $linkedinUrl): self
+    {
+        $this->linkedinUrl = $linkedinUrl;
 
         return $this;
     }

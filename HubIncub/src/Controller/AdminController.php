@@ -52,6 +52,7 @@ final class AdminController extends AbstractController
         return $this->render('admin/index.html.twig', [
             'portfolios' => $portfolios,
             'delegatePortfolioId' => $this->findDelegatePortfolioId($portfolios, $userRepository),
+            'adminPortfolioIds' => $this->findAdminPortfolioIds($portfolios, $userRepository),
             'projects' => $projectRepository->findBy([], ['name' => 'ASC']),
             'events' => $eventRepository->findBy([], ['startsAt' => 'DESC', 'title' => 'ASC']),
             'newsItems' => $newsRepository->findBy([], ['publishedAt' => 'DESC', 'id' => 'DESC']),
@@ -74,6 +75,7 @@ final class AdminController extends AbstractController
 
         match ($type) {
             'portfolio' => $this->createPortfolio($request, $entityManager, $portfolioRepository, $userRepository, $passwordHasher),
+            'update_portfolio' => $this->updatePortfolio($request, $entityManager, $portfolioRepository, $userRepository),
             'delete_portfolio' => $this->deletePortfolio($request, $entityManager, $portfolioRepository, $userRepository),
             'graduate_portfolio' => $this->graduatePortfolio($request, $entityManager, $portfolioRepository),
             'set_delegate' => $this->setDelegate($request, $entityManager, $portfolioRepository, $userRepository),
@@ -96,6 +98,7 @@ final class AdminController extends AbstractController
         $email = strtolower($this->field($request, 'email'));
         $password = $this->field($request, 'password');
         $passwordConfirmation = $this->field($request, 'passwordConfirmation');
+        $linkedinUrl = $this->optionalField($request, 'linkedinUrl');
 
         if ($portfolioRepository->findOneBy(['email' => $email]) || $userRepository->findOneBy(['email' => $email])) {
             $this->addFlash('error', 'Ce membre existe déjà avec cet email.');
@@ -115,12 +118,19 @@ final class AdminController extends AbstractController
             return;
         }
 
+        if ($linkedinUrl && !$this->isLinkedinUrl($linkedinUrl)) {
+            $this->addFlash('error', 'Le profil LinkedIn doit être une URL linkedin.com valide.');
+
+            return;
+        }
+
         $portfolio = (new Portfolio())
             ->setFirstName($this->field($request, 'firstName'))
             ->setLastName($this->field($request, 'lastName'))
             ->setRole($this->field($request, 'role'))
             ->setEmail($email)
-            ->setUrl($this->field($request, 'url'));
+            ->setUrl($this->field($request, 'url'))
+            ->setLinkedinUrl($linkedinUrl);
 
         $user = (new User())
             ->setEmail($email)
@@ -130,6 +140,71 @@ final class AdminController extends AbstractController
         $entityManager->persist($portfolio);
         $entityManager->persist($user);
         $this->addFlash('success', 'Ajout enregistré.');
+    }
+
+    private function updatePortfolio(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        PortfolioRepository $portfolioRepository,
+        UserRepository $userRepository,
+    ): void {
+        $portfolio = $portfolioRepository->find((int) $request->request->get('portfolioId'));
+
+        if (!$portfolio) {
+            $this->addFlash('error', 'Le membre à modifier est introuvable.');
+
+            return;
+        }
+
+        $linkedUser = $userRepository->findOneBy(['email' => $portfolio->getEmail()]);
+
+        if (!$this->isGranted('ROLE_ADMIN') && $linkedUser && in_array('ROLE_ADMIN', $linkedUser->getRoles(), true)) {
+            $this->addFlash('error', 'Seul l’administrateur peut modifier cette fiche.');
+
+            return;
+        }
+
+        $email = strtolower($this->field($request, 'email'));
+        $linkedinUrl = $this->optionalField($request, 'linkedinUrl');
+        $existingPortfolio = $portfolioRepository->findOneBy(['email' => $email]);
+        $existingUser = $userRepository->findOneBy(['email' => $email]);
+
+        if ($existingPortfolio && $existingPortfolio !== $portfolio) {
+            $this->addFlash('error', 'Un autre membre utilise déjà cet email.');
+
+            return;
+        }
+
+        if ($existingUser && $existingUser !== $linkedUser) {
+            $this->addFlash('error', 'Un autre compte utilisateur utilise déjà cet email.');
+
+            return;
+        }
+
+        if ($linkedinUrl && !$this->isLinkedinUrl($linkedinUrl)) {
+            $this->addFlash('error', 'Le profil LinkedIn doit être une URL linkedin.com valide.');
+
+            return;
+        }
+
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $portfolio->setRole($this->field($request, 'role'));
+        }
+
+        if ($linkedUser) {
+            $linkedUser->setEmail($email);
+            $entityManager->persist($linkedUser);
+        }
+
+        $portfolio
+            ->setFirstName($this->field($request, 'firstName'))
+            ->setLastName($this->field($request, 'lastName'))
+            ->setEmail($email)
+            ->setUrl($this->field($request, 'url'))
+            ->setLinkedinUrl($linkedinUrl);
+
+        $entityManager->persist($portfolio);
+        $this->addFlash('success', 'Fiche membre mise à jour.');
     }
 
     private function deletePortfolio(
@@ -292,6 +367,14 @@ final class AdminController extends AbstractController
         return 1 === preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{12,}$/', $password);
     }
 
+    private function isLinkedinUrl(string $url): bool
+    {
+        $scheme = parse_url($url, PHP_URL_SCHEME);
+        $host = parse_url($url, PHP_URL_HOST);
+
+        return 'https' === $scheme && is_string($host) && preg_match('/(^|\.)linkedin\.com$/', strtolower($host));
+    }
+
     /**
      * @param list<Portfolio> $portfolios
      */
@@ -306,6 +389,26 @@ final class AdminController extends AbstractController
         }
 
         return null;
+    }
+
+    /**
+     * @param list<Portfolio> $portfolios
+     *
+     * @return list<int>
+     */
+    private function findAdminPortfolioIds(array $portfolios, UserRepository $userRepository): array
+    {
+        $adminPortfolioIds = [];
+
+        foreach ($portfolios as $portfolio) {
+            $user = $userRepository->findOneBy(['email' => $portfolio->getEmail()]);
+
+            if ($user && in_array('ROLE_ADMIN', $user->getRoles(), true)) {
+                $adminPortfolioIds[] = (int) $portfolio->getId();
+            }
+        }
+
+        return $adminPortfolioIds;
     }
 
     private function uploadImage(mixed $file, string $label): ?string

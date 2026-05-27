@@ -94,13 +94,27 @@
     border: 1px solid var(--line);
 }
 
+.hero-panel .partner-logos {
+    padding: 16px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: center;
+    gap: 14px;
+}
+
 /* Partner/school logo inside the hero panel. */
 .school-logo {
     display: block;
-    width: min(120px, 42%);
+    width: min(118px, 100%);
     height: auto;
-    margin: 0 auto 4px;
+    margin: 0 auto;
     mix-blend-mode: multiply;
+}
+
+.ifa-logo {
+    width: min(86px, 86%);
+    border-radius: 8px;
+    mix-blend-mode: normal;
 }
 
 /* Small orange label inside metric cards. */
@@ -131,6 +145,12 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.content-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+}
+
 /* Card surfaces shared across public lists. */
 .features article,
 .event-list article,
@@ -150,6 +170,50 @@
 
 .portfolio-card {
     padding: 24px;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.content-card {
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 18px 42px rgba(20, 33, 61, 0.06);
+}
+
+.content-card img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    display: block;
+    object-fit: cover;
+}
+
+.content-card > div {
+    padding: 24px;
+}
+
+.content-card h2 {
+    margin-bottom: 12px;
+    font-size: 28px;
+}
+
+.content-card p {
+    color: var(--muted);
+    line-height: 1.65;
+}
+
+.content-card time {
+    display: inline-flex;
+    margin-bottom: 14px;
+    color: var(--orange-dark);
+    font-weight: 800;
+}
+
+.empty-state {
+    padding: 24px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    color: var(--muted);
     background: rgba(255, 255, 255, 0.9);
 }
 

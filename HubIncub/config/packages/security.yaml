@@ -4,7 +4,7 @@ security:
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
 
-    # Admin users are loaded from the Doctrine User entity by email.
+    # Members and administrators are loaded from the Doctrine User entity by email.
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
         app_user_provider:
@@ -36,6 +36,8 @@ security:
     access_control:
         # Administration is restricted to the unique admin and the unique delegate.
         - { path: ^/admin, roles: [ROLE_ADMIN, ROLE_DELEGATE] }
+        # The portfolio directory contains member information and requires authentication.
+        - { path: ^/anciens, roles: ROLE_USER }
         # - { path: ^/profile, roles: ROLE_USER }
 
 when@test:

@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Événements - HubIncub{% endblock %}
+
+{% block body %}
+<header class="site-header" data-header>
+    <a class="brand" href="{{ path('app_home') }}" aria-label="Accueil HubIncub">
+        <img src="/images/logo-hubincub.png" alt="HubIncub" width="1448" height="1086" decoding="async">
+        <span>HubIncub</span>
+    </a>
+
+    <nav class="main-nav" aria-label="Navigation principale">
+        <a href="{{ path('app_home') }}#reseau">Réseau</a>
+        <a href="{{ path('app_projets') }}">Projets</a>
+        <a href="{{ path('app_evenements') }}">Événements</a>
+        <a class="nav-action" href="{{ path('app_admin') }}">Administration</a>
+    </nav>
+</header>
+
+<main>
+    <section class="directory-hero">
+        <p class="eyebrow">Événements</p>
+        <h1>Les événements du réseau HubIncub.</h1>
+        <p class="hero-text">Retrouvez les rencontres, temps forts et rendez-vous partagés par le réseau.</p>
+    </section>
+
+    <section class="section">
+        <div class="content-grid">
+            {% for event in events %}
+                <article class="content-card">
+                    {% if event.imageFilename %}
+                        <img src="/uploads/admin/{{ event.imageFilename }}" alt="{{ event.imageAlt ?: 'Illustration de l’événement ' ~ event.title }}" width="960" height="540" loading="lazy" decoding="async">
+                    {% endif %}
+                    <div>
+                        <p class="eyebrow">Événement</p>
+                        <h2>{{ event.title }}</h2>
+                        <time datetime="{{ event.startsAt ? event.startsAt|date('c') : '' }}">{{ event.startsAt ? event.startsAt|date('d/m/Y H:i') : 'Date à préciser' }}</time>
+                        <p>{{ event.description }}</p>
+                    </div>
+                </article>
+            {% else %}
+                <p class="empty-state">Aucun événement n'est publié pour le moment.</p>
+            {% endfor %}
+        </div>
+    </section>
+</main>
+{% endblock %}

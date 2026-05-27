@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Projets - HubIncub{% endblock %}
+
+{% block body %}
+<header class="site-header" data-header>
+    <a class="brand" href="{{ path('app_home') }}" aria-label="Accueil HubIncub">
+        <img src="/images/logo-hubincub.png" alt="HubIncub" width="1448" height="1086" decoding="async">
+        <span>HubIncub</span>
+    </a>
+
+    <nav class="main-nav" aria-label="Navigation principale">
+        <a href="{{ path('app_home') }}#reseau">Réseau</a>
+        <a href="{{ path('app_projets') }}">Projets</a>
+        <a href="{{ path('app_evenements') }}">Événements</a>
+        <a class="nav-action" href="{{ path('app_admin') }}">Administration</a>
+    </nav>
+</header>
+
+<main>
+    <section class="directory-hero">
+        <p class="eyebrow">Projets</p>
+        <h1>Les projets du réseau HubIncub.</h1>
+        <p class="hero-text">Découvrez les initiatives portées par les incubateurs et anciens étudiants.</p>
+    </section>
+
+    <section class="section">
+        <div class="content-grid">
+            {% for project in projects %}
+                <article class="content-card">
+                    {% if project.imageFilename %}
+                        <img src="/uploads/admin/{{ project.imageFilename }}" alt="{{ project.imageAlt ?: 'Illustration du projet ' ~ project.name }}" width="960" height="540" loading="lazy" decoding="async">
+                    {% endif %}
+                    <div>
+                        <p class="eyebrow">Projet</p>
+                        <h2>{{ project.name }}</h2>
+                        <p>{{ project.description }}</p>
+                        {% if project.url %}
+                            <a class="button secondary" href="{{ project.url }}">Voir le projet</a>
+                        {% endif %}
+                    </div>
+                </article>
+            {% else %}
+                <p class="empty-state">Aucun projet n'est publié pour le moment.</p>
+            {% endfor %}
+        </div>
+    </section>
+</main>
+{% endblock %}

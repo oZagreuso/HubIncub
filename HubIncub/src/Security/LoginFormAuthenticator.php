@@ -16,7 +16,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 /**
- * Authenticates the administration login form and validates the session captcha.
+ * Authenticates protected member areas and validates the session captcha.
  */
 final class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 {

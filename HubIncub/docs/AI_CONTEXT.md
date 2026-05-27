@@ -27,10 +27,12 @@ Les objectifs principaux sont :
 ## Routes Principales
 
 - `/` : page d'accueil.
-- `/anciens` : annuaire des portfolios.
+- `/anciens` : annuaire des portfolios, protégé par authentification `ROLE_USER`.
+- `/projets` : liste publique des projets.
+- `/evenements` : liste publique des événements.
 - `/connexion` : connexion admin.
 - `/deconnexion` : déconnexion admin.
-- `/admin` : interface d'administration protégée par `ROLE_ADMIN`.
+- `/admin` : interface d'administration protégée par `ROLE_ADMIN` ou `ROLE_DELEGATE`.
 
 ## Authentification
 
@@ -47,6 +49,7 @@ La zone `/admin` est protégée par :
 ```yaml
 access_control:
     - { path: ^/admin, roles: [ROLE_ADMIN, ROLE_DELEGATE] }
+    - { path: ^/anciens, roles: ROLE_USER }
 ```
 
 Le compte initial d'Olivier Dal Ferro dispose de `ROLE_ADMIN` et utilise l'email :
@@ -70,15 +73,20 @@ Champs principaux :
 - `role`
 - `email`
 - `url`
+- `linkedinUrl`
 
 Règles métier :
 
 - `firstName`, `lastName`, `role`, `email` et `url` sont obligatoires.
+- `linkedinUrl` est optionnel et doit rester une URL HTTPS `linkedin.com` valide lorsqu'il est renseigné.
 - `role` accepte uniquement `Incubateur` ou `Ancien étudiant`.
 - `email` doit être unique dans les membres et dans les utilisateurs.
 - L'ajout d'un membre crée un `User` avec `ROLE_USER`.
 - Le mot de passe membre est obligatoire, confirmé une seconde fois, puis haché avant persistance.
 - La règle affichée pour le mot de passe suit le minimum CNIL utilisé dans le projet : 12 caractères minimum avec majuscule, minuscule, chiffre et caractère spécial.
+- La modification d'un membre se fait par POST CSRF `update_portfolio`.
+- `ROLE_ADMIN` peut modifier toutes les informations de base d'un membre et son statut.
+- `ROLE_DELEGATE` peut modifier les informations de base des membres non administrateurs, sans modifier le statut, sans supprimer, sans désigner le délégué et sans intervenir sur la fiche liée à `ROLE_ADMIN`.
 - La suppression d'un membre se fait par POST CSRF `delete_portfolio` et supprime aussi le `User` associé si ce compte n'est pas administrateur.
 - Le passage de `Incubateur` à `Ancien étudiant` se fait par POST CSRF `graduate_portfolio`.
 - Olivier Dal Ferro est le seul administrateur attendu et son statut membre est `Incubateur`.

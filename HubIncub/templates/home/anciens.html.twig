@@ -3,7 +3,7 @@
 {% block title %}Retrouver les anciens - HubIncub{% endblock %}
 
 {% block body %}
-{# Public directory header. #}
+{# Protected member directory header. #}
 <header class="site-header" data-header>
     <a class="brand" href="{{ path('app_home') }}" aria-label="Accueil HubIncub">
         <img src="/images/logo-hubincub.png" alt="HubIncub" width="1448" height="1086" decoding="async">
@@ -12,9 +12,9 @@
 
     <nav class="main-nav" aria-label="Navigation principale">
         <a href="{{ path('app_home') }}#reseau">Réseau</a>
-        <a href="{{ path('app_home') }}#projets">Projets</a>
-        <a href="{{ path('app_admin') }}">Administration</a>
-        <a class="nav-action" href="{{ path('app_home') }}#rejoindre">Rejoindre</a>
+        <a href="{{ path('app_projets') }}">Projets</a>
+        <a href="{{ path('app_evenements') }}">Événements</a>
+        <a class="nav-action" href="{{ path('app_admin') }}">Administration</a>
     </nav>
 </header>
 
@@ -39,6 +39,9 @@
                     <p>{{ portfolio.role }}</p>
                     {% if portfolio.email %}
                         <a class="portfolio-email" href="mailto:{{ portfolio.email }}">{{ portfolio.email }}</a>
+                    {% endif %}
+                    {% if portfolio.linkedinUrl %}
+                        <a class="portfolio-email" href="{{ portfolio.linkedinUrl }}" target="_blank" rel="noopener noreferrer">Profil LinkedIn</a>
                     {% endif %}
                     {% if portfolio.url %}
                         <a class="button secondary" href="{{ portfolio.url }}">Voir le portfolio</a>
