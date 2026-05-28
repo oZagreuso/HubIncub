@@ -10,6 +10,7 @@
 .nav-action {
     padding: 11px 17px;
     border-radius: 8px;
+    transition: box-shadow 180ms ease, transform 180ms ease;
 }
 
 /* Base button component. */
@@ -22,6 +23,12 @@
     border-radius: 8px;
     font-weight: 800;
     text-decoration: none;
+    transition: box-shadow 180ms ease, transform 180ms ease, border-color 180ms ease;
+}
+
+.button:hover,
+.nav-action:hover {
+    box-shadow: 0 0 0 4px rgba(255, 121, 0, 0.12), 0 12px 28px rgba(255, 121, 0, 0.18);
 }
 
 /* Secondary button variant used for navigation and portfolio links. */
@@ -142,7 +149,8 @@
 }
 
 .portfolio-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    align-items: stretch;
 }
 
 .content-grid {
@@ -169,8 +177,12 @@
 }
 
 .portfolio-card {
+    position: relative;
     padding: 24px;
-    background: rgba(255, 255, 255, 0.9);
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.94);
 }
 
 .content-card {
@@ -252,6 +264,12 @@
     font-size: 24px;
 }
 
+.portfolio-actions {
+    margin-top: auto;
+    display: grid;
+    gap: 12px;
+}
+
 .event-list time {
     display: block;
     margin-bottom: 12px;
@@ -262,10 +280,21 @@
 
 /* Visible and clickable email in the portfolio cards. */
 .portfolio-email {
-    margin-bottom: 18px;
     display: inline-flex;
+    min-width: 0;
     color: var(--navy);
     font-weight: 800;
     text-decoration-color: rgba(255, 121, 0, 0.55);
     overflow-wrap: anywhere;
+}
+
+.portfolio-card .button {
+    width: 100%;
+}
+
+.portfolio-card .button.secondary {
+    color: var(--white);
+    background: linear-gradient(135deg, var(--orange), var(--orange-dark));
+    border-color: transparent;
+    box-shadow: 0 12px 26px rgba(255, 121, 0, 0.22);
 }

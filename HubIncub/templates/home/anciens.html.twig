@@ -14,11 +14,19 @@
         <a href="{{ path('app_home') }}#reseau">Réseau</a>
         <a href="{{ path('app_projets') }}">Projets</a>
         <a href="{{ path('app_evenements') }}">Événements</a>
+        <a href="{{ path('app_actualites') }}">Actualités</a>
         <a class="nav-action" href="{{ path('app_admin') }}">Administration</a>
     </nav>
 </header>
 
 <main>
+    {% for message in app.flashes('success') %}
+        <p class="form-success">{{ message }}</p>
+    {% endfor %}
+    {% for message in app.flashes('error') %}
+        <p class="form-alert">{{ message }}</p>
+    {% endfor %}
+
     {# Directory introduction. #}
     <section class="directory-hero">
         <p class="eyebrow">Portfolios alumni</p>
@@ -30,22 +38,27 @@
     </section>
 
     {# Portfolio cards are loaded from the Portfolio entity. #}
-    <section class="section">
+    <section class="section portfolio-section">
         <div class="portfolio-grid" aria-label="Portfolios des anciens étudiants">
             {% for portfolio in portfolios %}
+                {# Display labels are derived from authenticated roles while stored portfolio roles remain unchanged. #}
+                {% set isAdminPortfolio = portfolio.email|lower in adminEmails %}
+                {% set isDelegatePortfolio = portfolio.email|lower in delegateEmails %}
                 <article class="portfolio-card">
                     <span>{{ loop.index < 10 ? '0' ~ loop.index : loop.index }}</span>
                     <h2>{{ portfolio.firstName }} {{ portfolio.lastName }}</h2>
-                    <p>{{ portfolio.role }}</p>
-                    {% if portfolio.email %}
-                        <a class="portfolio-email" href="mailto:{{ portfolio.email }}">{{ portfolio.email }}</a>
-                    {% endif %}
-                    {% if portfolio.linkedinUrl %}
-                        <a class="portfolio-email" href="{{ portfolio.linkedinUrl }}" target="_blank" rel="noopener noreferrer">Profil LinkedIn</a>
-                    {% endif %}
-                    {% if portfolio.url %}
-                        <a class="button secondary" href="{{ portfolio.url }}">Voir le portfolio</a>
-                    {% endif %}
+                    <p>{{ isAdminPortfolio ? 'Administrateur' : (isDelegatePortfolio ? 'Délégué' : portfolio.role) }}</p>
+                    <div class="portfolio-actions">
+                        {% if portfolio.email %}
+                            <a class="portfolio-email" href="mailto:{{ portfolio.email }}">{{ portfolio.email }}</a>
+                        {% endif %}
+                        {% if portfolio.linkedinUrl %}
+                            <a class="portfolio-email" href="{{ portfolio.linkedinUrl }}" target="_blank" rel="noopener noreferrer">Profil LinkedIn</a>
+                        {% endif %}
+                        {% if portfolio.url %}
+                            <a class="button secondary" href="{{ portfolio.url }}">Voir le portfolio</a>
+                        {% endif %}
+                    </div>
                 </article>
             {% endfor %}
         </div>

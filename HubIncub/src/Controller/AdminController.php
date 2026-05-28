@@ -99,6 +99,8 @@ final class AdminController extends AbstractController
         $password = $this->field($request, 'password');
         $passwordConfirmation = $this->field($request, 'passwordConfirmation');
         $linkedinUrl = $this->optionalField($request, 'linkedinUrl');
+        $firstName = $this->field($request, 'firstName');
+        $lastName = $this->field($request, 'lastName');
 
         if ($portfolioRepository->findOneBy(['email' => $email]) || $userRepository->findOneBy(['email' => $email])) {
             $this->addFlash('error', 'Ce membre existe déjà avec cet email.');
@@ -125,8 +127,8 @@ final class AdminController extends AbstractController
         }
 
         $portfolio = (new Portfolio())
-            ->setFirstName($this->field($request, 'firstName'))
-            ->setLastName($this->field($request, 'lastName'))
+            ->setFirstName($firstName)
+            ->setLastName($lastName)
             ->setRole($this->field($request, 'role'))
             ->setEmail($email)
             ->setUrl($this->field($request, 'url'))
@@ -166,6 +168,8 @@ final class AdminController extends AbstractController
 
         $email = strtolower($this->field($request, 'email'));
         $linkedinUrl = $this->optionalField($request, 'linkedinUrl');
+        $firstName = $this->field($request, 'firstName');
+        $lastName = $this->field($request, 'lastName');
         $existingPortfolio = $portfolioRepository->findOneBy(['email' => $email]);
         $existingUser = $userRepository->findOneBy(['email' => $email]);
 
@@ -197,8 +201,8 @@ final class AdminController extends AbstractController
         }
 
         $portfolio
-            ->setFirstName($this->field($request, 'firstName'))
-            ->setLastName($this->field($request, 'lastName'))
+            ->setFirstName($firstName)
+            ->setLastName($lastName)
             ->setEmail($email)
             ->setUrl($this->field($request, 'url'))
             ->setLinkedinUrl($linkedinUrl);

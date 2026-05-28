@@ -6,6 +6,7 @@ use App\Repository\NewsRepository;
 use App\Repository\PortfolioRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\EventRepository;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -13,18 +14,63 @@ use Symfony\Component\Routing\Attribute\Route;
 final class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
-    public function index(NewsRepository $newsRepository): Response
+    public function index(
+        NewsRepository $newsRepository,
+        ProjectRepository $projectRepository,
+        EventRepository $eventRepository,
+    ): Response
     {
         return $this->render('home/index.html.twig', [
+            'latestEvent' => $eventRepository->findOneBy([], ['startsAt' => 'DESC', 'title' => 'ASC']),
             'latestNews' => $newsRepository->findLatest(),
+            'latestProject' => $projectRepository->findOneBy([], ['id' => 'DESC']),
         ]);
     }
 
     #[Route('/anciens', name: 'app_anciens')]
-    public function anciens(PortfolioRepository $portfolioRepository): Response
+    public function anciens(PortfolioRepository $portfolioRepository, UserRepository $userRepository): Response
     {
+        // Administrative roles are resolved from User accounts to control the public ordering and displayed status.
+        $adminEmails = [];
+        $delegateEmails = [];
+
+        foreach ($userRepository->findAll() as $user) {
+            if (in_array('ROLE_ADMIN', $user->getRoles(), true)) {
+                $adminEmails[] = strtolower($user->getEmail());
+            }
+
+            if (in_array('ROLE_DELEGATE', $user->getRoles(), true)) {
+                $delegateEmails[] = strtolower($user->getEmail());
+            }
+        }
+
+        $portfolios = $portfolioRepository->findBy([], ['lastName' => 'ASC', 'firstName' => 'ASC']);
+
+        // Directory priority is: administrators, delegate, then regular members ordered alphabetically.
+        usort($portfolios, static function ($left, $right) use ($adminEmails, $delegateEmails): int {
+            $leftRank = in_array(strtolower($left->getEmail()), $adminEmails, true) ? 0 : 2;
+            $rightRank = in_array(strtolower($right->getEmail()), $adminEmails, true) ? 0 : 2;
+
+            if ($leftRank !== 0 && in_array(strtolower($left->getEmail()), $delegateEmails, true)) {
+                $leftRank = 1;
+            }
+
+            if ($rightRank !== 0 && in_array(strtolower($right->getEmail()), $delegateEmails, true)) {
+                $rightRank = 1;
+            }
+
+            if ($leftRank !== $rightRank) {
+                return $leftRank <=> $rightRank;
+            }
+
+            return [strtolower($left->getLastName()), strtolower($left->getFirstName())]
+                <=> [strtolower($right->getLastName()), strtolower($right->getFirstName())];
+        });
+
         return $this->render('home/anciens.html.twig', [
-            'portfolios' => $portfolioRepository->findBy([], ['lastName' => 'ASC', 'firstName' => 'ASC']),
+            'adminEmails' => $adminEmails,
+            'delegateEmails' => $delegateEmails,
+            'portfolios' => $portfolios,
         ]);
     }
 
@@ -41,6 +87,14 @@ final class HomeController extends AbstractController
     {
         return $this->render('home/evenements.html.twig', [
             'events' => $eventRepository->findBy([], ['startsAt' => 'DESC', 'title' => 'ASC']),
+        ]);
+    }
+
+    #[Route('/actualites', name: 'app_actualites')]
+    public function actualites(NewsRepository $newsRepository): Response
+    {
+        return $this->render('home/actualites.html.twig', [
+            'newsItems' => $newsRepository->findBy([], ['publishedAt' => 'DESC', 'id' => 'DESC']),
         ]);
     }
 }

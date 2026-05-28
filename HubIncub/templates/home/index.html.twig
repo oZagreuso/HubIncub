@@ -14,6 +14,7 @@
         <a href="#reseau">Réseau</a>
         <a href="{{ path('app_projets') }}">Projets</a>
         <a href="{{ path('app_evenements') }}">Événements</a>
+        <a href="{{ path('app_actualites') }}">Actualités</a>
         <a class="nav-action" href="{{ path('app_admin') }}">Administration</a>
     </nav>
 </header>
@@ -58,29 +59,85 @@
         </aside>
     </section>
 
-    {% if latestNews %}
-        {# Latest news item managed from the administration interface. #}
-        <section class="latest-news-section">
-            <article class="latest-news-card">
-                <div class="latest-news-content">
-                    <p class="eyebrow">Actualité</p>
-                    <h2>{{ latestNews.title }}</h2>
-                    <p>{{ latestNews.content }}</p>
-                    <time datetime="{{ latestNews.publishedAt|date('c') }}">{{ latestNews.publishedAt|date('d/m/Y') }}</time>
-                </div>
+    {% if latestNews or latestProject or latestEvent %}
+        {# Editorial feed groups the latest managed content under one visual rhythm. #}
+        <section class="front-feed-section">
+            <div class="front-feed-heading">
+                <p class="eyebrow">À la une</p>
+                <h2>Les dernières nouvelles du réseau.</h2>
+            </div>
 
-                {% if latestNews.imageFilename %}
-                    <img
-                        class="latest-news-image"
-                        src="/uploads/admin/{{ latestNews.imageFilename }}"
-                        alt="{{ latestNews.imageAlt ?: 'Illustration de l’actualité ' ~ latestNews.title }}"
-                        width="960"
-                        height="540"
-                        loading="lazy"
-                        decoding="async"
-                    >
-                {% endif %}
-            </article>
+            {% if latestNews %}
+                <article class="latest-news-card">
+                    <div class="latest-news-content">
+                        <p class="eyebrow">Actualité</p>
+                        <h2>{{ latestNews.title }}</h2>
+                        <p>{{ latestNews.content }}</p>
+                        <time datetime="{{ latestNews.publishedAt|date('c') }}">{{ latestNews.publishedAt|date('d/m/Y') }}</time>
+                    </div>
+
+                    {% if latestNews.imageFilename %}
+                        <img
+                            class="latest-news-image"
+                            src="/uploads/admin/{{ latestNews.imageFilename }}"
+                            alt="{{ latestNews.imageAlt ?: 'Illustration de l’actualité ' ~ latestNews.title }}"
+                            width="960"
+                            height="540"
+                            loading="lazy"
+                            decoding="async"
+                        >
+                    {% endif %}
+                </article>
+            {% endif %}
+
+            {% if latestProject or latestEvent %}
+                <div class="front-highlights-grid">
+                    {% if latestProject %}
+                        <article class="content-card">
+                            {% if latestProject.imageFilename %}
+                                <img
+                                    src="/uploads/admin/{{ latestProject.imageFilename }}"
+                                    alt="{{ latestProject.imageAlt ?: 'Illustration du projet ' ~ latestProject.name }}"
+                                    width="960"
+                                    height="540"
+                                    loading="lazy"
+                                    decoding="async"
+                                >
+                            {% endif %}
+                            <div>
+                                <p class="eyebrow">Dernier projet</p>
+                                <h2>{{ latestProject.name }}</h2>
+                                <p>{{ latestProject.description }}</p>
+                                <a class="button secondary" href="{{ path('app_projets') }}">Voir les projets</a>
+                            </div>
+                        </article>
+                    {% endif %}
+
+                    {% if latestEvent %}
+                        <article class="content-card">
+                            {% if latestEvent.imageFilename %}
+                                <img
+                                    src="/uploads/admin/{{ latestEvent.imageFilename }}"
+                                    alt="{{ latestEvent.imageAlt ?: 'Illustration de l’événement ' ~ latestEvent.title }}"
+                                    width="960"
+                                    height="540"
+                                    loading="lazy"
+                                    decoding="async"
+                                >
+                            {% endif %}
+                            <div>
+                                <p class="eyebrow">Dernier événement</p>
+                                <h2>{{ latestEvent.title }}</h2>
+                                <p>{{ latestEvent.description }}</p>
+                                {% if latestEvent.startsAt %}
+                                    <time datetime="{{ latestEvent.startsAt|date('c') }}">{{ latestEvent.startsAt|date('d/m/Y H:i') }}</time>
+                                {% endif %}
+                                <a class="button secondary" href="{{ path('app_evenements') }}">Voir les événements</a>
+                            </div>
+                        </article>
+                    {% endif %}
+                </div>
+            {% endif %}
         </section>
     {% endif %}
 

@@ -1,0 +1,5 @@
+{% set error_code = status_code|default('Erreur') %}
+{% set error_title = 'Une erreur est survenue.' %}
+{% set error_message = 'La machine a perdu le fil. Revenez à l’accueil ou retrouvez les portfolios des membres.' %}
+
+{% include 'bundles/TwigBundle/Exception/_error_page.html.twig' %}

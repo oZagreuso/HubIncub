@@ -33,16 +33,26 @@
     .section,
     .split-section,
     .join-section,
-    .latest-news-section,
+    .front-feed-section,
     .directory-hero {
         padding: 58px 22px;
+    }
+
+    .error-hero {
+        padding: 34px 22px;
+        align-items: flex-end;
+        background-position: center;
+    }
+
+    .error-brand {
+        margin-bottom: 34px;
     }
 
     .features,
     .event-list,
     .split-section,
-    .latest-news-section,
     .latest-news-card,
+    .front-highlights-grid,
     .portfolio-grid,
     .content-grid,
     .admin-grid,

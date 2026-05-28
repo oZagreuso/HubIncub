@@ -82,3 +82,5 @@ Les fichiers uploadés reçoivent un nom lisible pour le SEO, basé sur le nom d
 ## Documentation IA
 
 Le fichier `docs/AI_CONTEXT.md` contient une synthèse stable du projet, destinée aux assistants IA comme GPT/Codex, Claude, Gemini ou équivalents. Il doit être consulté avant toute intervention automatisée importante.
+
+Le fichier `docs/WORK_SUMMARY_2026-05-28.md` documente les changements récents apportés à l’annuaire, aux données de test, aux pages d’erreur, à l’administration et aux ajustements visuels.

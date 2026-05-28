@@ -14,6 +14,7 @@
         <a href="{{ path('app_home') }}#reseau">Réseau</a>
         <a href="{{ path('app_projets') }}">Projets</a>
         <a href="{{ path('app_evenements') }}">Événements</a>
+        <a href="{{ path('app_actualites') }}">Actualités</a>
         <a href="{{ path('app_anciens') }}">Portfolios</a>
         <a class="nav-action" href="{{ path('app_logout') }}">Déconnexion</a>
     </nav>
@@ -44,7 +45,7 @@
         {% if is_granted('ROLE_ADMIN') %}
             <article class="admin-card delegate-card">
                 <h2>Délégué des Incubateurs</h2>
-                <form class="admin-form" method="post">
+                <form class="admin-form" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="type" value="set_delegate">
                     <input type="hidden" name="_token" value="{{ csrf_token('admin_set_delegate') }}">
 

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Événements - HubIncub{% endblock %}
+{% block title %}Actualités - HubIncub{% endblock %}
 
 {% block body %}
 <header class="site-header" data-header>
@@ -20,27 +20,27 @@
 
 <main>
     <section class="directory-hero">
-        <p class="eyebrow">Événements</p>
-        <h1>Les événements du réseau HubIncub.</h1>
-        <p class="hero-text">Retrouvez les rencontres, temps forts et rendez-vous partagés par le réseau.</p>
+        <p class="eyebrow">Actualités</p>
+        <h1>Toutes les actualités HubIncub.</h1>
+        <p class="hero-text">Retrouvez les informations publiées par l'administration et les temps forts du réseau.</p>
     </section>
 
     <section class="section">
         <div class="content-grid">
-            {% for event in events %}
+            {% for news in newsItems %}
                 <article class="content-card">
-                    {% if event.imageFilename %}
-                        <img src="/uploads/admin/{{ event.imageFilename }}" alt="{{ event.imageAlt ?: 'Illustration de l’événement ' ~ event.title }}" width="960" height="540" loading="lazy" decoding="async">
+                    {% if news.imageFilename %}
+                        <img src="/uploads/admin/{{ news.imageFilename }}" alt="{{ news.imageAlt ?: 'Illustration de l’actualité ' ~ news.title }}" width="960" height="540" loading="lazy" decoding="async">
                     {% endif %}
                     <div>
-                        <p class="eyebrow">Événement</p>
-                        <h2>{{ event.title }}</h2>
-                        <time datetime="{{ event.startsAt ? event.startsAt|date('c') : '' }}">{{ event.startsAt ? event.startsAt|date('d/m/Y H:i') : 'Date à préciser' }}</time>
-                        <p>{{ event.description }}</p>
+                        <p class="eyebrow">Actualité</p>
+                        <h2>{{ news.title }}</h2>
+                        <time datetime="{{ news.publishedAt|date('c') }}">{{ news.publishedAt|date('d/m/Y H:i') }}</time>
+                        <p>{{ news.content }}</p>
                     </div>
                 </article>
             {% else %}
-                <p class="empty-state">Aucun événement n'est publié pour le moment.</p>
+                <p class="empty-state">Aucune actualité n'est publiée pour le moment.</p>
             {% endfor %}
         </div>
     </section>
