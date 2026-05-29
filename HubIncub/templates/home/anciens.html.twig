@@ -48,6 +48,9 @@
                     <span>{{ loop.index < 10 ? '0' ~ loop.index : loop.index }}</span>
                     <h2>{{ portfolio.firstName }} {{ portfolio.lastName }}</h2>
                     <p>{{ isAdminPortfolio ? 'Administrateur' : (isDelegatePortfolio ? 'Délégué' : portfolio.role) }}</p>
+                    {% if portfolio.promotion %}
+                        <p>Promotion {{ portfolio.promotion }}</p>
+                    {% endif %}
                     <div class="portfolio-actions">
                         {% if portfolio.email %}
                             <a class="portfolio-email" href="mailto:{{ portfolio.email }}">{{ portfolio.email }}</a>

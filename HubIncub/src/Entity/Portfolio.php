@@ -38,6 +38,9 @@ class Portfolio
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $linkedinUrl = null;
 
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $promotion = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -115,6 +118,18 @@ class Portfolio
     public function setLinkedinUrl(?string $linkedinUrl): self
     {
         $this->linkedinUrl = $linkedinUrl;
+
+        return $this;
+    }
+
+    public function getPromotion(): ?string
+    {
+        return $this->promotion;
+    }
+
+    public function setPromotion(?string $promotion): self
+    {
+        $this->promotion = $promotion;
 
         return $this;
     }

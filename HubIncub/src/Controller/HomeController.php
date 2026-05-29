@@ -44,7 +44,7 @@ final class HomeController extends AbstractController
             }
         }
 
-        $portfolios = $portfolioRepository->findBy([], ['lastName' => 'ASC', 'firstName' => 'ASC']);
+        $portfolios = $portfolioRepository->findBy([], ['promotion' => 'DESC', 'lastName' => 'ASC', 'firstName' => 'ASC']);
 
         // Directory priority is: administrators, delegate, then regular members ordered alphabetically.
         usort($portfolios, static function ($left, $right) use ($adminEmails, $delegateEmails): int {
@@ -61,6 +61,13 @@ final class HomeController extends AbstractController
 
             if ($leftRank !== $rightRank) {
                 return $leftRank <=> $rightRank;
+            }
+
+            $leftPromotion = (int) ($left->getPromotion() ?? 0);
+            $rightPromotion = (int) ($right->getPromotion() ?? 0);
+
+            if ($leftPromotion !== $rightPromotion) {
+                return $rightPromotion <=> $leftPromotion;
             }
 
             return [strtolower($left->getLastName()), strtolower($left->getFirstName())]

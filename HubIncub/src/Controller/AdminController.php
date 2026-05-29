@@ -47,7 +47,7 @@ final class AdminController extends AbstractController
             return $this->redirectToRoute('app_admin');
         }
 
-        $portfolios = $portfolioRepository->findBy([], ['lastName' => 'ASC', 'firstName' => 'ASC']);
+        $portfolios = $portfolioRepository->findBy([], ['promotion' => 'DESC', 'lastName' => 'ASC', 'firstName' => 'ASC']);
 
         return $this->render('admin/index.html.twig', [
             'portfolios' => $portfolios,
@@ -101,6 +101,7 @@ final class AdminController extends AbstractController
         $linkedinUrl = $this->optionalField($request, 'linkedinUrl');
         $firstName = $this->field($request, 'firstName');
         $lastName = $this->field($request, 'lastName');
+        $promotion = $this->field($request, 'promotion');
 
         if ($portfolioRepository->findOneBy(['email' => $email]) || $userRepository->findOneBy(['email' => $email])) {
             $this->addFlash('error', 'Ce membre existe déjà avec cet email.');
@@ -126,10 +127,17 @@ final class AdminController extends AbstractController
             return;
         }
 
+        if (!$this->isPromotionYear($promotion)) {
+            $this->addFlash('error', 'La promotion doit être une année sur 4 chiffres.');
+
+            return;
+        }
+
         $portfolio = (new Portfolio())
             ->setFirstName($firstName)
             ->setLastName($lastName)
             ->setRole($this->field($request, 'role'))
+            ->setPromotion($promotion)
             ->setEmail($email)
             ->setUrl($this->field($request, 'url'))
             ->setLinkedinUrl($linkedinUrl);
@@ -170,6 +178,7 @@ final class AdminController extends AbstractController
         $linkedinUrl = $this->optionalField($request, 'linkedinUrl');
         $firstName = $this->field($request, 'firstName');
         $lastName = $this->field($request, 'lastName');
+        $promotion = $this->field($request, 'promotion');
         $existingPortfolio = $portfolioRepository->findOneBy(['email' => $email]);
         $existingUser = $userRepository->findOneBy(['email' => $email]);
 
@@ -191,6 +200,12 @@ final class AdminController extends AbstractController
             return;
         }
 
+        if (!$this->isPromotionYear($promotion)) {
+            $this->addFlash('error', 'La promotion doit être une année sur 4 chiffres.');
+
+            return;
+        }
+
         if ($this->isGranted('ROLE_ADMIN')) {
             $portfolio->setRole($this->field($request, 'role'));
         }
@@ -203,6 +218,7 @@ final class AdminController extends AbstractController
         $portfolio
             ->setFirstName($firstName)
             ->setLastName($lastName)
+            ->setPromotion($promotion)
             ->setEmail($email)
             ->setUrl($this->field($request, 'url'))
             ->setLinkedinUrl($linkedinUrl);
@@ -377,6 +393,11 @@ final class AdminController extends AbstractController
         $host = parse_url($url, PHP_URL_HOST);
 
         return 'https' === $scheme && is_string($host) && preg_match('/(^|\.)linkedin\.com$/', strtolower($host));
+    }
+
+    private function isPromotionYear(string $promotion): bool
+    {
+        return 1 === preg_match('/^\d{4}$/', $promotion);
     }
 
     /**

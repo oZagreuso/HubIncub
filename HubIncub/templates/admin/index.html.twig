@@ -75,6 +75,7 @@
 
                     <label>Prénom obligatoire <input name="firstName" required></label>
                     <label>Nom obligatoire <input name="lastName" required></label>
+                    <label>Promotion obligatoire <input name="promotion" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" placeholder="2026" required></label>
                     <label>
                         Statut obligatoire
                         <select name="role" required>
@@ -165,6 +166,7 @@
                                 <div>
                                     {{ portfolio.firstName }} {{ portfolio.lastName }}
                                     <span>{{ portfolio.role }}</span>
+                                    <span>{{ portfolio.promotion ? 'Promotion ' ~ portfolio.promotion : 'Promotion à définir' }}</span>
                                     <span>{{ portfolio.email }}</span>
                                     {% if portfolio.linkedinUrl %}
                                         <span>LinkedIn renseigné</span>
@@ -181,6 +183,7 @@
 
                                                 <label>Prénom obligatoire <input name="firstName" value="{{ portfolio.firstName }}" required></label>
                                                 <label>Nom obligatoire <input name="lastName" value="{{ portfolio.lastName }}" required></label>
+                                                <label>Promotion obligatoire <input name="promotion" value="{{ portfolio.promotion }}" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" placeholder="2026" required></label>
                                                 {% if is_granted('ROLE_ADMIN') %}
                                                     <label>
                                                         Statut obligatoire
