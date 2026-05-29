@@ -147,10 +147,12 @@ Champs principaux :
 Les images ajoutées depuis l'administration pour les projets, événements et actualités sont stockées dans :
 
 ```text
-public/uploads/admin
+public/uploads/admin/projects
+public/uploads/admin/events
+public/uploads/admin/news
 ```
 
-Le nom de fichier est généré à partir d'un slug du nom du projet ou du titre de l'événement, suivi d'un suffixe aléatoire.
+Le nom de fichier est généré à partir d'un slug du nom du projet, du titre de l'événement ou du titre de l'actualité, suivi d'un suffixe aléatoire.
 
 Les images administrées doivent disposer d'un texte alternatif :
 

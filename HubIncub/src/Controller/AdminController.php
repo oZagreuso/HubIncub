@@ -327,7 +327,7 @@ final class AdminController extends AbstractController
             ->setName($name)
             ->setDescription($this->field($request, 'description'))
             ->setUrl($this->optionalField($request, 'url'))
-            ->setImageFilename($this->uploadImage($request->files->get('image'), $name))
+            ->setImageFilename($this->uploadImage($request->files->get('image'), $name, 'projects'))
             ->setImageAlt($imageAlt);
 
         $entityManager->persist($project);
@@ -345,7 +345,7 @@ final class AdminController extends AbstractController
             ->setTitle($title)
             ->setDescription($this->field($request, 'description'))
             ->setStartsAt($startsAt ? new \DateTimeImmutable($startsAt) : null)
-            ->setImageFilename($this->uploadImage($request->files->get('image'), $title))
+            ->setImageFilename($this->uploadImage($request->files->get('image'), $title, 'events'))
             ->setImageAlt($imageAlt);
 
         $entityManager->persist($event);
@@ -363,7 +363,7 @@ final class AdminController extends AbstractController
             ->setTitle($title)
             ->setContent($this->field($request, 'content'))
             ->setPublishedAt($publishedAt ? new \DateTimeImmutable($publishedAt) : new \DateTimeImmutable())
-            ->setImageFilename($this->uploadImage($request->files->get('image'), $title))
+            ->setImageFilename($this->uploadImage($request->files->get('image'), $title, 'news'))
             ->setImageAlt($imageAlt);
 
         $entityManager->persist($news);
@@ -436,7 +436,7 @@ final class AdminController extends AbstractController
         return $adminPortfolioIds;
     }
 
-    private function uploadImage(mixed $file, string $label): ?string
+    private function uploadImage(mixed $file, string $label, string $module): ?string
     {
         if (!$file instanceof UploadedFile) {
             return null;
@@ -449,7 +449,7 @@ final class AdminController extends AbstractController
         // Filenames are human-readable for SEO and include random bytes to avoid collisions.
         $extension = $file->guessExtension() ?: 'bin';
         $filename = $this->slugify($label).'-'.bin2hex(random_bytes(6)).'.'.$extension;
-        $uploadDirectory = $this->getParameter('kernel.project_dir').'/public/uploads/admin';
+        $uploadDirectory = $this->getParameter('kernel.project_dir').'/public/uploads/admin/'.$module;
 
         if (!is_dir($uploadDirectory)) {
             mkdir($uploadDirectory, 0775, true);

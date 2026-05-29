@@ -5,7 +5,7 @@
 {% block body %}
 <header class="site-header" data-header>
     <a class="brand" href="{{ path('app_home') }}" aria-label="Accueil HubIncub">
-        <img src="/images/logo-hubincub.png" alt="HubIncub" width="1448" height="1086" decoding="async">
+        <img src="/images/branding/logo-hubincub.png" alt="HubIncub" width="1448" height="1086" decoding="async">
         <span>HubIncub</span>
     </a>
 
@@ -30,7 +30,7 @@
             {% for project in projects %}
                 <article class="content-card">
                     {% if project.imageFilename %}
-                        <img src="/uploads/admin/{{ project.imageFilename }}" alt="{{ project.imageAlt ?: 'Illustration du projet ' ~ project.name }}" width="960" height="540" loading="lazy" decoding="async">
+                        <img src="/uploads/admin/projects/{{ project.imageFilename }}" alt="{{ project.imageAlt ?: 'Illustration du projet ' ~ project.name }}" width="960" height="540" loading="lazy" decoding="async">
                     {% endif %}
                     <div>
                         <p class="eyebrow">Projet</p>

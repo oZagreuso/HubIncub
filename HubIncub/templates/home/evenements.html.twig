@@ -5,7 +5,7 @@
 {% block body %}
 <header class="site-header" data-header>
     <a class="brand" href="{{ path('app_home') }}" aria-label="Accueil HubIncub">
-        <img src="/images/logo-hubincub.png" alt="HubIncub" width="1448" height="1086" decoding="async">
+        <img src="/images/branding/logo-hubincub.png" alt="HubIncub" width="1448" height="1086" decoding="async">
         <span>HubIncub</span>
     </a>
 
@@ -30,7 +30,7 @@
             {% for event in events %}
                 <article class="content-card">
                     {% if event.imageFilename %}
-                        <img src="/uploads/admin/{{ event.imageFilename }}" alt="{{ event.imageAlt ?: 'Illustration de l’événement ' ~ event.title }}" width="960" height="540" loading="lazy" decoding="async">
+                        <img src="/uploads/admin/events/{{ event.imageFilename }}" alt="{{ event.imageAlt ?: 'Illustration de l’événement ' ~ event.title }}" width="960" height="540" loading="lazy" decoding="async">
                     {% endif %}
                     <div>
                         <p class="eyebrow">Événement</p>

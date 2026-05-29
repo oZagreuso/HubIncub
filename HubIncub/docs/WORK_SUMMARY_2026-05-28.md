@@ -38,7 +38,7 @@ Ce document récapitule les modifications réalisées sur le projet HubIncub. Il
 
 ## Pages d’erreur
 
-- Une image dédiée aux pages d’erreur a été générée dans la palette HubIncub et ajoutée dans `public/images/error-retro-hubincub.png`.
+- Une image dédiée aux pages d’erreur a été générée dans la palette HubIncub et ajoutée dans `public/images/errors/error-retro-hubincub.png`.
 - Des templates Symfony ont été ajoutés pour les erreurs génériques, 403, 404 et 500.
 - Des routes de prévisualisation ont été ajoutées pour consulter les pages en environnement de développement :
   - `/403`

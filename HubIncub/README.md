@@ -69,15 +69,24 @@ Le fichier `public/styles/app.css` est le point d'entrée unique. Il importe les
 
 ## Images
 
-Les images du site se trouvent dans `public/images`.
+Les images du site se trouvent dans `public/images`, organisées par module :
+
+```text
+public/images/branding
+public/images/errors
+public/images/layout
+public/images/partners
+```
 
 Les images ajoutées depuis l'administration sont stockées dans :
 
 ```text
-public/uploads/admin
+public/uploads/admin/projects
+public/uploads/admin/events
+public/uploads/admin/news
 ```
 
-Les fichiers uploadés reçoivent un nom lisible pour le SEO, basé sur le nom du projet ou le titre de l'événement.
+Les fichiers uploadés reçoivent un nom lisible pour le SEO, basé sur le nom du projet, le titre de l'événement ou le titre de l'actualité.
 
 ## Documentation IA
 

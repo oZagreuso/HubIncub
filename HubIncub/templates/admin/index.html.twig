@@ -6,7 +6,7 @@
 {# Protected administration header. Symfony Security restricts this route to ROLE_ADMIN. #}
 <header class="site-header" data-header>
     <a class="brand" href="{{ path('app_home') }}" aria-label="Accueil HubIncub">
-        <img src="/images/logo-hubincub.png" alt="HubIncub" width="1448" height="1086" decoding="async">
+        <img src="/images/branding/logo-hubincub.png" alt="HubIncub" width="1448" height="1086" decoding="async">
         <span>HubIncub</span>
     </a>
 
@@ -30,7 +30,7 @@
                 <p class="hero-text">Ajoutez les membres de l'annuaire, les projets, les événements et les actualités du réseau.</p>
             </div>
             <div class="admin-heading-aside">
-                <img class="admin-heading-logo" src="/images/logo-hubincub.png" alt="HubIncub" width="1448" height="1086" decoding="async">
+                <img class="admin-heading-logo" src="/images/branding/logo-hubincub.png" alt="HubIncub" width="1448" height="1086" decoding="async">
                 <span class="admin-role-pill">{{ is_granted('ROLE_ADMIN') ? 'Administrateur' : 'Délégué' }}</span>
             </div>
         </div>
@@ -232,7 +232,7 @@
                 <h2>Projets</h2>
                 <ul class="admin-list">
                     {% for project in projects %}
-                        <li class="admin-media-item" {% if project.imageFilename %}style="--admin-media-image: url('/uploads/admin/{{ project.imageFilename }}');"{% endif %}>
+                        <li class="admin-media-item" {% if project.imageFilename %}style="--admin-media-image: url('/uploads/admin/projects/{{ project.imageFilename }}');"{% endif %}>
                             {{ project.name }}
                             <span>{{ project.description }}</span>
                         </li>
@@ -246,7 +246,7 @@
                 <h2>Événements</h2>
                 <ul class="admin-list">
                     {% for event in events %}
-                        <li class="admin-media-item" {% if event.imageFilename %}style="--admin-media-image: url('/uploads/admin/{{ event.imageFilename }}');"{% endif %}>
+                        <li class="admin-media-item" {% if event.imageFilename %}style="--admin-media-image: url('/uploads/admin/events/{{ event.imageFilename }}');"{% endif %}>
                             {{ event.title }}
                             <span>{{ event.startsAt ? event.startsAt|date('d/m/Y H:i') : 'Date à préciser' }}</span>
                         </li>
@@ -260,7 +260,7 @@
                 <h2>Actualités</h2>
                 <ul class="admin-list">
                     {% for news in newsItems %}
-                        <li class="admin-media-item" {% if news.imageFilename %}style="--admin-media-image: url('/uploads/admin/{{ news.imageFilename }}');"{% endif %}>
+                        <li class="admin-media-item" {% if news.imageFilename %}style="--admin-media-image: url('/uploads/admin/news/{{ news.imageFilename }}');"{% endif %}>
                             {{ news.title }}
                             <span>{{ news.publishedAt|date('d/m/Y H:i') }}</span>
                         </li>

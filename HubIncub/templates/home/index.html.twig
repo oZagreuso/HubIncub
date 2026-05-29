@@ -6,7 +6,7 @@
 {# Public header with navigation to the main site sections and the protected admin entry. #}
 <header class="site-header" data-header>
     <a class="brand" href="/" aria-label="Accueil HubIncub">
-        <img src="/images/logo-hubincub.png" alt="HubIncub" width="1448" height="1086" decoding="async">
+        <img src="/images/branding/logo-hubincub.png" alt="HubIncub" width="1448" height="1086" decoding="async">
         <span>HubIncub</span>
     </a>
 
@@ -23,7 +23,7 @@
     {# Front-page hero introducing the HubIncub network. #}
     <section class="hero">
         <div class="hero-content">
-            <img class="hero-logo" src="/images/logo-hubincub.png" alt="Logo HubIncub" width="1448" height="1086" fetchpriority="high" decoding="async">
+            <img class="hero-logo" src="/images/branding/logo-hubincub.png" alt="Logo HubIncub" width="1448" height="1086" fetchpriority="high" decoding="async">
             <p class="eyebrow">Incubateur Metz Numeric School</p>
 
             <h1>Le hub des anciens incubateurs de MNS</h1>
@@ -41,8 +41,8 @@
 
         <aside class="hero-panel" aria-label="Aperçu du hub">
             <div class="partner-logos" aria-label="Écoles partenaires">
-                <img class="school-logo" src="/images/logo-mns.webp" alt="Logo Metz Numeric School" width="816" height="768" loading="lazy" decoding="async">
-                <img class="school-logo ifa-logo" src="/images/ifalogo.jpg" alt="Logo IFA Business School" width="225" height="225" loading="lazy" decoding="async">
+                <img class="school-logo" src="/images/partners/logo-mns.webp" alt="Logo Metz Numeric School" width="816" height="768" loading="lazy" decoding="async">
+                <img class="school-logo ifa-logo" src="/images/partners/ifalogo.jpg" alt="Logo IFA Business School" width="225" height="225" loading="lazy" decoding="async">
             </div>
             <div>
                 <span class="metric">Alumni</span>
@@ -79,7 +79,7 @@
                     {% if latestNews.imageFilename %}
                         <img
                             class="latest-news-image"
-                            src="/uploads/admin/{{ latestNews.imageFilename }}"
+                            src="/uploads/admin/news/{{ latestNews.imageFilename }}"
                             alt="{{ latestNews.imageAlt ?: 'Illustration de l’actualité ' ~ latestNews.title }}"
                             width="960"
                             height="540"
@@ -96,7 +96,7 @@
                         <article class="content-card">
                             {% if latestProject.imageFilename %}
                                 <img
-                                    src="/uploads/admin/{{ latestProject.imageFilename }}"
+                                    src="/uploads/admin/projects/{{ latestProject.imageFilename }}"
                                     alt="{{ latestProject.imageAlt ?: 'Illustration du projet ' ~ latestProject.name }}"
                                     width="960"
                                     height="540"
@@ -117,7 +117,7 @@
                         <article class="content-card">
                             {% if latestEvent.imageFilename %}
                                 <img
-                                    src="/uploads/admin/{{ latestEvent.imageFilename }}"
+                                    src="/uploads/admin/events/{{ latestEvent.imageFilename }}"
                                     alt="{{ latestEvent.imageAlt ?: 'Illustration de l’événement ' ~ latestEvent.title }}"
                                     width="960"
                                     height="540"

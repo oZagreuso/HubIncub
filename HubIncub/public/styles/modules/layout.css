@@ -64,7 +64,7 @@ body.is-scrolled .site-header {
     gap: 56px;
     background:
         linear-gradient(90deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.94) 42%, rgba(255, 255, 255, 0.72) 68%, rgba(255, 121, 0, 0.16) 100%),
-        url("/images/logo-cover.jpg") right center / cover no-repeat;
+        url("/images/layout/logo-cover.jpg") right center / cover no-repeat;
 }
 
 /* Decorative overlay keeps the background aligned with the brand palette. */
@@ -129,7 +129,7 @@ body.is-scrolled .site-header {
     min-height: 260px;
     background:
         linear-gradient(90deg, rgba(20, 33, 61, 0.96), rgba(20, 33, 61, 0.9), rgba(20, 33, 61, 0.68)),
-        url("/images/fondfooter.png") right center / cover no-repeat,
+        url("/images/layout/fondfooter.png") right center / cover no-repeat,
         var(--navy);
     color: var(--white);
 }

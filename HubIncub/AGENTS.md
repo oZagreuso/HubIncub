@@ -13,8 +13,9 @@ docs/AI_CONTEXT.md
 - Keep `public/styles/app.css` as an import-only entry point.
 - Add new CSS in the relevant file under `public/styles/modules`.
 - Add a Doctrine migration for every schema change.
-- Keep uploaded project and event images on disk under `public/uploads/admin`.
-- Keep uploaded news images on disk under `public/uploads/admin`.
+- Keep uploaded project images on disk under `public/uploads/admin/projects`.
+- Keep uploaded event images on disk under `public/uploads/admin/events`.
+- Keep uploaded news images on disk under `public/uploads/admin/news`.
 - Persist image metadata in the database, not binary image data.
 - Preserve Symfony Security for admin authentication.
 - Preserve captcha validation in `App\Security\LoginFormAuthenticator`.
