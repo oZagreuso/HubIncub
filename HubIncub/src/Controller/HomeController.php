@@ -97,4 +97,10 @@ final class HomeController extends AbstractController
             'newsItems' => $newsRepository->findBy([], ['publishedAt' => 'DESC', 'id' => 'DESC']),
         ]);
     }
+
+    #[Route('/mentions-legales', name: 'app_mentions_legales')]
+    public function mentionsLegales(): Response
+    {
+        return $this->render('home/mentions_legales.html.twig');
+    }
 }

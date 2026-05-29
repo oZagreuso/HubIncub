@@ -185,6 +185,16 @@
     </section>
 
     {# Visual footer. Member access is managed exclusively from administration. #}
-    <section class="join-section" aria-label="Pied de page HubIncub"></section>
+    <section class="join-section" aria-label="Pied de page HubIncub">
+        <div>
+            <p class="eyebrow">HubIncub</p>
+            <h2>Un réseau qui continue après l'incubateur.</h2>
+            <p>Consultez les informations légales du site ou accédez à l'administration.</p>
+            <div class="hero-actions">
+                <a class="button primary" href="{{ path('app_mentions_legales') }}">Mentions légales</a>
+                <a class="button secondary" href="{{ path('app_admin') }}">Administration</a>
+            </div>
+        </div>
+    </section>
 </main>
 {% endblock %}
