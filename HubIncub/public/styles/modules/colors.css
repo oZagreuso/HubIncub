@@ -3,13 +3,21 @@
     /* Brand palette. */
     --orange: #ff7900;
     --orange-dark: #dc5e00;
+    --orange-hover: #c94f00;
     --orange-soft: #fff1e3;
 
     /* Structural and text colors. */
     --navy: #14213d;
+    --navy-hover: #0f172d;
     --navy-soft: #eaf0f8;
     --ink: #1d2430;
     --muted: #667085;
     --line: #dbe3ef;
     --white: #ffffff;
+    --danger: #8a1f11;
+    --danger-hover: #6f170d;
+    --danger-soft: #fff0ec;
+    --danger-soft-hover: #ffe4dc;
+    --danger-line: #ffd1c6;
+    --danger-line-hover: #ffb6a6;
 }

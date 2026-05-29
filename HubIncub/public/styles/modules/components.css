@@ -6,6 +6,11 @@
     box-shadow: 0 14px 30px rgba(255, 121, 0, 0.24);
 }
 
+.nav-action:hover,
+.button.primary:hover {
+    background: linear-gradient(135deg, var(--orange-dark), var(--orange-hover));
+}
+
 /* Header-specific call-to-action sizing. */
 .nav-action {
     padding: 11px 17px;
@@ -23,7 +28,7 @@
     border-radius: 8px;
     font-weight: 800;
     text-decoration: none;
-    transition: box-shadow 180ms ease, transform 180ms ease, border-color 180ms ease;
+    transition: background 180ms ease, box-shadow 180ms ease, transform 180ms ease, border-color 180ms ease, color 180ms ease;
 }
 
 .button:hover,
@@ -38,11 +43,23 @@
     border: 1px solid rgba(20, 33, 61, 0.16);
 }
 
+.button.secondary:hover {
+    color: var(--navy-hover);
+    background: var(--navy-soft);
+    border-color: rgba(20, 33, 61, 0.28);
+}
+
 .button.danger {
     min-height: 40px;
-    color: #8a1f11;
-    background: #fff0ec;
-    border: 1px solid #ffd1c6;
+    color: var(--danger);
+    background: var(--danger-soft);
+    border: 1px solid var(--danger-line);
+}
+
+.button.danger:hover {
+    color: var(--danger-hover);
+    background: var(--danger-soft-hover);
+    border-color: var(--danger-line-hover);
 }
 
 /* Small uppercase label used above major headings. */
@@ -297,4 +314,8 @@
     background: linear-gradient(135deg, var(--orange), var(--orange-dark));
     border-color: transparent;
     box-shadow: 0 12px 26px rgba(255, 121, 0, 0.22);
+}
+
+.portfolio-card .button.secondary:hover {
+    background: linear-gradient(135deg, var(--orange-dark), var(--orange-hover));
 }
