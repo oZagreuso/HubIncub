@@ -3,19 +3,19 @@
     position: sticky;
     top: 0;
     z-index: 10;
-    height: 76px;
-    padding: 0 48px;
+    height: 72px;
+    padding: 0 max(32px, calc((100vw - 1180px) / 2));
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: rgba(255, 255, 255, 0.86);
-    border-bottom: 1px solid rgba(20, 33, 61, 0.1);
-    backdrop-filter: blur(14px);
+    background: rgba(255, 255, 255, 0.92);
+    border-bottom: 1px solid rgba(23, 32, 51, 0.08);
+    backdrop-filter: blur(18px);
 }
 
 /* The scroll shadow is toggled by public/scripts/app.js. */
 body.is-scrolled .site-header {
-    box-shadow: 0 12px 32px rgba(20, 33, 61, 0.08);
+    box-shadow: 0 12px 32px rgba(23, 32, 51, 0.08);
 }
 
 /* Brand block combines the HubIncub logo and text label. */
@@ -26,13 +26,14 @@ body.is-scrolled .site-header {
     gap: 12px;
     color: var(--ink);
     text-decoration: none;
-    font-size: 19px;
-    font-weight: 800;
+    font-size: 18px;
+    font-weight: 850;
+    letter-spacing: 0;
 }
 
 .brand img {
-    width: 132px;
-    height: 42px;
+    width: 118px;
+    height: 38px;
     object-fit: contain;
 }
 
@@ -41,14 +42,25 @@ body.is-scrolled .site-header {
     min-width: 0;
     display: flex;
     align-items: center;
-    gap: 24px;
-    font-size: 15px;
-    font-weight: 700;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 750;
 }
 
 .main-nav a {
+    min-height: 40px;
+    padding: 0 11px;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 8px;
     color: var(--navy);
     text-decoration: none;
+    transition: background 160ms ease, color 160ms ease;
+}
+
+.main-nav a:hover {
+    color: var(--orange-dark);
+    background: var(--orange-soft);
 }
 
 /* Front-page hero with the shared geometric background image and orange overlay. */
@@ -56,15 +68,15 @@ body.is-scrolled .site-header {
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    min-height: calc(100vh - 76px);
-    padding: 54px 48px 80px;
+    min-height: calc(100vh - 72px);
+    padding: 64px max(32px, calc((100vw - 1180px) / 2)) 84px;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 340px;
+    grid-template-columns: minmax(0, 1fr) 360px;
     align-items: center;
-    gap: 56px;
+    gap: 64px;
     background:
-        linear-gradient(90deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.94) 42%, rgba(255, 255, 255, 0.72) 68%, rgba(255, 121, 0, 0.16) 100%),
-        url("/images/layout/logo-cover.jpg") right center / cover no-repeat;
+        linear-gradient(90deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.94) 50%, rgba(255, 248, 241, 0.8) 100%),
+        url("/images/layout/cover.jpg") right center / cover no-repeat;
 }
 
 /* Decorative overlay keeps the background aligned with the brand palette. */
@@ -74,51 +86,49 @@ body.is-scrolled .site-header {
     inset: 0;
     z-index: -1;
     background:
-        linear-gradient(135deg, rgba(255, 121, 0, 0.16), transparent 34%),
-        linear-gradient(180deg, transparent 68%, rgba(255, 121, 0, 0.08));
+        linear-gradient(180deg, transparent 72%, rgba(246, 248, 251, 0.95)),
+        linear-gradient(135deg, rgba(15, 143, 140, 0.08), transparent 42%);
 }
 
 /* Limits hero text width while keeping the background full-bleed. */
 .hero-content {
     position: relative;
     min-width: 0;
-    max-width: 900px;
+    max-width: 820px;
 }
 
 /* Shared vertical spacing for main page sections. */
 .section,
 .split-section,
 .join-section {
-    padding: 76px 48px;
+    padding: 76px max(32px, calc((100vw - 1180px) / 2));
 }
 
 /* Default light content band. */
 .section {
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.98)),
-        linear-gradient(135deg, rgba(255, 121, 0, 0.05), transparent 42%);
+    background: var(--surface);
 }
 
 /* Softer alternate section band retained for future content blocks. */
 .section-soft {
-    background: linear-gradient(180deg, #ffffff 0%, var(--navy-soft) 100%);
+    background: linear-gradient(180deg, var(--surface) 0%, var(--navy-soft) 100%);
 }
 
 /* Constrains introductory text inside sections. */
 .section-heading {
     max-width: 760px;
-    margin-bottom: 32px;
+    margin-bottom: 34px;
 }
 
 /* Two-column editorial section used for the project introduction. */
 .split-section {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(280px, 520px);
-    gap: 56px;
+    gap: 64px;
     align-items: start;
     background:
-        linear-gradient(135deg, #ffffff 0%, rgba(255, 241, 227, 0.9) 48%, rgba(255, 121, 0, 0.16) 100%);
-    border-top: 1px solid rgba(20, 33, 61, 0.1);
+        linear-gradient(135deg, var(--surface) 0%, var(--orange-wash) 55%, var(--teal-soft) 100%);
+    border-top: 1px solid rgba(23, 32, 51, 0.08);
 }
 
 /* Dark call-to-action band. */
@@ -126,9 +136,11 @@ body.is-scrolled .site-header {
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    min-height: 260px;
+    min-height: 300px;
+    display: flex;
+    align-items: center;
     background:
-        linear-gradient(90deg, rgba(20, 33, 61, 0.96), rgba(20, 33, 61, 0.9), rgba(20, 33, 61, 0.68)),
+        linear-gradient(90deg, rgba(13, 20, 36, 0.98), rgba(23, 32, 51, 0.9), rgba(23, 32, 51, 0.7)),
         url("/images/layout/fondfooter.png") right center / cover no-repeat,
         var(--navy);
     color: var(--white);
@@ -140,8 +152,8 @@ body.is-scrolled .site-header {
     inset: 0;
     z-index: -1;
     background:
-        linear-gradient(135deg, rgba(255, 121, 0, 0.16), transparent 38%),
-        linear-gradient(180deg, rgba(234, 240, 248, 0.08), transparent);
+        linear-gradient(135deg, rgba(255, 121, 0, 0.18), transparent 36%),
+        linear-gradient(180deg, rgba(15, 143, 140, 0.1), transparent);
 }
 
 .join-section > div {

@@ -16,7 +16,12 @@ final class Version20260529162000 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql('ALTER TABLE portfolio ADD COLUMN promotion VARCHAR(20) DEFAULT NULL');
+        $columns = $this->connection->fetchFirstColumn("SELECT name FROM pragma_table_info('portfolio')");
+
+        if (!in_array('promotion', $columns, true)) {
+            $this->addSql('ALTER TABLE portfolio ADD COLUMN promotion VARCHAR(20) DEFAULT NULL');
+        }
+
         $this->addSql("UPDATE portfolio SET promotion = '2026' WHERE lower(first_name) = 'olivier' AND lower(last_name) = 'dal ferro'");
         $this->addSql("UPDATE portfolio SET promotion = '2025' WHERE email IN ('aline.chevalier@example.com', 'bastien.lemoine@example.com', 'camille.martin@example.com', 'chloe.garnier@example.com', 'dorian.masson@example.com', 'elisa.renard@example.com')");
         $this->addSql("UPDATE portfolio SET promotion = '2024' WHERE email IN ('adel.bourgeois@example.com', 'farid.colin@example.com', 'gaelle.marchand@example.com', 'hugo.perrin@example.com', 'imane.roussel@example.com', 'jules.fontaine@example.com', 'karima.blanc@example.com')");
@@ -26,6 +31,10 @@ final class Version20260529162000 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        $this->addSql('ALTER TABLE portfolio DROP COLUMN promotion');
+        $columns = $this->connection->fetchFirstColumn("SELECT name FROM pragma_table_info('portfolio')");
+
+        if (in_array('promotion', $columns, true)) {
+            $this->addSql('ALTER TABLE portfolio DROP COLUMN promotion');
+        }
     }
 }

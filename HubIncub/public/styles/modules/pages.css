@@ -17,8 +17,12 @@
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    padding: 72px 48px 56px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 247, 238, 0.96));
+    padding: 72px max(32px, calc((100vw - 1180px) / 2)) 58px;
+    background:
+        linear-gradient(90deg, rgba(255, 255, 255, 0.98), rgba(255, 248, 241, 0.82)),
+        url("/images/layout/logo-cover.jpg") right center / contain no-repeat,
+        var(--surface);
+    border-bottom: 1px solid rgba(23, 32, 51, 0.08);
 }
 
 /* Orange tint overlay for directory pages. */
@@ -27,7 +31,7 @@
     content: "";
     inset: 0;
     z-index: -1;
-    background: linear-gradient(135deg, rgba(255, 121, 0, 0.08), transparent 42%);
+    background: linear-gradient(135deg, rgba(15, 143, 140, 0.08), transparent 44%);
 }
 
 .directory-hero .hero-text {
@@ -54,16 +58,14 @@
 /* Legal notice page. */
 .legal-hero {
     background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 247, 238, 0.94)),
-        linear-gradient(135deg, rgba(255, 121, 0, 0.1), transparent 44%),
-        url("/images/layout/logo-cover.jpg") right center / cover no-repeat;
+        linear-gradient(90deg, rgba(255, 255, 255, 0.98), rgba(255, 248, 241, 0.88)),
+        url("/images/layout/logo-cover.jpg") right center / contain no-repeat;
 }
 
 .legal-section {
     padding-top: 0;
     background:
-        linear-gradient(180deg, rgba(255, 247, 238, 0.96), rgba(255, 255, 255, 0.98) 38%, rgba(234, 240, 248, 0.62)),
-        linear-gradient(135deg, rgba(255, 121, 0, 0.06), transparent 46%);
+        linear-gradient(180deg, var(--orange-wash), var(--surface) 38%, var(--navy-soft));
 }
 
 .legal-grid {
@@ -80,10 +82,8 @@
     padding: 28px;
     border: 1px solid var(--line);
     border-radius: 8px;
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.86)),
-        linear-gradient(135deg, rgba(255, 121, 0, 0.05), transparent 48%);
-    box-shadow: 0 18px 42px rgba(20, 33, 61, 0.06);
+    background: var(--surface);
+    box-shadow: var(--shadow-soft);
 }
 
 .legal-card::before {
@@ -91,7 +91,7 @@
     content: "";
     inset: 0 0 auto;
     height: 4px;
-    background: linear-gradient(90deg, var(--orange), rgba(20, 33, 61, 0.18));
+    background: linear-gradient(90deg, var(--orange), var(--teal));
 }
 
 .legal-card span {
@@ -141,8 +141,7 @@
     align-items: center;
     overflow: hidden;
     background:
-        linear-gradient(90deg, rgba(20, 33, 61, 0.94), rgba(20, 33, 61, 0.72) 48%, rgba(20, 33, 61, 0.28)),
-        linear-gradient(135deg, rgba(255, 121, 0, 0.34), transparent 42%),
+        linear-gradient(90deg, rgba(13, 20, 36, 0.96), rgba(23, 32, 51, 0.76) 52%, rgba(23, 32, 51, 0.28)),
         url("/images/errors/error-retro-hubincub.png") center / cover no-repeat;
 }
 
@@ -190,11 +189,10 @@
 
 /* Editorial front-page feed for the latest news, project and event. */
 .front-feed-section {
-    padding: 76px 48px;
+    padding: 76px max(32px, calc((100vw - 1180px) / 2));
     background:
-        linear-gradient(180deg, rgba(255, 247, 238, 0.96), rgba(255, 255, 255, 0.98) 42%, rgba(234, 240, 248, 0.5)),
-        linear-gradient(135deg, rgba(255, 121, 0, 0.1), transparent 48%);
-    border-top: 1px solid rgba(20, 33, 61, 0.1);
+        linear-gradient(180deg, var(--orange-wash), var(--surface) 42%, var(--navy-soft));
+    border-top: 1px solid rgba(23, 32, 51, 0.08);
 }
 
 .front-feed-heading {
@@ -219,8 +217,8 @@
     align-items: center;
     border: 1px solid var(--line);
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 18px 42px rgba(20, 33, 61, 0.06);
+    background: var(--surface);
+    box-shadow: var(--shadow-soft);
 }
 
 .latest-news-content {
@@ -244,11 +242,11 @@
     min-height: 34px;
     padding: 0 12px;
     align-items: center;
-    border: 1px solid rgba(255, 121, 0, 0.24);
+    border: 1px solid rgba(15, 143, 140, 0.22);
     border-radius: 8px;
-    color: var(--orange-dark);
-    background: rgba(255, 241, 227, 0.74);
-    font-weight: 800;
+    color: var(--teal);
+    background: var(--teal-soft);
+    font-weight: 850;
 }
 
 .latest-news-image {
@@ -257,7 +255,7 @@
     object-fit: cover;
     border: 1px solid var(--line);
     border-radius: 8px;
-    box-shadow: 0 24px 60px rgba(20, 33, 61, 0.1);
+    box-shadow: 0 24px 60px rgba(23, 32, 51, 0.1);
 }
 
 /* Front-page highlights expose the latest managed project and event. */
@@ -292,12 +290,11 @@
 
 /* Admin and login page shell. */
 .admin-shell {
-    min-height: calc(100vh - 76px);
-    padding: 72px 48px;
+    min-height: calc(100vh - 72px);
+    padding: 72px max(32px, calc((100vw - 1180px) / 2));
     background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(255, 248, 241, 0.92) 48%, rgba(234, 240, 248, 0.88)),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.96), rgba(255, 121, 0, 0.1)),
-        url("/images/layout/logo-cover.jpg") right center / cover fixed no-repeat;
+        linear-gradient(180deg, rgba(255, 248, 241, 0.86), rgba(246, 248, 251, 0.94) 320px),
+        var(--page);
 }
 
 /* Login page two-column layout. */
@@ -333,11 +330,10 @@
     width: 138px;
     height: auto;
     padding: 12px;
-    border: 1px solid rgba(20, 33, 61, 0.1);
+    border: 1px solid rgba(23, 32, 51, 0.1);
     border-radius: 8px;
-    background:
-        linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(255, 241, 227, 0.78));
-    box-shadow: 0 18px 38px rgba(20, 33, 61, 0.08);
+    background: var(--surface);
+    box-shadow: var(--shadow-soft);
     mix-blend-mode: multiply;
 }
 
@@ -381,12 +377,10 @@
     position: relative;
     overflow: hidden;
     padding: 26px;
-    border: 1px solid rgba(20, 33, 61, 0.12);
+    border: 1px solid rgba(23, 32, 51, 0.12);
     border-radius: 8px;
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.86)),
-        linear-gradient(135deg, rgba(255, 121, 0, 0.05), transparent 46%);
-    box-shadow: 0 22px 52px rgba(20, 33, 61, 0.08);
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: var(--shadow-soft);
     backdrop-filter: blur(12px);
 }
 
@@ -395,7 +389,7 @@
     content: "";
     inset: 0 0 auto;
     height: 4px;
-    background: linear-gradient(90deg, var(--orange), rgba(20, 33, 61, 0.18));
+    background: linear-gradient(90deg, var(--orange), var(--teal));
 }
 
 .admin-card h2 {
@@ -443,7 +437,7 @@
     border-radius: 8px;
     color: var(--ink);
     font: inherit;
-    background: rgba(255, 255, 255, 0.96);
+    background: var(--surface);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
 }
 
@@ -496,11 +490,11 @@
 
 .admin-list li {
     padding: 14px;
-    border: 1px solid rgba(20, 33, 61, 0.1);
+    border: 1px solid rgba(23, 32, 51, 0.1);
     border-radius: 8px;
     color: var(--ink);
     font-weight: 800;
-    background: rgba(255, 255, 255, 0.72);
+    background: rgba(255, 255, 255, 0.82);
 }
 
 .admin-list li:last-child {

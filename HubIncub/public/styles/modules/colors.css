@@ -2,18 +2,28 @@
 :root {
     /* Brand palette. */
     --orange: #ff7900;
-    --orange-dark: #dc5e00;
-    --orange-hover: #c94f00;
-    --orange-soft: #fff1e3;
+    --orange-dark: #d95f00;
+    --orange-hover: #b84f00;
+    --orange-soft: #fff3e8;
+    --orange-wash: #fff8f1;
+    --teal: #0f8f8c;
+    --teal-soft: #e8f7f6;
 
     /* Structural and text colors. */
-    --navy: #14213d;
-    --navy-hover: #0f172d;
-    --navy-soft: #eaf0f8;
-    --ink: #1d2430;
-    --muted: #667085;
-    --line: #dbe3ef;
+    --navy: #172033;
+    --navy-hover: #0d1424;
+    --navy-soft: #edf3f8;
+    --ink: #19202c;
+    --muted: #647084;
+    --subtle: #8a94a6;
+    --line: #d8e0ea;
+    --line-strong: #c2cedc;
+    --page: #f6f8fb;
+    --surface: #ffffff;
+    --surface-soft: #fbfcfe;
     --white: #ffffff;
+    --shadow-soft: 0 18px 42px rgba(23, 32, 51, 0.08);
+    --shadow-lift: 0 28px 70px rgba(23, 32, 51, 0.14);
     --danger: #8a1f11;
     --danger-hover: #6f170d;
     --danger-soft: #fff0ec;

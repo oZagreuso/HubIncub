@@ -2,7 +2,7 @@
 @media (max-width: 900px) {
     .site-header {
         height: auto;
-        padding: 18px 22px;
+        padding: 16px 22px;
         align-items: flex-start;
         gap: 18px;
         flex-direction: column;
@@ -10,7 +10,7 @@
 
     .main-nav {
         width: 100%;
-        gap: 14px;
+        gap: 8px;
         flex-wrap: wrap;
     }
 
@@ -20,14 +20,18 @@
 
     .hero {
         min-height: auto;
-        padding: 42px 22px 64px;
+        padding: 46px 22px 64px;
         grid-template-columns: 1fr;
         gap: 34px;
     }
 
     h1 {
-        font-size: 42px;
+        font-size: 44px;
         overflow-wrap: anywhere;
+    }
+
+    h2 {
+        font-size: 34px;
     }
 
     .section,
@@ -101,16 +105,53 @@
 
 /* Narrow mobile adjustments. */
 @media (max-width: 560px) {
+    .site-header {
+        padding-inline: 16px;
+    }
+
+    .brand img {
+        width: 104px;
+    }
+
+    .main-nav a {
+        min-height: 38px;
+        padding-inline: 9px;
+        font-size: 13px;
+    }
+
     .hero-logo {
         width: 100%;
-        max-width: 340px;
+        max-width: 270px;
     }
 
     h1 {
         font-size: 36px;
+        line-height: 1.04;
+    }
+
+    h2 {
+        font-size: 30px;
     }
 
     .hero-text {
-        font-size: 18px;
+        font-size: 17px;
+    }
+
+    .button {
+        width: 100%;
+    }
+
+    .hero-panel {
+        padding: 12px;
+    }
+
+    .content-card > div,
+    .features article,
+    .event-list article,
+    .portfolio-card,
+    .latest-news-card,
+    .legal-card,
+    .admin-card {
+        padding: 20px;
     }
 }

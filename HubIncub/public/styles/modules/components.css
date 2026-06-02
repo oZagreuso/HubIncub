@@ -3,7 +3,7 @@
 .button.primary {
     color: var(--white);
     background: linear-gradient(135deg, var(--orange), var(--orange-dark));
-    box-shadow: 0 14px 30px rgba(255, 121, 0, 0.24);
+    box-shadow: 0 12px 26px rgba(255, 121, 0, 0.22);
 }
 
 .nav-action:hover,
@@ -11,9 +11,18 @@
     background: linear-gradient(135deg, var(--orange-dark), var(--orange-hover));
 }
 
+.main-nav .nav-action,
+.main-nav .nav-action:hover {
+    color: var(--white);
+}
+
+.main-nav .nav-action:hover {
+    background: linear-gradient(135deg, var(--orange-dark), var(--orange-hover));
+}
+
 /* Header-specific call-to-action sizing. */
 .nav-action {
-    padding: 11px 17px;
+    padding: 0 16px;
     border-radius: 8px;
     transition: box-shadow 180ms ease, transform 180ms ease;
 }
@@ -21,32 +30,34 @@
 /* Base button component. */
 .button {
     min-height: 48px;
-    padding: 0 20px;
+    padding: 0 21px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     border-radius: 8px;
-    font-weight: 800;
+    font-weight: 850;
     text-decoration: none;
     transition: background 180ms ease, box-shadow 180ms ease, transform 180ms ease, border-color 180ms ease, color 180ms ease;
 }
 
 .button:hover,
 .nav-action:hover {
-    box-shadow: 0 0 0 4px rgba(255, 121, 0, 0.12), 0 12px 28px rgba(255, 121, 0, 0.18);
+    box-shadow: 0 0 0 4px rgba(255, 121, 0, 0.12), 0 16px 30px rgba(255, 121, 0, 0.18);
+    transform: translateY(-1px);
 }
 
 /* Secondary button variant used for navigation and portfolio links. */
 .button.secondary {
     color: var(--navy);
     background: var(--white);
-    border: 1px solid rgba(20, 33, 61, 0.16);
+    border: 1px solid var(--line-strong);
+    box-shadow: 0 8px 18px rgba(23, 32, 51, 0.04);
 }
 
 .button.secondary:hover {
     color: var(--navy-hover);
-    background: var(--navy-soft);
-    border-color: rgba(20, 33, 61, 0.28);
+    background: var(--surface-soft);
+    border-color: rgba(255, 121, 0, 0.42);
 }
 
 .button.danger {
@@ -64,19 +75,18 @@
 
 /* Small uppercase label used above major headings. */
 .eyebrow {
-    margin: 0 0 14px;
+    margin: 0 0 12px;
     color: var(--orange-dark);
-    font-size: 13px;
-    font-weight: 800;
-    letter-spacing: 0;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
 }
 
 /* Main hero logo sizing. */
 .hero-logo {
-    width: min(440px, 100%);
-    height: auto;
-    margin-bottom: 10px;
+    width: min(320px, 100%);
+    margin-bottom: 18px;
     mix-blend-mode: multiply;
 }
 
@@ -85,7 +95,7 @@
     max-width: 660px;
     margin-bottom: 0;
     color: var(--muted);
-    font-size: 20px;
+    font-size: 19px;
     line-height: 1.6;
 }
 
@@ -94,28 +104,28 @@
     display: flex;
     flex-wrap: wrap;
     gap: 14px;
-    margin-top: 34px;
+    margin-top: 32px;
 }
 
 /* Glass-like summary panel in the hero. */
 .hero-panel {
     position: relative;
     min-width: 0;
-    padding: 22px;
+    padding: 18px;
     display: grid;
-    gap: 14px;
-    border: 1px solid rgba(20, 33, 61, 0.12);
+    gap: 12px;
+    border: 1px solid rgba(23, 32, 51, 0.1);
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.82);
-    box-shadow: 0 30px 70px rgba(20, 33, 61, 0.14);
-    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: var(--shadow-lift);
+    backdrop-filter: blur(14px);
 }
 
 .hero-panel div {
-    padding: 20px;
+    padding: 18px;
     border-radius: 8px;
-    background: linear-gradient(135deg, #ffffff, var(--navy-soft));
-    border: 1px solid var(--line);
+    background: var(--surface-soft);
+    border: 1px solid rgba(23, 32, 51, 0.08);
 }
 
 .hero-panel .partner-logos {
@@ -145,8 +155,10 @@
 .metric {
     display: block;
     margin-bottom: 8px;
-    color: var(--orange-dark);
-    font-weight: 800;
+    color: var(--teal);
+    font-size: 13px;
+    font-weight: 900;
+    text-transform: uppercase;
 }
 
 /* Reusable grid containers. */
@@ -154,7 +166,7 @@
 .event-list,
 .portfolio-grid {
     display: grid;
-    gap: 18px;
+    gap: 20px;
 }
 
 .features {
@@ -182,32 +194,39 @@
 .portfolio-card {
     border: 1px solid var(--line);
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.86);
-    box-shadow: 0 18px 42px rgba(20, 33, 61, 0.06);
+    background: var(--surface);
+    box-shadow: var(--shadow-soft);
 }
 
 /* Feature and event cards can contain stretched links. */
 .features article,
 .event-list article {
     position: relative;
-    padding: 24px;
+    padding: 26px;
 }
 
 .portfolio-card {
     position: relative;
-    padding: 24px;
+    padding: 26px;
     min-height: 100%;
     display: flex;
     flex-direction: column;
-    background: rgba(255, 255, 255, 0.94);
+    background: var(--surface);
 }
 
 .content-card {
     overflow: hidden;
     border: 1px solid var(--line);
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 18px 42px rgba(20, 33, 61, 0.06);
+    background: var(--surface);
+    box-shadow: var(--shadow-soft);
+    transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.content-card:hover {
+    border-color: rgba(15, 143, 140, 0.26);
+    box-shadow: 0 24px 56px rgba(23, 32, 51, 0.11);
+    transform: translateY(-2px);
 }
 
 .content-card img {
@@ -218,12 +237,12 @@
 }
 
 .content-card > div {
-    padding: 24px;
+    padding: 26px;
 }
 
 .content-card h2 {
     margin-bottom: 12px;
-    font-size: 28px;
+    font-size: 27px;
 }
 
 .content-card p {
@@ -234,8 +253,8 @@
 .content-card time {
     display: inline-flex;
     margin-bottom: 14px;
-    color: var(--orange-dark);
-    font-weight: 800;
+    color: var(--teal);
+    font-weight: 850;
 }
 
 .empty-state {
@@ -243,7 +262,8 @@
     border: 1px solid var(--line);
     border-radius: 8px;
     color: var(--muted);
-    background: rgba(255, 255, 255, 0.9);
+    background: var(--surface);
+    box-shadow: var(--shadow-soft);
 }
 
 /* Interactive card affordance for the portfolio directory entry point. */
@@ -253,7 +273,7 @@
 
 .feature-link-card:hover {
     border-color: rgba(255, 121, 0, 0.42);
-    box-shadow: 0 18px 36px rgba(20, 33, 61, 0.1);
+    box-shadow: 0 22px 46px rgba(23, 32, 51, 0.11);
     transform: translateY(-2px);
 }
 
@@ -267,13 +287,13 @@
 /* Number labels on feature and portfolio cards. */
 .features span,
 .portfolio-card span {
-    color: var(--orange-dark);
-    font-weight: 800;
+    color: var(--teal);
+    font-weight: 900;
 }
 
 .features h3 {
     margin: 14px 0 10px;
-    font-size: 21px;
+    font-size: 22px;
 }
 
 .portfolio-card h2 {
@@ -290,9 +310,9 @@
 .event-list time {
     display: block;
     margin-bottom: 12px;
-    color: var(--orange-dark);
+    color: var(--teal);
     font-size: 20px;
-    font-weight: 800;
+    font-weight: 850;
 }
 
 /* Visible and clickable email in the portfolio cards. */
