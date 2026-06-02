@@ -1,0 +1,20 @@
+{% set footer_class = footer_class|default('') %}
+{% set footer_eyebrow = footer_eyebrow|default('HubIncub') %}
+{% set footer_title = footer_title|default("Un réseau qui continue après l'incubateur.") %}
+{% set footer_text = footer_text|default("Consultez les informations légales du site ou accédez à l'administration.") %}
+{% set footer_primary_label = footer_primary_label|default('Mentions légales') %}
+{% set footer_primary_href = footer_primary_href|default(path('app_mentions_legales')) %}
+{% set footer_secondary_label = footer_secondary_label|default('Administration') %}
+{% set footer_secondary_href = footer_secondary_href|default(path('app_admin')) %}
+
+<section class="join-section {{ footer_class }}" aria-label="Pied de page HubIncub">
+    <div>
+        <p class="eyebrow">{{ footer_eyebrow }}</p>
+        <h2>{{ footer_title }}</h2>
+        <p>{{ footer_text }}</p>
+        <div class="hero-actions">
+            <a class="button primary" href="{{ footer_primary_href }}">{{ footer_primary_label }}</a>
+            <a class="button secondary" href="{{ footer_secondary_href }}">{{ footer_secondary_label }}</a>
+        </div>
+    </div>
+</section>

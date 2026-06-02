@@ -8,7 +8,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: rgba(255, 255, 255, 0.92);
+    background: rgba(255, 253, 249, 0.92);
     border-bottom: 1px solid rgba(23, 32, 51, 0.08);
     backdrop-filter: blur(18px);
 }
@@ -69,14 +69,15 @@ body.is-scrolled .site-header {
     isolation: isolate;
     overflow: hidden;
     min-height: calc(100vh - 72px);
-    padding: 64px max(32px, calc((100vw - 1180px) / 2)) 84px;
+    padding: 58px max(32px, calc((100vw - 1180px) / 2)) 72px;
     display: grid;
     grid-template-columns: minmax(0, 1fr) 360px;
     align-items: center;
     gap: 64px;
     background:
-        linear-gradient(90deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.94) 50%, rgba(255, 248, 241, 0.8) 100%),
+        linear-gradient(90deg, rgba(255, 253, 249, 0.96) 0%, rgba(255, 253, 249, 0.82) 44%, rgba(23, 32, 51, 0.28) 100%),
         url("/images/layout/cover.jpg") right center / cover no-repeat;
+    border-bottom: 1px solid rgba(23, 32, 51, 0.08);
 }
 
 /* Decorative overlay keeps the background aligned with the brand palette. */
@@ -86,8 +87,19 @@ body.is-scrolled .site-header {
     inset: 0;
     z-index: -1;
     background:
-        linear-gradient(180deg, transparent 72%, rgba(246, 248, 251, 0.95)),
-        linear-gradient(135deg, rgba(15, 143, 140, 0.08), transparent 42%);
+        linear-gradient(180deg, transparent 68%, rgba(241, 245, 249, 0.96)),
+        linear-gradient(135deg, rgba(255, 121, 0, 0.13), transparent 31%),
+        linear-gradient(105deg, transparent 58%, rgba(15, 143, 140, 0.18));
+}
+
+.hero::after {
+    position: absolute;
+    content: "";
+    inset: auto max(32px, calc((100vw - 1180px) / 2)) 34px;
+    z-index: -1;
+    height: 10px;
+    background: linear-gradient(90deg, var(--orange), var(--teal), transparent);
+    opacity: 0.72;
 }
 
 /* Limits hero text width while keeping the background full-bleed. */
@@ -101,12 +113,14 @@ body.is-scrolled .site-header {
 .section,
 .split-section,
 .join-section {
-    padding: 76px max(32px, calc((100vw - 1180px) / 2));
+    padding: 68px max(32px, calc((100vw - 1180px) / 2));
 }
 
 /* Default light content band. */
 .section {
-    background: var(--surface);
+    background:
+        linear-gradient(180deg, rgba(255, 253, 249, 0.98), rgba(248, 251, 255, 0.98)),
+        var(--surface);
 }
 
 /* Softer alternate section band retained for future content blocks. */
@@ -127,8 +141,17 @@ body.is-scrolled .site-header {
     gap: 64px;
     align-items: start;
     background:
-        linear-gradient(135deg, var(--surface) 0%, var(--orange-wash) 55%, var(--teal-soft) 100%);
-    border-top: 1px solid rgba(23, 32, 51, 0.08);
+        linear-gradient(135deg, rgba(23, 32, 51, 0.96) 0%, rgba(23, 32, 51, 0.88) 46%, rgba(15, 143, 140, 0.86) 100%);
+    border-top: 1px solid rgba(23, 32, 51, 0.1);
+    color: var(--white);
+}
+
+.split-section h2 {
+    color: var(--white);
+}
+
+.split-section .eyebrow {
+    color: #ffb56b;
 }
 
 /* Dark call-to-action band. */
@@ -140,7 +163,7 @@ body.is-scrolled .site-header {
     display: flex;
     align-items: center;
     background:
-        linear-gradient(90deg, rgba(13, 20, 36, 0.98), rgba(23, 32, 51, 0.9), rgba(23, 32, 51, 0.7)),
+        linear-gradient(90deg, rgba(13, 20, 36, 0.99), rgba(23, 32, 51, 0.94) 54%, rgba(15, 143, 140, 0.7)),
         url("/images/layout/fondfooter.png") right center / cover no-repeat,
         var(--navy);
     color: var(--white);
@@ -152,16 +175,32 @@ body.is-scrolled .site-header {
     inset: 0;
     z-index: -1;
     background:
-        linear-gradient(135deg, rgba(255, 121, 0, 0.18), transparent 36%),
-        linear-gradient(180deg, rgba(15, 143, 140, 0.1), transparent);
+        linear-gradient(135deg, rgba(255, 121, 0, 0.28), transparent 38%),
+        linear-gradient(180deg, rgba(0, 0, 0, 0.14), rgba(0, 0, 0, 0.22));
 }
 
 .join-section > div {
     position: relative;
     min-width: 0;
-    max-width: 680px;
+    max-width: 720px;
 }
 
 .join-section .button {
     position: relative;
+}
+
+.join-section h2 {
+    color: var(--white);
+    text-shadow: 0 2px 18px rgba(0, 0, 0, 0.28);
+}
+
+.join-section .eyebrow {
+    color: #ffb56b;
+}
+
+.join-section .button.secondary {
+    color: var(--navy);
+    background: rgba(255, 255, 255, 0.96);
+    border-color: rgba(255, 255, 255, 0.72);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.18);
 }

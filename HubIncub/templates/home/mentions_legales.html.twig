@@ -94,16 +94,12 @@
         </div>
     </section>
 
-    <section class="join-section legal-footer" aria-label="Pied de page HubIncub">
-        <div>
-            <p class="eyebrow">HubIncub</p>
-            <h2>Retour au réseau des anciens.</h2>
-            <p>Retrouvez les projets, les actualités et les événements de la communauté.</p>
-            <div class="hero-actions">
-                <a class="button primary" href="{{ path('app_home') }}">Accueil</a>
-                <a class="button secondary" href="{{ path('app_admin') }}">Administration</a>
-            </div>
-        </div>
-    </section>
+    {% include 'partials/_footer.html.twig' with {
+        footer_class: 'legal-footer',
+        footer_title: 'Retour au réseau des anciens.',
+        footer_text: 'Retrouvez les projets, les actualités et les événements de la communauté.',
+        footer_primary_label: 'Accueil',
+        footer_primary_href: path('app_home')
+    } %}
 </main>
 {% endblock %}
