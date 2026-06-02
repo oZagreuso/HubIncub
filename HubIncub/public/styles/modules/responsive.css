@@ -60,9 +60,13 @@
     .portfolio-grid,
     .content-grid,
     .legal-grid,
+    .admin-stats,
     .admin-grid,
     .admin-grid-content,
     .admin-card-featured .admin-form,
+    .admin-member-create-form,
+    .admin-form-inline,
+    .admin-filters,
     .admin-lists,
     .auth-shell {
         grid-template-columns: 1fr;
@@ -87,10 +91,21 @@
         flex-direction: column;
     }
 
+    .admin-section-heading,
     .admin-list-row,
+    .admin-member-row,
     .admin-row-actions {
         flex-direction: column;
         align-items: stretch;
+    }
+
+    .admin-section-heading {
+        display: grid;
+    }
+
+    .admin-member-row {
+        display: grid;
+        grid-template-columns: 1fr;
     }
 
     .admin-form-compact {
@@ -98,6 +113,8 @@
     }
 
     .admin-card-featured .password-field,
+    .admin-member-create-form .password-field,
+    .admin-member-create-form > .button,
     .admin-card-featured > .admin-form > .button {
         grid-column: auto;
     }

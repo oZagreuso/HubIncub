@@ -59,6 +59,42 @@ final class AdminController extends AbstractController
         ]);
     }
 
+    #[Route('/members', name: 'app_admin_members', methods: ['GET', 'POST'])]
+    public function members(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        PortfolioRepository $portfolioRepository,
+        UserRepository $userRepository,
+        UserPasswordHasherInterface $passwordHasher,
+    ): Response {
+        if ($request->isMethod('POST')) {
+            $this->denyAccessUnlessGranted('ROLE_USER');
+            $this->handleAdminPost($request, $entityManager, $portfolioRepository, $userRepository, $passwordHasher);
+
+            return $this->redirectToRoute('app_admin_members', $request->query->all());
+        }
+
+        $portfolios = $portfolioRepository->findBy([], ['promotion' => 'DESC', 'lastName' => 'ASC', 'firstName' => 'ASC']);
+        $usersByEmail = $this->indexUsersByEmail($userRepository);
+        $filteredPortfolios = $this->filterPortfolios($portfolios, $usersByEmail, $request);
+
+        return $this->render('admin/members.html.twig', [
+            'portfolios' => $filteredPortfolios,
+            'allPortfolios' => $portfolios,
+            'memberStats' => $this->buildMemberStats($portfolios, $usersByEmail),
+            'usersByEmail' => $usersByEmail,
+            'delegatePortfolioId' => $this->findDelegatePortfolioId($portfolios, $userRepository),
+            'adminPortfolioIds' => $this->findAdminPortfolioIds($portfolios, $userRepository),
+            'filters' => [
+                'q' => trim((string) $request->query->get('q')),
+                'status' => (string) $request->query->get('status'),
+                'promotion' => (string) $request->query->get('promotion'),
+                'account' => (string) $request->query->get('account'),
+            ],
+            'promotions' => $this->listPromotions($portfolios),
+        ]);
+    }
+
     private function handleAdminPost(
         Request $request,
         EntityManagerInterface $entityManager,
@@ -398,6 +434,134 @@ final class AdminController extends AbstractController
     private function isPromotionYear(string $promotion): bool
     {
         return 1 === preg_match('/^\d{4}$/', $promotion);
+    }
+
+    /**
+     * @return array<string, User>
+     */
+    private function indexUsersByEmail(UserRepository $userRepository): array
+    {
+        $usersByEmail = [];
+
+        foreach ($userRepository->findAll() as $user) {
+            $usersByEmail[strtolower($user->getEmail())] = $user;
+        }
+
+        return $usersByEmail;
+    }
+
+    /**
+     * @param list<Portfolio> $portfolios
+     * @param array<string, User> $usersByEmail
+     *
+     * @return list<Portfolio>
+     */
+    private function filterPortfolios(array $portfolios, array $usersByEmail, Request $request): array
+    {
+        $query = strtolower(trim((string) $request->query->get('q')));
+        $status = (string) $request->query->get('status');
+        $promotion = (string) $request->query->get('promotion');
+        $account = (string) $request->query->get('account');
+
+        return array_values(array_filter($portfolios, function (Portfolio $portfolio) use ($usersByEmail, $query, $status, $promotion, $account): bool {
+            $email = strtolower($portfolio->getEmail());
+            $user = $usersByEmail[$email] ?? null;
+
+            if ('' !== $query) {
+                $haystack = strtolower(implode(' ', [
+                    $portfolio->getFirstName(),
+                    $portfolio->getLastName(),
+                    $portfolio->getEmail(),
+                    $portfolio->getPromotion(),
+                ]));
+
+                if (!str_contains($haystack, $query)) {
+                    return false;
+                }
+            }
+
+            if ('' !== $status && $portfolio->getRole() !== $status) {
+                return false;
+            }
+
+            if ('' !== $promotion && $portfolio->getPromotion() !== $promotion) {
+                return false;
+            }
+
+            if ('with_account' === $account && null === $user) {
+                return false;
+            }
+
+            if ('without_account' === $account && null !== $user) {
+                return false;
+            }
+
+            if ('admin' === $account && (!$user || !in_array('ROLE_ADMIN', $user->getRoles(), true))) {
+                return false;
+            }
+
+            if ('delegate' === $account && (!$user || !in_array('ROLE_DELEGATE', $user->getRoles(), true))) {
+                return false;
+            }
+
+            return true;
+        }));
+    }
+
+    /**
+     * @param list<Portfolio> $portfolios
+     * @param array<string, User> $usersByEmail
+     *
+     * @return array<string, int>
+     */
+    private function buildMemberStats(array $portfolios, array $usersByEmail): array
+    {
+        $stats = [
+            'total' => count($portfolios),
+            'incubators' => 0,
+            'alumni' => 0,
+            'withAccount' => 0,
+            'withoutAccount' => 0,
+        ];
+
+        foreach ($portfolios as $portfolio) {
+            if (Portfolio::ROLE_INCUBATOR === $portfolio->getRole()) {
+                ++$stats['incubators'];
+            }
+
+            if (Portfolio::ROLE_ALUMNI === $portfolio->getRole()) {
+                ++$stats['alumni'];
+            }
+
+            if (isset($usersByEmail[strtolower($portfolio->getEmail())])) {
+                ++$stats['withAccount'];
+            } else {
+                ++$stats['withoutAccount'];
+            }
+        }
+
+        return $stats;
+    }
+
+    /**
+     * @param list<Portfolio> $portfolios
+     *
+     * @return list<string>
+     */
+    private function listPromotions(array $portfolios): array
+    {
+        $promotions = [];
+
+        foreach ($portfolios as $portfolio) {
+            if ($portfolio->getPromotion()) {
+                $promotions[] = $portfolio->getPromotion();
+            }
+        }
+
+        $promotions = array_values(array_unique($promotions));
+        rsort($promotions);
+
+        return $promotions;
     }
 
     /**
