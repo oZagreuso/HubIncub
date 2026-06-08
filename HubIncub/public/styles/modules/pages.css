@@ -20,10 +20,10 @@
     overflow: hidden;
     padding: 66px max(32px, calc((100vw - 1180px) / 2)) 54px;
     background:
-        linear-gradient(90deg, rgba(255, 253, 249, 0.97), rgba(255, 248, 241, 0.78), rgba(15, 143, 140, 0.14)),
+        linear-gradient(90deg, rgba(255, 250, 243, 0.97), rgba(255, 240, 222, 0.82), rgba(182, 106, 33, 0.16)),
         url("/images/layout/logo-cover.jpg") right center / contain no-repeat,
         var(--surface);
-    border-bottom: 1px solid rgba(23, 32, 51, 0.08);
+    border-bottom: 1px solid rgba(43, 33, 24, 0.1);
 }
 
 /* Voile orangé des pages d'annuaire. */
@@ -34,7 +34,7 @@
     z-index: -1;
     background:
         linear-gradient(135deg, rgba(255, 121, 0, 0.13), transparent 36%),
-        linear-gradient(180deg, transparent 76%, rgba(241, 245, 249, 0.72));
+        linear-gradient(180deg, transparent 76%, rgba(255, 239, 221, 0.78));
 }
 
 .directory-hero .hero-text {
@@ -45,7 +45,7 @@
     padding-top: 42px;
     padding-bottom: 68px;
     background:
-        linear-gradient(180deg, rgba(241, 245, 249, 0.54), rgba(255, 248, 241, 0.5));
+        linear-gradient(180deg, rgba(255, 239, 221, 0.58), rgba(255, 247, 237, 0.72));
 }
 
 .portfolio-card p {
@@ -65,14 +65,14 @@
 /* Page des mentions légales. */
 .legal-hero {
     background:
-        linear-gradient(90deg, rgba(255, 255, 255, 0.98), rgba(255, 248, 241, 0.88)),
+        linear-gradient(90deg, rgba(255, 250, 243, 0.98), rgba(255, 239, 221, 0.9)),
         url("/images/layout/logo-cover.jpg") right center / contain no-repeat;
 }
 
 .legal-section {
     padding-top: 0;
     background:
-        linear-gradient(180deg, var(--orange-wash), var(--surface) 38%, var(--navy-soft));
+        linear-gradient(180deg, var(--orange-wash), var(--surface) 38%, var(--surface-warm));
 }
 
 .legal-grid {
@@ -148,7 +148,7 @@
     align-items: center;
     overflow: hidden;
     background:
-        linear-gradient(90deg, rgba(13, 20, 36, 0.96), rgba(23, 32, 51, 0.76) 52%, rgba(23, 32, 51, 0.28)),
+        linear-gradient(90deg, rgba(31, 22, 15, 0.96), rgba(65, 43, 26, 0.78) 52%, rgba(182, 106, 33, 0.3)),
         url("/images/errors/error-retro-hubincub.png") center / cover no-repeat;
 }
 
@@ -198,8 +198,8 @@
 .front-feed-section {
     padding: 68px max(32px, calc((100vw - 1180px) / 2));
     background:
-        linear-gradient(180deg, var(--surface-warm), var(--teal-wash) 46%, var(--navy-soft));
-    border-top: 1px solid rgba(23, 32, 51, 0.08);
+        linear-gradient(180deg, var(--surface-warm), var(--orange-wash) 46%, var(--navy-soft));
+    border-top: 1px solid rgba(43, 33, 24, 0.1);
 }
 
 .front-feed-heading {
@@ -222,10 +222,10 @@
     grid-template-columns: minmax(0, 1fr) minmax(280px, 420px);
     gap: 34px;
     align-items: center;
-    border: 1px solid rgba(23, 32, 51, 0.1);
+    border: 1px solid rgba(43, 33, 24, 0.11);
     border-radius: 8px;
     background:
-        linear-gradient(135deg, var(--surface) 0%, var(--surface-soft) 58%, var(--teal-wash) 100%);
+        linear-gradient(135deg, var(--surface) 0%, var(--surface-soft) 58%, var(--orange-wash) 100%);
     box-shadow: var(--shadow-soft);
 }
 
@@ -259,7 +259,7 @@
     min-height: 34px;
     padding: 0 12px;
     align-items: center;
-    border: 1px solid rgba(15, 143, 140, 0.22);
+    border: 1px solid rgba(182, 106, 33, 0.28);
     border-radius: 8px;
     color: var(--teal);
     background: var(--teal-soft);
@@ -272,7 +272,7 @@
     object-fit: cover;
     border: 1px solid var(--line);
     border-radius: 8px;
-    box-shadow: 0 26px 64px rgba(23, 32, 51, 0.16);
+    box-shadow: 0 26px 64px rgba(89, 58, 33, 0.18);
     filter: saturate(1.06) contrast(1.04);
 }
 
@@ -311,7 +311,7 @@
     min-height: calc(100vh - 72px);
     padding: 72px max(32px, calc((100vw - 1180px) / 2));
     background:
-        linear-gradient(180deg, rgba(255, 248, 241, 0.9), rgba(241, 245, 249, 0.96) 320px),
+        linear-gradient(180deg, rgba(255, 239, 221, 0.94), rgba(255, 247, 237, 0.98) 320px),
         var(--page);
 }
 
@@ -348,7 +348,7 @@
     width: 138px;
     height: auto;
     padding: 12px;
-    border: 1px solid rgba(23, 32, 51, 0.1);
+    border: 1px solid rgba(43, 33, 24, 0.11);
     border-radius: 8px;
     background: var(--surface);
     box-shadow: var(--shadow-soft);
@@ -399,9 +399,9 @@
     position: relative;
     overflow: hidden;
     padding: 26px;
-    border: 1px solid rgba(23, 32, 51, 0.12);
+    border: 1px solid rgba(43, 33, 24, 0.12);
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.94);
+    background: rgba(255, 250, 243, 0.94);
     box-shadow: var(--shadow-soft);
     backdrop-filter: blur(12px);
 }
@@ -456,9 +456,9 @@
 
 .admin-stat {
     padding: 18px;
-    border: 1px solid rgba(23, 32, 51, 0.1);
+    border: 1px solid rgba(43, 33, 24, 0.1);
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 250, 243, 0.92);
     box-shadow: var(--shadow-soft);
 }
 
@@ -585,11 +585,11 @@
 
 .admin-list li {
     padding: 14px;
-    border: 1px solid rgba(23, 32, 51, 0.1);
+    border: 1px solid rgba(43, 33, 24, 0.1);
     border-radius: 8px;
     color: var(--ink);
     font-weight: 800;
-    background: rgba(255, 255, 255, 0.82);
+    background: rgba(255, 250, 243, 0.84);
 }
 
 .admin-list li:last-child {
@@ -597,7 +597,7 @@
 }
 
 .admin-media-item {
-    --admin-media-image: linear-gradient(135deg, rgba(255, 241, 227, 0.9), rgba(234, 240, 248, 0.84));
+    --admin-media-image: linear-gradient(135deg, rgba(255, 232, 207, 0.92), rgba(255, 243, 226, 0.88));
     min-height: 132px;
     padding: 18px;
     display: flex;
@@ -606,7 +606,7 @@
     border: 1px solid var(--line);
     border-radius: 8px;
     background-image:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.94)),
+        linear-gradient(180deg, rgba(255, 250, 243, 0.74), rgba(255, 250, 243, 0.94)),
         var(--admin-media-image);
     background-position: center;
     background-size: cover;
@@ -658,7 +658,7 @@
     padding: 0 10px;
     display: inline-flex;
     align-items: center;
-    border: 1px solid rgba(15, 143, 140, 0.18);
+    border: 1px solid rgba(182, 106, 33, 0.24);
     border-radius: 8px;
     color: var(--teal);
     background: var(--teal-soft);

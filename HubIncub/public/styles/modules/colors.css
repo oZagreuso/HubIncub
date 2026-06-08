@@ -2,31 +2,31 @@
 :root {
     /* Palette de marque. */
     --orange: #ff7900;
-    --orange-dark: #d95f00;
-    --orange-hover: #b84f00;
-    --orange-soft: #fff3e8;
-    --orange-wash: #fff8f1;
-    --teal: #0f8f8c;
-    --teal-soft: #e8f7f6;
-    --teal-wash: #f0fbfa;
+    --orange-dark: #cc5d00;
+    --orange-hover: #a84600;
+    --orange-soft: #fff0df;
+    --orange-wash: #fff6ec;
+    --teal: #b66a21;
+    --teal-soft: #fff0dc;
+    --teal-wash: #fff7ea;
 
     /* Couleurs de structure et de texte. */
-    --navy: #172033;
-    --navy-hover: #0d1424;
-    --navy-soft: #edf3f8;
-    --navy-ink: #111827;
-    --ink: #19202c;
-    --muted: #647084;
-    --subtle: #8a94a6;
-    --line: #d8e0ea;
-    --line-strong: #c2cedc;
-    --page: #f1f5f9;
-    --surface: #fffdf9;
-    --surface-soft: #f8fbff;
-    --surface-warm: #fff7ef;
+    --navy: #2b2118;
+    --navy-hover: #1f160f;
+    --navy-soft: #f7eadc;
+    --navy-ink: #241810;
+    --ink: #2d241c;
+    --muted: #7a6554;
+    --subtle: #9b8572;
+    --line: #ead8c4;
+    --line-strong: #d6b996;
+    --page: #fff3e4;
+    --surface: #fffaf3;
+    --surface-soft: #fff4e6;
+    --surface-warm: #ffead5;
     --white: #ffffff;
-    --shadow-soft: 0 20px 48px rgba(23, 32, 51, 0.1);
-    --shadow-lift: 0 30px 78px rgba(23, 32, 51, 0.18);
+    --shadow-soft: 0 20px 48px rgba(89, 58, 33, 0.12);
+    --shadow-lift: 0 30px 78px rgba(89, 58, 33, 0.2);
     --danger: #8a1f11;
     --danger-hover: #6f170d;
     --danger-soft: #fff0ec;

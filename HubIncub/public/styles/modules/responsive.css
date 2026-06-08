@@ -23,6 +23,7 @@
         padding: 46px 22px 64px;
         grid-template-columns: 1fr;
         gap: 34px;
+        background-position: 58% center;
     }
 
     h1 {
@@ -160,6 +161,11 @@
 
     .hero-panel {
         padding: 12px;
+    }
+
+    .hero::after {
+        width: calc(100vw - 44px);
+        bottom: 24px;
     }
 
     .content-card > div,
