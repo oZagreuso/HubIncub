@@ -33,14 +33,22 @@ final class HomeController extends AbstractController
         // Administrative roles are resolved from User accounts to control the public ordering and displayed status.
         $adminEmails = [];
         $delegateEmails = [];
+        $onlineEmails = [];
+        $now = new \DateTimeImmutable();
 
         foreach ($userRepository->findAll() as $user) {
+            $email = strtolower($user->getEmail());
+
             if (in_array('ROLE_ADMIN', $user->getRoles(), true)) {
-                $adminEmails[] = strtolower($user->getEmail());
+                $adminEmails[] = $email;
             }
 
             if (in_array('ROLE_DELEGATE', $user->getRoles(), true)) {
-                $delegateEmails[] = strtolower($user->getEmail());
+                $delegateEmails[] = $email;
+            }
+
+            if ($user->isOnline($now)) {
+                $onlineEmails[] = $email;
             }
         }
 
@@ -77,6 +85,7 @@ final class HomeController extends AbstractController
         return $this->render('home/anciens.html.twig', [
             'adminEmails' => $adminEmails,
             'delegateEmails' => $delegateEmails,
+            'onlineEmails' => $onlineEmails,
             'portfolios' => $portfolios,
         ]);
     }

@@ -346,8 +346,39 @@
     font-size: 24px;
 }
 
+.portfolio-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
 .portfolio-card span {
     font-size: 14px;
+}
+
+.portfolio-card .presence-badge {
+    min-height: 28px;
+    padding: 0 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    border: 1px solid rgba(15, 143, 140, 0.24);
+    border-radius: 8px;
+    color: var(--teal);
+    background: var(--teal-soft);
+    font-size: 12px;
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+.portfolio-card .presence-badge::before {
+    width: 7px;
+    height: 7px;
+    content: "";
+    border-radius: 50%;
+    background: var(--teal);
+    box-shadow: 0 0 0 4px rgba(15, 143, 140, 0.12);
 }
 
 .portfolio-actions {

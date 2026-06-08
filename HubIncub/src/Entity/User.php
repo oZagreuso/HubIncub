@@ -34,6 +34,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private string $password = '';
 
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeImmutable $lastSeenAt = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -88,6 +91,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->password = $password;
 
         return $this;
+    }
+
+    public function getLastSeenAt(): ?\DateTimeImmutable
+    {
+        return $this->lastSeenAt;
+    }
+
+    public function setLastSeenAt(?\DateTimeImmutable $lastSeenAt): self
+    {
+        $this->lastSeenAt = $lastSeenAt;
+
+        return $this;
+    }
+
+    public function isOnline(?\DateTimeImmutable $now = null): bool
+    {
+        if (!$this->lastSeenAt) {
+            return false;
+        }
+
+        $now ??= new \DateTimeImmutable();
+
+        return $this->lastSeenAt >= $now->modify('-5 minutes');
     }
 
     public function eraseCredentials(): void

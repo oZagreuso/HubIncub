@@ -44,8 +44,14 @@
                 {# Display labels are derived from authenticated roles while stored portfolio roles remain unchanged. #}
                 {% set isAdminPortfolio = portfolio.email|lower in adminEmails %}
                 {% set isDelegatePortfolio = portfolio.email|lower in delegateEmails %}
+                {% set isOnlinePortfolio = portfolio.email|lower in onlineEmails %}
                 <article class="portfolio-card">
-                    <span>{{ loop.index < 10 ? '0' ~ loop.index : loop.index }}</span>
+                    <div class="portfolio-card-header">
+                        <span>{{ loop.index < 10 ? '0' ~ loop.index : loop.index }}</span>
+                        {% if isOnlinePortfolio %}
+                            <span class="presence-badge">Connect&eacute;</span>
+                        {% endif %}
+                    </div>
                     <h2>{{ portfolio.firstName }} {{ portfolio.lastName }}</h2>
                     <p>{{ isAdminPortfolio ? 'Administrateur' : (isDelegatePortfolio ? 'Délégué' : portfolio.role) }}</p>
                     {% if portfolio.promotion %}
