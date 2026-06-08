@@ -1,4 +1,4 @@
-/* Tablet and small desktop adjustments. */
+/* Ajustements pour tablettes et petits écrans de bureau. */
 @media (max-width: 900px) {
     .site-header {
         height: auto;
@@ -120,7 +120,7 @@
     }
 }
 
-/* Narrow mobile adjustments. */
+/* Ajustements pour mobiles étroits. */
 @media (max-width: 560px) {
     .site-header {
         padding-inline: 16px;

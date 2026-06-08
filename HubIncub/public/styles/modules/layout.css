@@ -1,4 +1,4 @@
-/* Sticky site header used by public, login and admin pages. */
+/* En-tête fixe utilisé par les pages publiques, la connexion et l'administration. */
 .site-header {
     position: sticky;
     top: 0;
@@ -13,12 +13,12 @@
     backdrop-filter: blur(18px);
 }
 
-/* The scroll shadow is toggled by public/scripts/app.js. */
+/* L'ombre au défilement est activée par public/scripts/app.js. */
 body.is-scrolled .site-header {
     box-shadow: 0 12px 32px rgba(23, 32, 51, 0.08);
 }
 
-/* Brand block combines the HubIncub logo and text label. */
+/* Bloc de marque associant le logo HubIncub et le libellé texte. */
 .brand {
     min-width: 0;
     display: inline-flex;
@@ -37,7 +37,7 @@ body.is-scrolled .site-header {
     object-fit: contain;
 }
 
-/* Primary navigation. Individual call-to-action styling lives in components.css. */
+/* Navigation principale. Le style des appels à l'action est défini dans components.css. */
 .main-nav {
     min-width: 0;
     display: flex;
@@ -63,7 +63,7 @@ body.is-scrolled .site-header {
     background: var(--orange-soft);
 }
 
-/* Front-page hero with the shared geometric background image and orange overlay. */
+/* Héros de page d'accueil avec image de fond géométrique partagée et voile orange. */
 .hero {
     position: relative;
     isolation: isolate;
@@ -80,7 +80,7 @@ body.is-scrolled .site-header {
     border-bottom: 1px solid rgba(23, 32, 51, 0.08);
 }
 
-/* Decorative overlay keeps the background aligned with the brand palette. */
+/* Le voile décoratif maintient le fond dans la palette de marque. */
 .hero::before {
     position: absolute;
     content: "";
@@ -102,39 +102,39 @@ body.is-scrolled .site-header {
     opacity: 0.72;
 }
 
-/* Limits hero text width while keeping the background full-bleed. */
+/* Limite la largeur du texte du héros tout en conservant un fond pleine largeur. */
 .hero-content {
     position: relative;
     min-width: 0;
     max-width: 820px;
 }
 
-/* Shared vertical spacing for main page sections. */
+/* Espacement vertical partagé par les sections principales. */
 .section,
 .split-section,
 .join-section {
     padding: 68px max(32px, calc((100vw - 1180px) / 2));
 }
 
-/* Default light content band. */
+/* Bande de contenu claire par défaut. */
 .section {
     background:
         linear-gradient(180deg, rgba(255, 253, 249, 0.98), rgba(248, 251, 255, 0.98)),
         var(--surface);
 }
 
-/* Softer alternate section band retained for future content blocks. */
+/* Bande alternative plus douce conservée pour de futurs blocs de contenu. */
 .section-soft {
     background: linear-gradient(180deg, var(--surface) 0%, var(--navy-soft) 100%);
 }
 
-/* Constrains introductory text inside sections. */
+/* Contraint le texte introductif des sections. */
 .section-heading {
     max-width: 760px;
     margin-bottom: 34px;
 }
 
-/* Two-column editorial section used for the project introduction. */
+/* Section éditoriale à deux colonnes utilisée pour l'introduction des projets. */
 .split-section {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(280px, 520px);
@@ -154,7 +154,7 @@ body.is-scrolled .site-header {
     color: #ffb56b;
 }
 
-/* Dark call-to-action band. */
+/* Bande sombre d'appel à l'action. */
 .join-section {
     position: relative;
     isolation: isolate;

@@ -22,10 +22,10 @@ use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/admin')]
 /**
- * Centralizes the protected administration interface.
+ * Centralise l'interface d'administration protégée.
  *
- * The controller keeps form handling explicit: each POST declares a content
- * type through the `type` field, then delegates creation to a private method.
+ * Le traitement des formulaires reste explicite : chaque requête POST déclare
+ * une action avec le champ `type`, puis délègue l'opération à une méthode privée.
  */
 final class AdminController extends AbstractController
 {
@@ -104,9 +104,9 @@ final class AdminController extends AbstractController
     ): void {
         $type = (string) $request->request->get('type');
 
-        // Each admin form has a dedicated CSRF token namespace.
+        // Chaque formulaire d'administration dispose d'un espace de jeton CSRF dédié.
         if (!$this->isCsrfTokenValid('admin_'.$type, (string) $request->request->get('_token'))) {
-            throw $this->createAccessDeniedException('Invalid CSRF token.');
+            throw $this->createAccessDeniedException('Jeton CSRF invalide.');
         }
 
         match ($type) {
@@ -356,7 +356,7 @@ final class AdminController extends AbstractController
     private function createProject(Request $request, EntityManagerInterface $entityManager): void
     {
         $name = $this->field($request, 'name');
-        // SEO fallback ensures uploaded images always have descriptive alt text.
+        // Le repli SEO garantit un texte alternatif descriptif pour chaque image téléversée.
         $imageAlt = $this->optionalField($request, 'imageAlt') ?? 'Illustration du projet '.$name;
 
         $project = (new Project())
@@ -374,7 +374,7 @@ final class AdminController extends AbstractController
     {
         $startsAt = $this->optionalField($request, 'startsAt');
         $title = $this->field($request, 'title');
-        // SEO fallback mirrors project images for consistent indexing metadata.
+        // Le repli SEO reprend la règle des projets pour conserver des métadonnées d'indexation cohérentes.
         $imageAlt = $this->optionalField($request, 'imageAlt') ?? 'Illustration de l’événement '.$title;
 
         $event = (new Event())
@@ -392,7 +392,7 @@ final class AdminController extends AbstractController
     {
         $publishedAt = $this->optionalField($request, 'publishedAt');
         $title = $this->field($request, 'title');
-        // SEO fallback follows the same rule as projects and events.
+        // Le repli SEO applique la même règle que les projets et les événements.
         $imageAlt = $this->optionalField($request, 'imageAlt') ?? 'Illustration de l’actualité '.$title;
 
         $news = (new News())
@@ -610,7 +610,7 @@ final class AdminController extends AbstractController
             throw $this->createAccessDeniedException('Le fichier transmis doit être une image.');
         }
 
-        // Filenames are human-readable for SEO and include random bytes to avoid collisions.
+        // Les noms de fichiers restent lisibles pour le SEO et incluent des octets aléatoires pour éviter les collisions.
         $extension = $file->guessExtension() ?: 'bin';
         $filename = $this->slugify($label).'-'.bin2hex(random_bytes(6)).'.'.$extension;
         $uploadDirectory = $this->getParameter('kernel.project_dir').'/public/uploads/admin/'.$module;
@@ -626,7 +626,7 @@ final class AdminController extends AbstractController
 
     private function slugify(string $value): string
     {
-        // Converts labels to lowercase ASCII slugs suitable for public image filenames.
+        // Les libellés sont convertis en slugs ASCII minuscules adaptés aux noms de fichiers publics.
         $value = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $value) ?: $value;
         $value = strtolower($value);
         $value = preg_replace('/[^a-z0-9]+/', '-', $value) ?? '';

@@ -7,9 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: NewsRepository::class)]
 /**
- * News entry managed from the administration interface.
+ * Entrée d'actualité gérée depuis l'interface d'administration.
  *
- * The latest published item is displayed on the front page.
+ * La dernière actualité publiée est affichée sur la page d'accueil.
  */
 class News
 {

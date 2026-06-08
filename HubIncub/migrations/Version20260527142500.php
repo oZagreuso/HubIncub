@@ -11,7 +11,7 @@ final class Version20260527142500 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Make portfolio email required and portfolio URL optional';
+        return "Rendre l'email des portfolios obligatoire et l'URL optionnelle";
     }
 
     public function up(Schema $schema): void

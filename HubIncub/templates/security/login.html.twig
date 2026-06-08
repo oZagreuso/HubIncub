@@ -3,7 +3,7 @@
 {% block title %}Connexion membre - HubIncub{% endblock %}
 
 {% block body %}
-{# Authentication page used by the custom Symfony login authenticator. #}
+{# Page d'authentification utilisée par l'authentificateur Symfony personnalisé. #}
 <header class="site-header" data-header>
     <a class="brand" href="{{ path('app_home') }}" aria-label="Accueil HubIncub">
         <img src="/images/branding/logo-hubincub.png" alt="HubIncub" width="1448" height="1086" decoding="async">
@@ -28,7 +28,7 @@
             <p class="hero-text">Accès réservé aux membres HubIncub pour consulter l'annuaire et les informations protégées.</p>
         </div>
 
-        {# Field names follow Symfony Security form_login defaults. #}
+        {# Les noms de champs suivent les valeurs par défaut de Symfony Security. #}
         <form class="admin-card admin-form auth-form" method="post">
             {% if error %}
                 <p class="form-alert">{{ error.messageKey|trans(error.messageData, 'security') }}</p>

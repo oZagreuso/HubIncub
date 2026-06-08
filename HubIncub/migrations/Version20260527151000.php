@@ -11,7 +11,7 @@ final class Version20260527151000 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Add optional LinkedIn profile URL to members';
+        return "Ajouter l'URL optionnelle du profil LinkedIn aux membres";
     }
 
     public function up(Schema $schema): void

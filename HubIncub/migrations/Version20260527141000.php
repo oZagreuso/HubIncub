@@ -11,7 +11,7 @@ final class Version20260527141000 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Add news managed from administration';
+        return 'Ajouter les actualités administrées';
     }
 
     public function up(Schema $schema): void

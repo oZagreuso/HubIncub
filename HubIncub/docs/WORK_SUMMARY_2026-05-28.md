@@ -17,6 +17,7 @@ Ce document récapitule les modifications réalisées sur le projet HubIncub. Il
   - `ROLE_DELEGATE` affiche `Délégué` ;
   - les autres profils conservent le statut du portfolio.
 - L’option d’ajout d’image au niveau des portfolios a été retirée.
+- Un badge de présence `Connecté` peut être affiché pour les membres récemment actifs.
 
 ## Données de test
 

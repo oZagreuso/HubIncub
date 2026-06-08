@@ -11,9 +11,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\Table(name: '`user`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 /**
- * Authenticated back-office user.
+ * Utilisateur authentifiable de l'espace protégé.
  *
- * Users are loaded by email through Doctrine and authenticated by Symfony Security.
+ * Les utilisateurs sont chargés par email avec Doctrine puis authentifiés par Symfony Security.
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -65,7 +65,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // Every authenticated account receives ROLE_USER in addition to persisted roles.
+        // Chaque compte authentifié reçoit ROLE_USER en complément des rôles persistés.
         $roles[] = 'ROLE_USER';
 
         return array_values(array_unique($roles));
@@ -118,6 +118,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function eraseCredentials(): void
     {
-        // No transient plain-text credentials are stored on this entity.
+        // Aucune donnée d'identification temporaire en clair n'est stockée sur cette entité.
     }
 }

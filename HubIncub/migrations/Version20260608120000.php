@@ -11,7 +11,7 @@ final class Version20260608120000 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Track authenticated user presence';
+        return 'Suivre la présence des utilisateurs authentifiés';
     }
 
     public function up(Schema $schema): void

@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: PortfolioRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_PORTFOLIO_EMAIL', fields: ['email'])]
 /**
- * Member entry displayed in the public portfolio directory.
+ * Fiche membre affichée dans l'annuaire public des portfolios.
  */
 class Portfolio
 {
@@ -78,7 +78,7 @@ class Portfolio
     public function setRole(string $role): self
     {
         if (!in_array($role, [self::ROLE_INCUBATOR, self::ROLE_ALUMNI], true)) {
-            throw new \InvalidArgumentException('Invalid portfolio role.');
+            throw new \InvalidArgumentException('Statut de portfolio invalide.');
         }
 
         $this->role = $role;

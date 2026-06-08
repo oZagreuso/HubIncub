@@ -11,7 +11,7 @@ final class Version20260527120000 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Add email to portfolios';
+        return "Ajouter l'email aux portfolios";
     }
 
     public function up(Schema $schema): void

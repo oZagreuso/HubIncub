@@ -11,7 +11,7 @@ final class Version20260529162000 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Add promotion to portfolio members';
+        return 'Ajouter la promotion aux membres des portfolios';
     }
 
     public function up(Schema $schema): void

@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class ErrorController extends AbstractController
 {
-    // Preview routes render production error templates while Symfony debug mode is enabled locally.
+    // Les routes de prévisualisation affichent les gabarits d'erreur de production lorsque le mode debug local est actif.
     #[Route('/403', name: 'app_error_403')]
     public function forbidden(): Response
     {

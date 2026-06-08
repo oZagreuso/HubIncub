@@ -3,7 +3,7 @@
 {% block title %}Retrouver les anciens - HubIncub{% endblock %}
 
 {% block body %}
-{# Protected member directory header. #}
+{# En-tête de l'annuaire membres protégé. #}
 <header class="site-header" data-header>
     <a class="brand" href="{{ path('app_home') }}" aria-label="Accueil HubIncub">
         <img src="/images/branding/logo-hubincub.png" alt="HubIncub" width="1448" height="1086" decoding="async">
@@ -27,7 +27,7 @@
         <p class="form-alert">{{ message }}</p>
     {% endfor %}
 
-    {# Directory introduction. #}
+    {# Introduction de l'annuaire. #}
     <section class="directory-hero">
         <p class="eyebrow">Portfolios alumni</p>
         <h1>Retrouver les anciens étudiants.</h1>
@@ -37,11 +37,11 @@
         </p>
     </section>
 
-    {# Portfolio cards are loaded from the Portfolio entity. #}
+    {# Les cartes de portfolio sont alimentées depuis l'entité Portfolio. #}
     <section class="section portfolio-section">
         <div class="portfolio-grid" aria-label="Portfolios des anciens étudiants">
             {% for portfolio in portfolios %}
-                {# Display labels are derived from authenticated roles while stored portfolio roles remain unchanged. #}
+                {# Les libellés affichés sont dérivés des rôles authentifiés, sans modifier les statuts persistés. #}
                 {% set isAdminPortfolio = portfolio.email|lower in adminEmails %}
                 {% set isDelegatePortfolio = portfolio.email|lower in delegateEmails %}
                 {% set isOnlinePortfolio = portfolio.email|lower in onlineEmails %}

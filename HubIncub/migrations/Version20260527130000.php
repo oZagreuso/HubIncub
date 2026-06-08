@@ -11,7 +11,7 @@ final class Version20260527130000 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Add admin users, projects and events';
+        return 'Ajouter les utilisateurs administrateurs, les projets et les événements';
     }
 
     public function up(Schema $schema): void

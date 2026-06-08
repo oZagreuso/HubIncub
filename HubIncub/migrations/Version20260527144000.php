@@ -11,7 +11,7 @@ final class Version20260527144000 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Require portfolio URL and enforce unique member emails';
+        return "Rendre l'URL des portfolios obligatoire et garantir l'unicité des emails membres";
     }
 
     public function up(Schema $schema): void

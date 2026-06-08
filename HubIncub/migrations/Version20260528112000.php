@@ -11,12 +11,12 @@ final class Version20260528112000 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Set Maeva Picard as delegate user';
+        return 'Définir Maeva Picard comme utilisatrice déléguée';
     }
 
     public function up(Schema $schema): void
     {
-        // The delegate account is required because directory priority is resolved from User roles.
+        // Le compte délégué est requis car la priorité de l'annuaire est résolue depuis les rôles User.
         $this->addSql("INSERT INTO user (email, roles, password) SELECT 'maeva.picard@example.com', '[\"ROLE_DELEGATE\"]', 'disabled-delegate-test-account' WHERE NOT EXISTS (SELECT 1 FROM user WHERE email = 'maeva.picard@example.com')");
         $this->addSql("UPDATE user SET roles = '[\"ROLE_DELEGATE\"]' WHERE email = 'maeva.picard@example.com'");
         $this->addSql("UPDATE user SET roles = '[\"ROLE_ADMIN\"]' WHERE email = 'olivier@dal-ferro.com'");

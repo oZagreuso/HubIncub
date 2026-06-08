@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 /**
- * Handles authentication entry points delegated to Symfony Security.
+ * Gère les points d'entrée d'authentification délégués à Symfony Security.
  */
 final class SecurityController extends AbstractController
 {
@@ -20,7 +20,7 @@ final class SecurityController extends AbstractController
         $right = random_int(2, 9);
         $request->getSession()->set('admin_captcha_answer', (string) ($left + $right));
 
-        // Symfony supplies the last submitted identifier and the last authentication error.
+        // Symfony fournit le dernier identifiant soumis et la dernière erreur d'authentification.
         return $this->render('security/login.html.twig', [
             'last_username' => $authenticationUtils->getLastUsername(),
             'error' => $authenticationUtils->getLastAuthenticationError(),
@@ -31,7 +31,7 @@ final class SecurityController extends AbstractController
     #[Route('/deconnexion', name: 'app_logout')]
     public function logout(): void
     {
-        // The firewall intercepts this route before the controller body is executed.
-        throw new \LogicException('This method is intercepted by the Symfony logout firewall.');
+        // Le pare-feu intercepte cette route avant l'exécution du corps du contrôleur.
+        throw new \LogicException('Cette méthode est interceptée par le pare-feu de déconnexion Symfony.');
     }
 }

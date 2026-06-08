@@ -11,12 +11,12 @@ final class Version20260528113000 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Normalize sample portfolio role accents';
+        return 'Normaliser les accents des statuts des portfolios de test';
     }
 
     public function up(Schema $schema): void
     {
-        // Normalizes local sample data created from terminals that replaced accented characters.
+        // Normalise les données de test locales créées depuis des terminaux ayant remplacé les caractères accentués.
         $this->addSql("UPDATE portfolio SET role = 'Ancien étudiant' WHERE role = 'Ancien ?tudiant'");
     }
 

@@ -36,6 +36,7 @@ Le mot de passe initial a été généré pendant la mise en place de l'administ
 
 - Page d'accueil HubIncub.
 - Annuaire des anciens avec portfolio et email visible, réservé aux membres connectés.
+- Statut de présence visible dans l'annuaire lorsqu'un membre est récemment actif.
 - Pages publiques `Projets` et `Événements`.
 - L'email et le lien portfolio d'un membre sont obligatoires.
 - Le profil LinkedIn d'un membre peut être renseigné de façon optionnelle avec une URL `linkedin.com` valide.
@@ -47,6 +48,7 @@ Le mot de passe initial a été généré pendant la mise en place de l'administ
 - Le délégué peut accéder à l'administration et ajouter membres, projets, événements et actualités, sans supprimer de membre.
 - Connexion administrateur.
 - Captcha obligatoire sur la connexion membre et administrateur.
+- Suivi de présence basé sur la dernière activité authentifiée, avec affichage d'un badge `Connecté`.
 - Ajout de membres à l'annuaire.
 - Suppression de membres depuis l'administration.
 - Ajout de projets.
@@ -87,6 +89,10 @@ public/uploads/admin/news
 ```
 
 Les fichiers uploadés reçoivent un nom lisible pour le SEO, basé sur le nom du projet, le titre de l'événement ou le titre de l'actualité.
+
+## Présence des membres
+
+Le statut de présence des membres est déterminé à partir du champ `lastSeenAt` de l'entité `User`. Ce champ est mis à jour automatiquement lorsqu'un utilisateur authentifié navigue sur le site. Un membre est affiché comme `Connecté` dans l'annuaire lorsque sa dernière activité date de moins de cinq minutes.
 
 ## Documentation IA
 

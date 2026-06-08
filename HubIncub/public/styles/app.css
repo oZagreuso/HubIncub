@@ -1,4 +1,4 @@
-/* Main stylesheet entry point. Keep this file limited to ordered imports. */
+/* Point d'entrée principal des styles. Ce fichier reste limité aux imports ordonnés. */
 @import url("./modules/colors.css");
 @import url("./modules/base.css");
 @import url("./modules/layout.css");

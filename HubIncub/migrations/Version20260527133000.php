@@ -11,7 +11,7 @@ final class Version20260527133000 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Add persistent images to projects and events';
+        return 'Ajouter les images persistées aux projets et événements';
     }
 
     public function up(Schema $schema): void

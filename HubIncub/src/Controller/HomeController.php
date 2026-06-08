@@ -30,7 +30,7 @@ final class HomeController extends AbstractController
     #[Route('/anciens', name: 'app_anciens')]
     public function anciens(PortfolioRepository $portfolioRepository, UserRepository $userRepository): Response
     {
-        // Administrative roles are resolved from User accounts to control the public ordering and displayed status.
+        // Les rôles administratifs sont résolus depuis les comptes utilisateur pour piloter l'ordre public et le statut affiché.
         $adminEmails = [];
         $delegateEmails = [];
         $onlineEmails = [];
@@ -54,7 +54,7 @@ final class HomeController extends AbstractController
 
         $portfolios = $portfolioRepository->findBy([], ['promotion' => 'DESC', 'lastName' => 'ASC', 'firstName' => 'ASC']);
 
-        // Directory priority is: administrators, delegate, then regular members ordered alphabetically.
+        // La priorité de l'annuaire est la suivante : administrateurs, délégué, puis membres réguliers par ordre alphabétique.
         usort($portfolios, static function ($left, $right) use ($adminEmails, $delegateEmails): int {
             $leftRank = in_array(strtolower($left->getEmail()), $adminEmails, true) ? 0 : 2;
             $rightRank = in_array(strtolower($right->getEmail()), $adminEmails, true) ? 0 : 2;

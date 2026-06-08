@@ -1,4 +1,4 @@
-/* Shared primary call-to-action treatment. */
+/* Traitement principal partagé des appels à l'action. */
 .nav-action,
 .button.primary {
     color: var(--white);
@@ -20,14 +20,14 @@
     background: linear-gradient(135deg, var(--orange-dark), var(--orange-hover));
 }
 
-/* Header-specific call-to-action sizing. */
+/* Dimensions des appels à l'action propres à l'en-tête. */
 .nav-action {
     padding: 0 16px;
     border-radius: 8px;
     transition: box-shadow 180ms ease, transform 180ms ease;
 }
 
-/* Base button component. */
+/* Composant bouton de base. */
 .button {
     min-height: 48px;
     padding: 0 21px;
@@ -46,7 +46,7 @@
     transform: translateY(-1px);
 }
 
-/* Secondary button variant used for navigation and portfolio links. */
+/* Variante secondaire utilisée pour la navigation et les liens de portfolio. */
 .button.secondary {
     color: var(--navy);
     background: rgba(255, 253, 249, 0.94);
@@ -73,7 +73,7 @@
     border-color: var(--danger-line-hover);
 }
 
-/* Small uppercase label used above major headings. */
+/* Petit libellé en capitales placé au-dessus des titres principaux. */
 .eyebrow {
     margin: 0 0 12px;
     color: var(--orange-dark);
@@ -83,7 +83,7 @@
     text-transform: uppercase;
 }
 
-/* Main hero logo sizing. */
+/* Dimensions du logo principal dans le héros. */
 .hero-logo {
     width: min(320px, 100%);
     margin-bottom: 18px;
@@ -91,7 +91,7 @@
     filter: drop-shadow(0 18px 32px rgba(23, 32, 51, 0.1));
 }
 
-/* Standard lead paragraph style. */
+/* Style standard du paragraphe d'introduction. */
 .hero-text {
     max-width: 660px;
     margin-bottom: 0;
@@ -100,7 +100,7 @@
     line-height: 1.6;
 }
 
-/* Button row in the hero area. */
+/* Rangée de boutons dans la zone héros. */
 .hero-actions {
     display: flex;
     flex-wrap: wrap;
@@ -108,7 +108,7 @@
     margin-top: 32px;
 }
 
-/* Glass-like summary panel in the hero. */
+/* Panneau de synthèse à effet verre dans le héros. */
 .hero-panel {
     position: relative;
     min-width: 0;
@@ -139,7 +139,7 @@
     background: rgba(255, 255, 255, 0.92);
 }
 
-/* Partner/school logo inside the hero panel. */
+/* Logo partenaire ou école dans le panneau du héros. */
 .school-logo {
     display: block;
     width: min(118px, 100%);
@@ -154,7 +154,7 @@
     mix-blend-mode: normal;
 }
 
-/* Small orange label inside metric cards. */
+/* Petit libellé orange dans les cartes d'indicateurs. */
 .metric {
     display: block;
     margin-bottom: 8px;
@@ -164,7 +164,7 @@
     text-transform: uppercase;
 }
 
-/* Reusable grid containers. */
+/* Conteneurs de grille réutilisables. */
 .features,
 .event-list,
 .portfolio-grid {
@@ -191,7 +191,7 @@
     gap: 22px;
 }
 
-/* Card surfaces shared across public lists. */
+/* Surfaces de cartes partagées par les listes publiques. */
 .features article,
 .event-list article,
 .portfolio-card {
@@ -201,7 +201,7 @@
     box-shadow: var(--shadow-soft);
 }
 
-/* Feature and event cards can contain stretched links. */
+/* Les cartes de fonctionnalité et d'événement peuvent contenir des liens étendus. */
 .features article,
 .event-list article {
     position: relative;
@@ -285,7 +285,7 @@
     box-shadow: var(--shadow-soft);
 }
 
-/* Interactive card affordance for the portfolio directory entry point. */
+/* Signal interactif des cartes menant vers l'annuaire des portfolios. */
 .feature-link-card {
     transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
 }
@@ -296,14 +296,14 @@
     transform: translateY(-2px);
 }
 
-/* Full-card link target. */
+/* Zone de lien couvrant toute la carte. */
 .card-link {
     position: absolute;
     inset: 0;
     border-radius: 8px;
 }
 
-/* Number labels on feature and portfolio cards. */
+/* Libellés numériques des cartes de fonctionnalité et de portfolio. */
 .features span,
 .portfolio-card span {
     color: var(--orange-dark);
@@ -401,7 +401,7 @@
     font-weight: 850;
 }
 
-/* Visible and clickable email in the portfolio cards. */
+/* Email visible et cliquable dans les cartes de portfolio. */
 .portfolio-email {
     display: inline-flex;
     min-width: 0;

@@ -1,6 +1,6 @@
-/* Design tokens shared by all CSS modules. */
+/* Jetons de design partagés par tous les modules CSS. */
 :root {
-    /* Brand palette. */
+    /* Palette de marque. */
     --orange: #ff7900;
     --orange-dark: #d95f00;
     --orange-hover: #b84f00;
@@ -10,7 +10,7 @@
     --teal-soft: #e8f7f6;
     --teal-wash: #f0fbfa;
 
-    /* Structural and text colors. */
+    /* Couleurs de structure et de texte. */
     --navy: #172033;
     --navy-hover: #0d1424;
     --navy-soft: #edf3f8;

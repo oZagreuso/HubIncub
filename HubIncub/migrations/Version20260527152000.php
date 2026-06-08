@@ -11,7 +11,7 @@ final class Version20260527152000 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Set Olivier Dal Ferro LinkedIn profile URL';
+        return "Définir l'URL du profil LinkedIn d'Olivier Dal Ferro";
     }
 
     public function up(Schema $schema): void

@@ -1,9 +1,9 @@
-/* Global box model reset. */
+/* Réinitialisation globale du modèle de boîte. */
 * {
     box-sizing: border-box;
 }
 
-/* Document-level behavior shared by every page. */
+/* Comportement global du document partagé par toutes les pages. */
 html {
     scroll-behavior: smooth;
     overflow-x: hidden;
@@ -24,18 +24,18 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* Media defaults prevent accidental overflow in responsive layouts. */
+/* Réglages média par défaut pour limiter les débordements dans les mises en page responsives. */
 img {
     max-width: 100%;
     height: auto;
 }
 
-/* Links inherit surrounding text color unless styled as a component. */
+/* Les liens héritent de la couleur du texte environnant sauf lorsqu'ils sont stylés comme composants. */
 a {
     color: inherit;
 }
 
-/* Shared heading reset. */
+/* Réinitialisation commune des titres. */
 h1,
 h2,
 h3,
@@ -43,7 +43,7 @@ p {
     margin-top: 0;
 }
 
-/* Primary page title scale. */
+/* Échelle du titre principal de page. */
 h1 {
     max-width: 860px;
     margin-bottom: 24px;
@@ -53,7 +53,7 @@ h1 {
     letter-spacing: 0;
 }
 
-/* Section title scale. */
+/* Échelle des titres de section. */
 h2 {
     margin-bottom: 0;
     color: var(--navy-ink);

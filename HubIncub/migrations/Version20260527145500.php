@@ -11,7 +11,7 @@ final class Version20260527145500 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Normalize member statuses and set Olivier as incubator admin';
+        return 'Normaliser les statuts membres et définir Olivier comme administrateur incubateur';
     }
 
     public function up(Schema $schema): void

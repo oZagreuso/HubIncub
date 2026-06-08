@@ -8,9 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: EventRepository::class)]
 #[ORM\Table(name: '`event`')]
 /**
- * Event entry managed from the administration interface.
+ * Entrée d'événement gérée depuis l'interface d'administration.
  *
- * Uploaded images are stored on disk; only the filename and SEO alt text are persisted.
+ * Les images téléversées sont stockées sur disque ; seuls le nom du fichier et le texte alternatif SEO sont persistés.
  */
 class Event
 {

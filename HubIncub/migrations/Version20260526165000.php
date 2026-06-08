@@ -11,7 +11,7 @@ final class Version20260526165000 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Create portfolio table';
+        return 'Créer la table des portfolios';
     }
 
     public function up(Schema $schema): void

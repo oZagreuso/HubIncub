@@ -1,4 +1,4 @@
-# AI Context - HubIncub
+# Contexte IA - HubIncub
 
 Ce fichier sert de source de contexte prioritaire pour les assistants IA intervenant sur le projet HubIncub, notamment GPT/Codex, Claude, Gemini ou tout autre agent de génération, revue ou maintenance de code.
 
@@ -14,14 +14,14 @@ Les objectifs principaux sont :
 - permettre à un administrateur de publier des actualités ;
 - conserver une base technique simple, maintenable et compatible Docker.
 
-## Stack Technique
+## Socle Technique
 
 - Symfony 8.
 - Doctrine ORM.
 - SQLite en local via Docker.
 - Twig pour les vues.
 - CSS natif modulaire.
-- Symfony Security pour l'authentification admin.
+- Symfony Security pour l'authentification d'administration et des membres.
 - Docker Compose avec services `php` et `nginx`.
 
 ## Routes Principales
@@ -30,19 +30,19 @@ Les objectifs principaux sont :
 - `/anciens` : annuaire des portfolios, protégé par authentification `ROLE_USER`.
 - `/projets` : liste publique des projets.
 - `/evenements` : liste publique des événements.
-- `/connexion` : connexion admin.
-- `/deconnexion` : déconnexion admin.
+- `/connexion` : connexion membre et administration.
+- `/deconnexion` : déconnexion membre et administration.
 - `/admin` : interface d'administration protégée par `ROLE_ADMIN` ou `ROLE_DELEGATE`.
 
 ## Authentification
 
-L'authentification admin utilise `symfony/security-bundle`.
+L'authentification utilise `symfony/security-bundle`.
 
-La connexion est gérée par `App\Security\LoginFormAuthenticator`. Cet authenticator valide le jeton CSRF, le captcha arithmétique stocké en session, puis l'email et le mot de passe.
+La connexion est gérée par `App\Security\LoginFormAuthenticator`. Cet authentificateur valide le jeton CSRF, le captcha arithmétique stocké en session, puis l'email et le mot de passe.
 
 L'entité utilisateur est `App\Entity\User`.
 
-Le provider Doctrine est configuré dans `config/packages/security.yaml`.
+Le fournisseur Doctrine est configuré dans `config/packages/security.yaml`.
 
 La zone `/admin` est protégée par :
 
@@ -141,8 +141,11 @@ Champs principaux :
 - `email`
 - `roles`
 - `password`
+- `lastSeenAt`
 
-## Uploads et SEO Images
+La présence en ligne est suivie avec `lastSeenAt`. Le champ est mis à jour automatiquement par `App\EventSubscriber\UserPresenceSubscriber` lors des requêtes authentifiées, avec un intervalle minimal d'une minute entre deux écritures. Un utilisateur est considéré connecté si sa dernière activité date de moins de cinq minutes.
+
+## Téléversements et SEO des Images
 
 Les images ajoutées depuis l'administration pour les projets, événements et actualités sont stockées dans :
 
@@ -172,10 +175,10 @@ Le CSS est volontairement séparé en modules :
 
 - `colors.css` : variables et palette.
 - `base.css` : base document, typographie globale.
-- `layout.css` : header, hero, sections et structure.
+- `layout.css` : en-tête, héros, sections et structure.
 - `components.css` : boutons, cartes, grilles, composants.
-- `pages.css` : styles de pages spécifiques, notamment admin.
-- `responsive.css` : media queries.
+- `pages.css` : styles de pages spécifiques, notamment administration.
+- `responsive.css` : requêtes média.
 
 `app.css` ne doit rester qu'un point d'entrée avec des `@import`.
 

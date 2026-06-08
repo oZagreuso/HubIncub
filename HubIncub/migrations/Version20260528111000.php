@@ -11,12 +11,12 @@ final class Version20260528111000 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Add twenty extra sample alumni portfolios';
+        return 'Ajouter vingt portfolios de test supplémentaires pour les anciens';
     }
 
     public function up(Schema $schema): void
     {
-        // Additional sample rows expand the portfolio grid for layout validation.
+        // Les lignes de test supplémentaires étendent la grille des portfolios pour valider la mise en page.
         $this->addSql("INSERT INTO portfolio (first_name, last_name, role, url, email, linkedin_url) SELECT 'Adel', 'Bourgeois', 'Ancien étudiant', 'https://example.com/adel-bourgeois', 'adel.bourgeois@example.com', NULL WHERE NOT EXISTS (SELECT 1 FROM portfolio WHERE email = 'adel.bourgeois@example.com')");
         $this->addSql("INSERT INTO portfolio (first_name, last_name, role, url, email, linkedin_url) SELECT 'Aline', 'Chevalier', 'Ancien étudiant', 'https://example.com/aline-chevalier', 'aline.chevalier@example.com', 'https://www.linkedin.com/in/aline-chevalier-test' WHERE NOT EXISTS (SELECT 1 FROM portfolio WHERE email = 'aline.chevalier@example.com')");
         $this->addSql("INSERT INTO portfolio (first_name, last_name, role, url, email, linkedin_url) SELECT 'Bastien', 'Lemoine', 'Ancien étudiant', 'https://example.com/bastien-lemoine', 'bastien.lemoine@example.com', NULL WHERE NOT EXISTS (SELECT 1 FROM portfolio WHERE email = 'bastien.lemoine@example.com')");

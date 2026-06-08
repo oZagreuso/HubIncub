@@ -11,7 +11,7 @@ final class Version20260527134500 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Add SEO alt text to project and event images';
+        return 'Ajouter le texte alternatif SEO aux images des projets et événements';
     }
 
     public function up(Schema $schema): void
