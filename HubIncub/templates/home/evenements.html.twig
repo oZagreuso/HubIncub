@@ -9,7 +9,12 @@
         <span>HubIncub</span>
     </a>
 
-    <nav class="main-nav" aria-label="Navigation principale">
+    <button class="menu-toggle" type="button" aria-controls="main-menu" aria-expanded="false" data-menu-toggle>
+        <span class="menu-toggle-label">Ouvrir le menu</span>
+        <span aria-hidden="true"></span>
+    </button>
+
+    <nav id="main-menu" class="main-nav" aria-label="Navigation principale" data-main-nav>
         <a href="{{ path('app_home') }}#reseau">Réseau</a>
         <a href="{{ path('app_projets') }}">Projets</a>
         <a href="{{ path('app_evenements') }}">Événements</a>

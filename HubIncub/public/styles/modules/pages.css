@@ -18,12 +18,12 @@
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    padding: 66px max(32px, calc((100vw - 1180px) / 2)) 54px;
+    padding: 66px max(32px, calc((100vw - 1180px) / 2)) 74px;
     background:
         linear-gradient(90deg, rgba(255, 250, 243, 0.97), rgba(255, 240, 222, 0.82), rgba(182, 106, 33, 0.16)),
         url("/images/layout/logo-cover.jpg") right center / contain no-repeat,
         var(--surface);
-    border-bottom: 1px solid rgba(43, 33, 24, 0.1);
+    border-bottom: 0;
 }
 
 /* Voile orangé des pages d'annuaire. */
@@ -34,18 +34,35 @@
     z-index: -1;
     background:
         linear-gradient(135deg, rgba(255, 121, 0, 0.13), transparent 36%),
-        linear-gradient(180deg, transparent 76%, rgba(255, 239, 221, 0.78));
+        linear-gradient(180deg, transparent 58%, rgba(255, 239, 221, 0.42) 76%, rgba(255, 239, 221, 0.92) 100%);
+}
+
+.directory-hero::after {
+    position: absolute;
+    content: "";
+    inset: auto 0 0;
+    z-index: -1;
+    height: 76px;
+    background: linear-gradient(180deg, rgba(255, 239, 221, 0), rgba(255, 239, 221, 0.94));
 }
 
 .directory-hero .hero-text {
     max-width: 720px;
 }
 
+.directory-hero + .section {
+    margin-top: -22px;
+    padding-top: 64px;
+    background:
+        linear-gradient(180deg, rgba(255, 239, 221, 0.94), rgba(255, 247, 237, 0.78) 34%, rgba(255, 250, 243, 0.9));
+}
+
 .portfolio-section {
-    padding-top: 42px;
+    margin-top: -22px;
+    padding-top: 64px;
     padding-bottom: 68px;
     background:
-        linear-gradient(180deg, rgba(255, 239, 221, 0.58), rgba(255, 247, 237, 0.72));
+        linear-gradient(180deg, rgba(255, 239, 221, 0.94), rgba(255, 247, 237, 0.76) 38%, rgba(255, 250, 243, 0.86));
 }
 
 .portfolio-card p {
@@ -70,9 +87,10 @@
 }
 
 .legal-section {
-    padding-top: 0;
+    margin-top: -22px;
+    padding-top: 22px;
     background:
-        linear-gradient(180deg, var(--orange-wash), var(--surface) 38%, var(--surface-warm));
+        linear-gradient(180deg, rgba(255, 239, 221, 0.94), var(--surface) 42%, var(--surface-warm));
 }
 
 .legal-grid {
@@ -311,7 +329,7 @@
     min-height: calc(100vh - 72px);
     padding: 72px max(32px, calc((100vw - 1180px) / 2));
     background:
-        linear-gradient(180deg, rgba(255, 239, 221, 0.94), rgba(255, 247, 237, 0.98) 320px),
+        linear-gradient(180deg, rgba(255, 239, 221, 0.98), rgba(255, 247, 237, 0.94) 220px, rgba(255, 250, 243, 0.98) 520px),
         var(--page);
 }
 

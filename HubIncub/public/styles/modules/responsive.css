@@ -2,20 +2,65 @@
 @media (max-width: 900px) {
     .site-header {
         height: auto;
+        min-height: 68px;
         padding: 16px 22px;
-        align-items: flex-start;
-        gap: 18px;
-        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+        flex-wrap: wrap;
+    }
+
+    .brand {
+        flex: 1;
+    }
+
+    .has-js .menu-toggle {
+        display: inline-flex;
     }
 
     .main-nav {
         width: 100%;
+        padding: 10px;
+        display: grid;
         gap: 8px;
-        flex-wrap: wrap;
+        border: 1px solid rgba(43, 33, 24, 0.1);
+        border-radius: 8px;
+        background: rgba(255, 250, 243, 0.96);
+        box-shadow: 0 20px 46px rgba(89, 58, 33, 0.13);
+        transition: max-height 220ms ease, padding 220ms ease, opacity 180ms ease, transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+    }
+
+    .has-js .main-nav {
+        max-height: 0;
+        padding: 0;
+        overflow: hidden;
+        border-width: 0;
+        border-color: transparent;
+        box-shadow: none;
+        opacity: 0;
+        transform: translateY(-6px);
     }
 
     .main-nav a {
+        width: 100%;
+        min-height: 44px;
+        justify-content: space-between;
+        padding: 0 14px;
         overflow-wrap: anywhere;
+    }
+
+    .main-nav .nav-action {
+        justify-content: center;
+        margin-top: 4px;
+    }
+
+    .has-js .site-header.is-menu-open .main-nav {
+        max-height: 420px;
+        padding: 10px;
+        border-width: 1px;
+        border-color: rgba(43, 33, 24, 0.1);
+        box-shadow: 0 20px 46px rgba(89, 58, 33, 0.13);
+        opacity: 1;
+        transform: translateY(0);
     }
 
     .hero {
@@ -132,9 +177,13 @@
     }
 
     .main-nav a {
-        min-height: 38px;
-        padding-inline: 9px;
-        font-size: 13px;
+        min-height: 42px;
+        font-size: 14px;
+    }
+
+    .menu-toggle {
+        width: 42px;
+        height: 42px;
     }
 
     .hero-logo {

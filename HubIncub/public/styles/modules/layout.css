@@ -63,6 +63,72 @@ body.is-scrolled .site-header {
     background: var(--orange-soft);
 }
 
+.menu-toggle {
+    width: 44px;
+    height: 44px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    color: var(--navy);
+    background: rgba(255, 250, 243, 0.94);
+    box-shadow: 0 10px 24px rgba(89, 58, 33, 0.08);
+    cursor: pointer;
+}
+
+.menu-toggle span[aria-hidden="true"],
+.menu-toggle span[aria-hidden="true"]::before,
+.menu-toggle span[aria-hidden="true"]::after {
+    width: 20px;
+    height: 2px;
+    display: block;
+    border-radius: 999px;
+    background: currentColor;
+    transition: transform 180ms ease, opacity 180ms ease;
+}
+
+.menu-toggle span[aria-hidden="true"] {
+    position: relative;
+}
+
+.menu-toggle span[aria-hidden="true"]::before,
+.menu-toggle span[aria-hidden="true"]::after {
+    position: absolute;
+    content: "";
+    left: 0;
+}
+
+.menu-toggle span[aria-hidden="true"]::before {
+    top: -7px;
+}
+
+.menu-toggle span[aria-hidden="true"]::after {
+    top: 7px;
+}
+
+.menu-toggle-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+.site-header.is-menu-open .menu-toggle span[aria-hidden="true"] {
+    transform: rotate(45deg);
+}
+
+.site-header.is-menu-open .menu-toggle span[aria-hidden="true"]::before {
+    transform: translateY(7px) rotate(90deg);
+}
+
+.site-header.is-menu-open .menu-toggle span[aria-hidden="true"]::after {
+    opacity: 0;
+    transform: translateY(-7px);
+}
+
 /* Héros de page d'accueil avec image de fond géométrique partagée et voile orange. */
 .hero {
     position: relative;
