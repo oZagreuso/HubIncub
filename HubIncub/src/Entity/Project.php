@@ -5,12 +5,13 @@ namespace App\Entity;
 use App\Repository\ProjectRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ProjectRepository::class)]
 /**
- * Entrée de projet gérée depuis l'interface d'administration.
+ * Projet publié depuis l'administration.
  *
- * Les images téléversées sont stockées sur disque ; seuls le nom du fichier et le texte alternatif SEO sont persistés.
+ * Les images téléversées sont stockées sur disque ; seuls le nom du fichier et
+ * le texte alternatif SEO/accessibilité sont persistés.
  */
+#[ORM\Entity(repositoryClass: ProjectRepository::class)]
 class Project
 {
     #[ORM\Id]
@@ -30,6 +31,9 @@ class Project
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $imageFilename = null;
 
+    /**
+     * Texte alternatif SEO et accessibilité associé à l'image du projet.
+     */
     #[ORM\Column(length: 180, nullable: true)]
     private ?string $imageAlt = null;
 

@@ -7,14 +7,16 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * Compte authentifiable pour les espaces protégés.
+ *
+ * Les utilisateurs sont chargés par email avec Doctrine puis authentifiés par
+ * Symfony Security. La présence en ligne est déduite du dernier horodatage
+ * d'activité enregistré.
+ */
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-/**
- * Utilisateur authentifiable de l'espace protégé.
- *
- * Les utilisateurs sont chargés par email avec Doctrine puis authentifiés par Symfony Security.
- */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -26,6 +28,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private string $email = '';
 
     /**
+     * Rôles persistés hors `ROLE_USER`, qui est ajouté systématiquement à la lecture.
+     *
      * @var list<string>
      */
     #[ORM\Column]
@@ -34,6 +38,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private string $password = '';
 
+    /**
+     * Date de dernière activité utilisée pour l'indicateur de présence.
+     */
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $lastSeenAt = null;
 
@@ -65,7 +72,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // Chaque compte authentifié reçoit ROLE_USER en complément des rôles persistés.
         $roles[] = 'ROLE_USER';
 
         return array_values(array_unique($roles));

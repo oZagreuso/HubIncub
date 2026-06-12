@@ -291,12 +291,21 @@ Les règles d'autorisation sont les suivantes :
 
 ### Modèle de Données
 
+Les entités Doctrine doivent conserver des commentaires de classe factuels, placés avant les attributs PHP `#[ORM\...]`. Les commentaires de propriété sont réservés aux champs dont l'usage n'est pas immédiatement déductible du nom ou du type, par exemple les chemins d'images, les codes postaux de carte ou les rôles persistés.
+
 `Portfolio` représente un membre affiché dans l'annuaire. L'email est unique. Les statuts valides sont exclusivement :
 
 - `Incubateur`
 - `Ancien étudiant`
 
-Les champs métier principaux sont `firstName`, `lastName`, `role`, `url`, `email`, `linkedinUrl`, `promotion` et `photoFilename`.
+Les champs métier principaux sont `firstName`, `lastName`, `role`, `url`, `email`, `linkedinUrl`, `promotion`, `photoFilename` et `postalCode`.
+
+`photoFilename` référence la photo ou l'avatar public du membre dans `public/uploads/portfolios`.
+
+`postalCode` est optionnel et sert uniquement à la localisation approximative sur la carte des membres. Les formats attendus sont :
+
+- code postal français sur cinq chiffres ;
+- code postal luxembourgeois normalisé au format `L-1234`.
 
 `User` représente un compte authentifiable. Il contient l'email, les rôles, le mot de passe haché et `lastSeenAt`. La méthode `getRoles` ajoute toujours `ROLE_USER`. La méthode `isOnline` considère un utilisateur connecté si la dernière activité date de moins de cinq minutes.
 
@@ -375,6 +384,33 @@ La page d'accueil utilise :
 - une section `Réseau en chiffres` alimentée par les données réelles : membres, promotions représentées, projets publiés et prochain événement programmé ;
 - un flux éditorial `À la une` si au moins une actualité, un projet ou un événement existe ;
 - trois cartes de réseau menant vers anciens, projets et événements.
+
+### Carte des Membres
+
+La page `/anciens` contient une carte interactive France + Luxembourg basée sur un SVG inline.
+
+La carte de France est issue d'une carte départementale SVG et rend uniquement les délimitations des départements. Les départements ne doivent pas afficher de nom ou de couleur spécifique par défaut. Lorsqu'au moins un membre possède un code postal associé à un département, ce département est coloré en orange de la charte graphique.
+
+Le Luxembourg est représenté comme un encart séparé en haut à droite de la carte de France, avec une indication visible `Luxembourg`. Cet encart reste une zone interactive avec `data-member-area="LU"` et doit continuer à filtrer les membres luxembourgeois.
+
+Le rendu de la carte est réparti entre :
+
+- `templates/home/anciens.html.twig` pour la structure de la section et la grille des cards membres ;
+- `templates/partials/_france_departments_map.svg.twig` pour les chemins SVG des départements et l'encart Luxembourg ;
+- `public/scripts/app.js` pour le survol, le focus clavier, le clic et le filtrage ;
+- `public/styles/modules/pages.css` pour les couleurs, l'info-bulle et les états actifs.
+
+Le contrôleur `HomeController::buildMemberMapData` transforme les codes postaux en zones de carte :
+
+- les codes postaux français utilisent les deux premiers chiffres comme département ;
+- les codes corses commençant par `20` sont répartis entre `2A` et `2B` ;
+- les codes luxembourgeois commençant par `L-` sont regroupés sous la zone `LU`.
+
+Au survol ou au focus clavier d'une zone active, une info-bulle affiche le nom du département ou `Luxembourg`. Au clic ou à la touche Entrée/Espace, la grille des cards membres est filtrée pour afficher uniquement les membres de la zone sélectionnée. Les cards non concernées reçoivent la classe `is-map-filtered-out`, car l'attribut HTML `hidden` seul peut être neutralisé par le `display: grid` appliqué aux cartes.
+
+Le bouton `Afficher tous` réinitialise le filtre.
+
+Les données de démonstration de localisation sont définies par la migration `Version20260612134000`. Olivier Dal Ferro utilise le code postal `57200`. Les membres fictifs sont répartis entre plusieurs départements français et plusieurs codes postaux luxembourgeois. Les exemples luxembourgeois utilisent notamment `L-1234`, `L-2449` et `L-4132`.
 
 Les images Twig doivent conserver des attributs utiles à la performance et à l'accessibilité : `alt`, `width`, `height`, `loading` lorsque pertinent et `decoding="async"`.
 

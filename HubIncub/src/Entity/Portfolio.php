@@ -5,11 +5,14 @@ namespace App\Entity;
 use App\Repository\PortfolioRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * Fiche membre affichée dans l'annuaire des anciens.
+ *
+ * L'entité porte les informations publiques du membre, la photo affichée dans
+ * les cards et le code postal facultatif utilisé pour la carte interactive.
+ */
 #[ORM\Entity(repositoryClass: PortfolioRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_PORTFOLIO_EMAIL', fields: ['email'])]
-/**
- * Fiche membre affichée dans l'annuaire public des portfolios.
- */
 class Portfolio
 {
     public const ROLE_INCUBATOR = 'Incubateur';
@@ -26,6 +29,9 @@ class Portfolio
     #[ORM\Column(length: 100)]
     private string $lastName = '';
 
+    /**
+     * Statut métier affiché dans l'annuaire.
+     */
     #[ORM\Column(length: 150)]
     private string $role = '';
 
@@ -41,9 +47,15 @@ class Portfolio
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $promotion = null;
 
+    /**
+     * Nom du fichier image stocké dans public/uploads/portfolios.
+     */
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $photoFilename = null;
 
+    /**
+     * Code postal optionnel utilisé pour colorer la zone correspondante sur la carte.
+     */
     #[ORM\Column(length: 12, nullable: true)]
     private ?string $postalCode = null;
 
@@ -163,5 +175,4 @@ class Portfolio
 
         return $this;
     }
-
 }

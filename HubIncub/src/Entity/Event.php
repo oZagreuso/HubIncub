@@ -5,13 +5,15 @@ namespace App\Entity;
 use App\Repository\EventRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * Événement publié depuis l'administration.
+ *
+ * Le nom de table est échappé car `event` peut être réservé selon le moteur SQL.
+ * Les images téléversées sont stockées sur disque ; seuls le nom du fichier et
+ * le texte alternatif SEO/accessibilité sont persistés.
+ */
 #[ORM\Entity(repositoryClass: EventRepository::class)]
 #[ORM\Table(name: '`event`')]
-/**
- * Entrée d'événement gérée depuis l'interface d'administration.
- *
- * Les images téléversées sont stockées sur disque ; seuls le nom du fichier et le texte alternatif SEO sont persistés.
- */
 class Event
 {
     #[ORM\Id]
@@ -31,6 +33,9 @@ class Event
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $imageFilename = null;
 
+    /**
+     * Texte alternatif SEO et accessibilité associé à l'image de l'événement.
+     */
     #[ORM\Column(length: 180, nullable: true)]
     private ?string $imageAlt = null;
 

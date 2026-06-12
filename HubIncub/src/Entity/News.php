@@ -5,12 +5,14 @@ namespace App\Entity;
 use App\Repository\NewsRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: NewsRepository::class)]
 /**
- * Entrée d'actualité gérée depuis l'interface d'administration.
+ * Actualité publiée depuis l'administration.
  *
- * La dernière actualité publiée est affichée sur la page d'accueil.
+ * La dernière actualité publiée alimente automatiquement la page d'accueil.
+ * Les images associées sont stockées sur disque ; l'entité conserve uniquement
+ * le nom du fichier et le texte alternatif utilisé dans les vues.
  */
+#[ORM\Entity(repositoryClass: NewsRepository::class)]
 class News
 {
     #[ORM\Id]
@@ -30,6 +32,9 @@ class News
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $imageFilename = null;
 
+    /**
+     * Texte alternatif SEO et accessibilité associé à l'image d'actualité.
+     */
     #[ORM\Column(length: 180, nullable: true)]
     private ?string $imageAlt = null;
 
