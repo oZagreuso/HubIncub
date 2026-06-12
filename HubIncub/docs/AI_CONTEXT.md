@@ -204,7 +204,10 @@ docker compose up --build
 docker compose exec php php bin/console doctrine:migrations:migrate --no-interaction
 docker compose exec php php bin/console doctrine:schema:validate
 docker compose exec php php bin/console debug:router
+docker compose exec php php bin/console doctrine:query:sql "SELECT * FROM portfolio"
 ```
+
+La commande `doctrine:query:sql` est fournie localement par `App\Command\DoctrineQuerySqlCommand`, car elle n'est pas disponible par défaut dans la version Doctrine/Symfony utilisée par le projet.
 
 ## État Courant Vérifié
 
@@ -252,6 +255,10 @@ Le projet ne doit pas être transformé en application JavaScript côté client.
 
 La page `/anciens` trie les portfolios avec priorité aux administrateurs, puis au délégué, puis aux autres membres. La présence en ligne est calculée à partir des utilisateurs dont `lastSeenAt` date de moins de cinq minutes.
 
+L'annuaire affiche chaque membre sous forme de fiche enrichie avec photo ou initiales, rôle affiché, promotion, statut, indicateur de présence, email, lien LinkedIn lorsqu'il existe et lien vers le portfolio.
+
+Chaque membre authentifié peut gérer sa propre photo publique depuis `/mon-profil`. La photo est limitée à 2 Mo, stockée dans `public/uploads/portfolios` et référencée par `Portfolio::photoFilename`. L'administrateur et le délégué peuvent supprimer la photo d'un membre depuis l'administration.
+
 ### Administration
 
 `App\Controller\AdminController` centralise l'administration sous `/admin`.
@@ -270,9 +277,9 @@ Actions prises en charge :
 - suppression de membre ;
 - passage en ancien étudiant ;
 - désignation du délégué ;
-- création de projet ;
-- création d'événement ;
-- création d'actualité.
+- création, modification et suppression de projet ;
+- création, modification et suppression d'événement ;
+- création, modification et suppression d'actualité.
 
 Les règles d'autorisation sont les suivantes :
 
@@ -289,7 +296,7 @@ Les règles d'autorisation sont les suivantes :
 - `Incubateur`
 - `Ancien étudiant`
 
-Les champs métier principaux sont `firstName`, `lastName`, `role`, `url`, `email`, `linkedinUrl` et `promotion`.
+Les champs métier principaux sont `firstName`, `lastName`, `role`, `url`, `email`, `linkedinUrl`, `promotion` et `photoFilename`.
 
 `User` représente un compte authentifiable. Il contient l'email, les rôles, le mot de passe haché et `lastSeenAt`. La méthode `getRoles` ajoute toujours `ROLE_USER`. La méthode `isOnline` considère un utilisateur connecté si la dernière activité date de moins de cinq minutes.
 
@@ -412,6 +419,8 @@ Les neutres ont été refroidis pour éviter une interface trop brune :
 ```
 
 Les futures évolutions visuelles doivent préserver une interface sobre, professionnelle, lisible et cohérente avec l'identité orange de HubIncub.
+
+Les pages internes utilisent `public/images/layout/cover.jpg` comme image de fond globale avec une adaptation au scroll. La front-page conserve son fond de héros spécifique, avec une image attachée au scroll sur desktop et un repli standard sur mobile. Elle ne doit pas être basculée sur ce visuel sans demande explicite.
 
 ### Conventions CSS
 

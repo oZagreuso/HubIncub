@@ -15,7 +15,7 @@
             <script src="/scripts/app.js" defer></script>
         {% endblock %}
     </head>
-    <body>
+    <body class="{% block body_class %}site-page{% endblock %}">
         {% block body %}{% endblock %}
     </body>
 </html>

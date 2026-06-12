@@ -36,6 +36,8 @@ security:
     access_control:
         # Administration is restricted to the unique admin and the unique delegate.
         - { path: ^/admin, roles: [ROLE_ADMIN, ROLE_DELEGATE] }
+        # Members can manage their own public profile photo.
+        - { path: ^/mon-profil, roles: ROLE_USER }
         # The portfolio directory contains member information and requires authentication.
         - { path: ^/anciens, roles: ROLE_USER }
         # - { path: ^/profile, roles: ROLE_USER }

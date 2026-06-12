@@ -24,6 +24,13 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
+body.site-page {
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(255, 247, 241, 0.92)),
+        url("/images/layout/cover.jpg") center top / cover fixed no-repeat,
+        var(--page);
+}
+
 /* Réglages média par défaut pour limiter les débordements dans les mises en page responsives. */
 img {
     max-width: 100%;

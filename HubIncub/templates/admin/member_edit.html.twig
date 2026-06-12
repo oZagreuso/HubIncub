@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier {{ portfolio.firstName }} {{ portfolio.lastName }} - Administration HubIncub{% endblock %}
+
+{% block body %}
+<header class="site-header" data-header>
+    <a class="brand" href="{{ path('app_home') }}" aria-label="Accueil HubIncub">
+        <img src="/images/branding/logo-hubincub.png" alt="HubIncub" width="1448" height="1086" decoding="async">
+        <span>HubIncub</span>
+    </a>
+
+    <button class="menu-toggle" type="button" aria-controls="main-menu" aria-expanded="false" data-menu-toggle>
+        <span class="menu-toggle-label">Ouvrir le menu</span>
+        <span aria-hidden="true"></span>
+    </button>
+
+    <nav id="main-menu" class="main-nav" aria-label="Navigation principale" data-main-nav>
+        <a href="{{ path('app_admin_members') }}">Membres</a>
+        <a href="{{ path('app_admin') }}">Admin</a>
+        <a href="{{ path('app_anciens') }}">Portfolios</a>
+        <a class="nav-action" href="{{ path('app_logout') }}">Déconnexion</a>
+    </nav>
+</header>
+
+<main>
+    <section class="admin-shell">
+        <div class="admin-heading admin-card">
+            <div>
+                <p class="eyebrow">Fiche membre</p>
+                <h1>{{ portfolio.firstName }} {{ portfolio.lastName }}</h1>
+                <p class="hero-text">Modifiez les informations principales du membre.</p>
+            </div>
+            <div class="admin-heading-aside">
+                {% if portfolio.photoFilename %}
+                    <img class="admin-heading-logo admin-heading-photo" src="/uploads/portfolios/{{ portfolio.photoFilename }}" alt="Photo de {{ portfolio.firstName }} {{ portfolio.lastName }}" width="160" height="160" decoding="async">
+                {% else %}
+                    <span class="admin-role-pill">Sans photo</span>
+                {% endif %}
+                <span class="admin-role-pill">
+                    {{ isAdminPortfolio ? 'Administrateur' : (isDelegatePortfolio ? 'Délégué' : portfolio.role) }}
+                </span>
+            </div>
+        </div>
+
+        {% for message in app.flashes('success') %}
+            <p class="form-success">{{ message }}</p>
+        {% endfor %}
+        {% for message in app.flashes('error') %}
+            <p class="form-alert">{{ message }}</p>
+        {% endfor %}
+
+        <article class="admin-card admin-card-wide">
+            <form class="admin-form admin-member-edit-form" method="post">
+                <input type="hidden" name="type" value="update_portfolio">
+                <input type="hidden" name="portfolioId" value="{{ portfolio.id }}">
+                <input type="hidden" name="_token" value="{{ csrf_token('admin_update_portfolio') }}">
+
+                <label>Prénom obligatoire <input name="firstName" value="{{ portfolio.firstName }}" required></label>
+                <label>Nom obligatoire <input name="lastName" value="{{ portfolio.lastName }}" required></label>
+                <label>Promotion obligatoire <input name="promotion" value="{{ portfolio.promotion }}" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" placeholder="2026" required></label>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <label>
+                        Statut obligatoire
+                        <select name="role" required>
+                            <option value="Incubateur" {{ portfolio.role == 'Incubateur' ? 'selected' : '' }}>Incubateur</option>
+                            <option value="Ancien étudiant" {{ portfolio.role == 'Ancien étudiant' ? 'selected' : '' }}>Ancien étudiant</option>
+                        </select>
+                    </label>
+                {% endif %}
+                <label>Email obligatoire <input type="email" name="email" value="{{ portfolio.email }}" required></label>
+                <label>Portfolio obligatoire <input type="url" name="url" value="{{ portfolio.url }}" required></label>
+                <label>Profil LinkedIn optionnel <input type="url" name="linkedinUrl" value="{{ portfolio.linkedinUrl }}" placeholder="https://www.linkedin.com/in/..."></label>
+                <label>Code postal optionnel <input name="postalCode" value="{{ portfolio.postalCode }}" inputmode="text" maxlength="12" placeholder="57000 ou L-1234"></label>
+
+                <div class="admin-form-actions">
+                    <button class="button primary" type="submit">Enregistrer</button>
+                    <a class="button secondary" href="{{ path('app_admin_members') }}">Retour</a>
+                </div>
+            </form>
+        </article>
+    </section>
+</main>
+{% endblock %}

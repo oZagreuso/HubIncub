@@ -3,7 +3,7 @@
 {% block title %}Retrouver les anciens - HubIncub{% endblock %}
 
 {% block body %}
-{# En-tête de l'annuaire membres protégé. #}
+{# En-tete de l'annuaire membres protege. #}
 <header class="site-header" data-header>
     <a class="brand" href="{{ path('app_home') }}" aria-label="Accueil HubIncub">
         <img src="/images/branding/logo-hubincub.png" alt="HubIncub" width="1448" height="1086" decoding="async">
@@ -20,6 +20,7 @@
         <a href="{{ path('app_projets') }}">Projets</a>
         <a href="{{ path('app_evenements') }}">Événements</a>
         <a href="{{ path('app_actualites') }}">Actualités</a>
+        <a href="{{ path('app_member_profile') }}">Mon profil</a>
         <a class="nav-action" href="{{ path('app_admin') }}">Administration</a>
     </nav>
 </header>
@@ -42,38 +43,125 @@
         </p>
     </section>
 
-    {# Les cartes de portfolio sont alimentées depuis l'entité Portfolio. #}
+    {# Les cartes de portfolio sont alimentees depuis l'entite Portfolio. #}
     <section class="section portfolio-section">
-        <div class="portfolio-grid" aria-label="Portfolios des anciens étudiants">
+        <div class="member-map-section">
+            <div class="member-map-heading">
+                <div>
+                    <p class="eyebrow">Carte du réseau</p>
+                    <h2>Où sont les membres ?</h2>
+                </div>
+                <p>{{ localizedMemberCount }} membre{{ localizedMemberCount > 1 ? 's' : '' }} localisé{{ localizedMemberCount > 1 ? 's' : '' }} par code postal.</p>
+            </div>
+
+            <div class="member-map-card" data-member-directory>
+                <svg class="member-map" viewBox="0 0 2000 1898" role="img" aria-labelledby="member-map-title member-map-description" data-member-map>
+                    <title id="member-map-title">Carte simplifiée des membres HubIncub en France et au Luxembourg</title>
+                    <desc id="member-map-description">Les zones orange indiquent les territoires où au moins un membre a renseigné un code postal.</desc>
+                    <rect class="member-map-sea" width="2000" height="1898" rx="18" />
+                    {% include 'partials/_france_departments_map.svg.twig' %}
+                </svg>
+                <p class="member-map-tooltip" data-member-map-tooltip hidden></p>
+
+                {% if mapAreas is empty %}
+                    <p class="member-map-empty">Aucune localisation n'est encore renseignée.</p>
+                {% else %}
+                    <div class="member-map-panel">
+                        <p class="member-map-filter" data-member-map-status>Tous les membres localisés sont affichés.</p>
+                        <button class="button secondary" type="button" data-member-map-reset>Afficher tous</button>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="portfolio-grid" aria-label="Portfolios des anciens étudiants" data-member-card-grid>
             {% for portfolio in portfolios %}
-                {# Les libellés affichés sont dérivés des rôles authentifiés, sans modifier les statuts persistés. #}
+                {# Les libelles affiches sont derives des roles authentifies, sans modifier les statuts persistés. #}
                 {% set isAdminPortfolio = portfolio.email|lower in adminEmails %}
                 {% set isDelegatePortfolio = portfolio.email|lower in delegateEmails %}
                 {% set isOnlinePortfolio = portfolio.email|lower in onlineEmails %}
-                <article class="portfolio-card">
+                {% set memberRole = isAdminPortfolio ? 'Administrateur' : (isDelegatePortfolio ? 'Délégué' : portfolio.role) %}
+                {% set memberInitials = (portfolio.firstName|first ~ portfolio.lastName|first)|upper %}
+                {% set memberMapArea = portfolioMapAreas[portfolio.id] ?? '' %}
+
+                <article class="portfolio-card" data-member-card data-member-area="{{ memberMapArea }}">
                     <div class="portfolio-card-header">
                         <span>{{ loop.index < 10 ? '0' ~ loop.index : loop.index }}</span>
                         {% if isOnlinePortfolio %}
-                            <span class="presence-badge">Connect&eacute;</span>
+                            <span class="presence-badge">Connecté</span>
+                        {% else %}
+                            <span class="presence-badge presence-badge-muted">Hors ligne</span>
                         {% endif %}
                     </div>
-                    <h2>{{ portfolio.firstName }} {{ portfolio.lastName }}</h2>
-                    <p>{{ isAdminPortfolio ? 'Administrateur' : (isDelegatePortfolio ? 'Délégué' : portfolio.role) }}</p>
-                    {% if portfolio.promotion %}
-                        <p>Promotion {{ portfolio.promotion }}</p>
-                    {% endif %}
+
+                    <div class="portfolio-identity">
+                        {% if portfolio.photoFilename %}
+                            <img class="portfolio-photo" src="/uploads/portfolios/{{ portfolio.photoFilename }}" alt="Photo de {{ portfolio.firstName }} {{ portfolio.lastName }}" width="160" height="160" loading="lazy" decoding="async">
+                        {% else %}
+                            <div class="portfolio-avatar" aria-hidden="true">{{ memberInitials }}</div>
+                        {% endif %}
+                        <div>
+                            <h2>{{ portfolio.firstName }} {{ portfolio.lastName }}</h2>
+                            <div class="portfolio-tags" aria-label="Informations membre">
+                                <span class="portfolio-tag">{{ memberRole }}</span>
+                                {% if portfolio.promotion %}
+                                    <span class="portfolio-tag">Promotion {{ portfolio.promotion }}</span>
+                                {% else %}
+                                    <span class="portfolio-tag portfolio-tag-muted">Promotion non renseignée</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <dl class="portfolio-details">
+                        <div>
+                            <dt>Statut</dt>
+                            <dd>{{ memberRole }}</dd>
+                        </div>
+                        <div>
+                            <dt>Promotion</dt>
+                            <dd>{{ portfolio.promotion ?: 'Non renseignée' }}</dd>
+                        </div>
+                        <div>
+                            <dt>Localisation</dt>
+                            <dd>{{ portfolio.postalCode ?: 'Non renseignée' }}</dd>
+                        </div>
+                    </dl>
+
                     <div class="portfolio-actions">
                         {% if portfolio.email %}
-                            <a class="portfolio-email" href="mailto:{{ portfolio.email }}">{{ portfolio.email }}</a>
+                            <a class="portfolio-contact-link" href="mailto:{{ portfolio.email }}">
+                                <span>Email</span>
+                                {{ portfolio.email }}
+                            </a>
+                        {% else %}
+                            <div class="portfolio-contact-link portfolio-contact-empty">
+                                <span>Email</span>
+                                Non renseigné
+                            </div>
                         {% endif %}
+
                         {% if portfolio.linkedinUrl %}
-                            <a class="portfolio-email" href="{{ portfolio.linkedinUrl }}" target="_blank" rel="noopener noreferrer">Profil LinkedIn</a>
+                            <a class="portfolio-contact-link" href="{{ portfolio.linkedinUrl }}" target="_blank" rel="noopener noreferrer">
+                                <span>LinkedIn</span>
+                                Profil professionnel
+                            </a>
+                        {% else %}
+                            <div class="portfolio-contact-link portfolio-contact-empty">
+                                <span>LinkedIn</span>
+                                Non renseigné
+                            </div>
                         {% endif %}
+
                         {% if portfolio.url %}
-                            <a class="button secondary" href="{{ portfolio.url }}">Voir le portfolio</a>
+                            <a class="button secondary" href="{{ portfolio.url }}" target="_blank" rel="noopener noreferrer">Voir le portfolio</a>
+                        {% else %}
+                            <span class="button secondary portfolio-button-muted">Portfolio non renseigné</span>
                         {% endif %}
                     </div>
                 </article>
+            {% else %}
+                <p class="empty-state">Aucun membre n'est encore référencé dans l'annuaire.</p>
             {% endfor %}
         </div>
     </section>

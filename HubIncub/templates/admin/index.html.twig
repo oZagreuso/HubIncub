@@ -62,13 +62,11 @@
                 <form class="admin-form" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="type" value="project">
                     <input type="hidden" name="_token" value="{{ csrf_token('admin_project') }}">
-
                     <label>Nom du projet <input name="name" required></label>
                     <label>Lien <input type="url" name="url"></label>
                     <label>Image <input type="file" name="image" accept="image/*"></label>
                     <label>Texte alternatif SEO <input name="imageAlt" maxlength="180" placeholder="Ex. Capture du projet HubIncub CRM"></label>
                     <label>Description <textarea name="description" rows="5" required></textarea></label>
-
                     <button class="button primary" type="submit">Ajouter</button>
                 </form>
             </article>
@@ -78,13 +76,11 @@
                 <form class="admin-form" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="type" value="event">
                     <input type="hidden" name="_token" value="{{ csrf_token('admin_event') }}">
-
                     <label>Titre <input name="title" required></label>
                     <label>Date <input type="datetime-local" name="startsAt"></label>
                     <label>Image <input type="file" name="image" accept="image/*"></label>
                     <label>Texte alternatif SEO <input name="imageAlt" maxlength="180" placeholder="Ex. Photo de l'événement alumni MNS"></label>
                     <label>Description <textarea name="description" rows="5" required></textarea></label>
-
                     <button class="button primary" type="submit">Ajouter</button>
                 </form>
             </article>
@@ -94,13 +90,11 @@
                 <form class="admin-form" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="type" value="news">
                     <input type="hidden" name="_token" value="{{ csrf_token('admin_news') }}">
-
                     <label>Titre <input name="title" required></label>
                     <label>Date de publication <input type="datetime-local" name="publishedAt"></label>
                     <label>Image <input type="file" name="image" accept="image/*"></label>
                     <label>Texte alternatif SEO <input name="imageAlt" maxlength="180" placeholder="Ex. Photo de l'actualité HubIncub"></label>
                     <label>Contenu <textarea name="content" rows="5" required></textarea></label>
-
                     <button class="button primary" type="submit">Ajouter</button>
                 </form>
             </article>
@@ -112,8 +106,34 @@
                 <ul class="admin-list">
                     {% for project in projects %}
                         <li class="admin-media-item" {% if project.imageFilename %}style="--admin-media-image: url('/uploads/admin/projects/{{ project.imageFilename }}');"{% endif %}>
-                            {{ project.name }}
-                            <span>{{ project.description }}</span>
+                            <div class="admin-list-row">
+                                <div>
+                                    {{ project.name }}
+                                    <span>{{ project.description }}</span>
+                                </div>
+                                <div class="admin-row-actions">
+                                    <details class="admin-edit-panel">
+                                        <summary class="button secondary">Modifier</summary>
+                                        <form class="admin-form admin-form-compact" method="post" enctype="multipart/form-data">
+                                            <input type="hidden" name="type" value="update_project">
+                                            <input type="hidden" name="projectId" value="{{ project.id }}">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('admin_update_project') }}">
+                                            <label>Nom <input name="name" value="{{ project.name }}" required></label>
+                                            <label>Lien <input type="url" name="url" value="{{ project.url }}"></label>
+                                            <label>Nouvelle image <input type="file" name="image" accept="image/*"></label>
+                                            <label>Texte alternatif SEO <input name="imageAlt" maxlength="180" value="{{ project.imageAlt }}"></label>
+                                            <label>Description <textarea name="description" rows="5" required>{{ project.description }}</textarea></label>
+                                            <button class="button primary" type="submit">Enregistrer</button>
+                                        </form>
+                                    </details>
+                                    <form method="post" onsubmit="return confirm('Supprimer ce projet ?');">
+                                        <input type="hidden" name="type" value="delete_project">
+                                        <input type="hidden" name="projectId" value="{{ project.id }}">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('admin_delete_project') }}">
+                                        <button class="button danger" type="submit">Supprimer</button>
+                                    </form>
+                                </div>
+                            </div>
                         </li>
                     {% else %}
                         <li>Aucun projet pour le moment.</li>
@@ -126,8 +146,34 @@
                 <ul class="admin-list">
                     {% for event in events %}
                         <li class="admin-media-item" {% if event.imageFilename %}style="--admin-media-image: url('/uploads/admin/events/{{ event.imageFilename }}');"{% endif %}>
-                            {{ event.title }}
-                            <span>{{ event.startsAt ? event.startsAt|date('d/m/Y H:i') : 'Date à préciser' }}</span>
+                            <div class="admin-list-row">
+                                <div>
+                                    {{ event.title }}
+                                    <span>{{ event.startsAt ? event.startsAt|date('d/m/Y H:i') : 'Date à préciser' }}</span>
+                                </div>
+                                <div class="admin-row-actions">
+                                    <details class="admin-edit-panel">
+                                        <summary class="button secondary">Modifier</summary>
+                                        <form class="admin-form admin-form-compact" method="post" enctype="multipart/form-data">
+                                            <input type="hidden" name="type" value="update_event">
+                                            <input type="hidden" name="eventId" value="{{ event.id }}">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('admin_update_event') }}">
+                                            <label>Titre <input name="title" value="{{ event.title }}" required></label>
+                                            <label>Date <input type="datetime-local" name="startsAt" value="{{ event.startsAt ? event.startsAt|date('Y-m-d\\TH:i') : '' }}"></label>
+                                            <label>Nouvelle image <input type="file" name="image" accept="image/*"></label>
+                                            <label>Texte alternatif SEO <input name="imageAlt" maxlength="180" value="{{ event.imageAlt }}"></label>
+                                            <label>Description <textarea name="description" rows="5" required>{{ event.description }}</textarea></label>
+                                            <button class="button primary" type="submit">Enregistrer</button>
+                                        </form>
+                                    </details>
+                                    <form method="post" onsubmit="return confirm('Supprimer cet événement ?');">
+                                        <input type="hidden" name="type" value="delete_event">
+                                        <input type="hidden" name="eventId" value="{{ event.id }}">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('admin_delete_event') }}">
+                                        <button class="button danger" type="submit">Supprimer</button>
+                                    </form>
+                                </div>
+                            </div>
                         </li>
                     {% else %}
                         <li>Aucun événement pour le moment.</li>
@@ -140,8 +186,34 @@
                 <ul class="admin-list">
                     {% for news in newsItems %}
                         <li class="admin-media-item" {% if news.imageFilename %}style="--admin-media-image: url('/uploads/admin/news/{{ news.imageFilename }}');"{% endif %}>
-                            {{ news.title }}
-                            <span>{{ news.publishedAt|date('d/m/Y H:i') }}</span>
+                            <div class="admin-list-row">
+                                <div>
+                                    {{ news.title }}
+                                    <span>{{ news.publishedAt|date('d/m/Y H:i') }}</span>
+                                </div>
+                                <div class="admin-row-actions">
+                                    <details class="admin-edit-panel">
+                                        <summary class="button secondary">Modifier</summary>
+                                        <form class="admin-form admin-form-compact" method="post" enctype="multipart/form-data">
+                                            <input type="hidden" name="type" value="update_news">
+                                            <input type="hidden" name="newsId" value="{{ news.id }}">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('admin_update_news') }}">
+                                            <label>Titre <input name="title" value="{{ news.title }}" required></label>
+                                            <label>Date de publication <input type="datetime-local" name="publishedAt" value="{{ news.publishedAt|date('Y-m-d\\TH:i') }}"></label>
+                                            <label>Nouvelle image <input type="file" name="image" accept="image/*"></label>
+                                            <label>Texte alternatif SEO <input name="imageAlt" maxlength="180" value="{{ news.imageAlt }}"></label>
+                                            <label>Contenu <textarea name="content" rows="5" required>{{ news.content }}</textarea></label>
+                                            <button class="button primary" type="submit">Enregistrer</button>
+                                        </form>
+                                    </details>
+                                    <form method="post" onsubmit="return confirm('Supprimer cette actualité ?');">
+                                        <input type="hidden" name="type" value="delete_news">
+                                        <input type="hidden" name="newsId" value="{{ news.id }}">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('admin_delete_news') }}">
+                                        <button class="button danger" type="submit">Supprimer</button>
+                                    </form>
+                                </div>
+                            </div>
                         </li>
                     {% else %}
                         <li>Aucune actualité pour le moment.</li>

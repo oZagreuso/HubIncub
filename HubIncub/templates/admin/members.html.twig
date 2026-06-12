@@ -31,7 +31,7 @@
             <div>
                 <p class="eyebrow">Administration</p>
                 <h1>Membres HubIncub</h1>
-                <p class="hero-text">Centralisez les fiches membres, les accès, les promotions et le délégué des Incubateurs.</p>
+                <p class="hero-text">Vue compacte des fiches, accès, promotions et rôles du réseau.</p>
             </div>
             <div class="admin-heading-aside">
                 <img class="admin-heading-logo" src="/images/branding/logo-hubincub.png" alt="HubIncub" width="1448" height="1086" decoding="async">
@@ -47,56 +47,18 @@
         {% endfor %}
 
         <div class="admin-stats">
-            <article class="admin-stat">
-                <span>Total</span>
-                <strong>{{ memberStats.total }}</strong>
-            </article>
-            <article class="admin-stat">
-                <span>Incubateurs</span>
-                <strong>{{ memberStats.incubators }}</strong>
-            </article>
-            <article class="admin-stat">
-                <span>Anciens</span>
-                <strong>{{ memberStats.alumni }}</strong>
-            </article>
-            <article class="admin-stat">
-                <span>Avec accès</span>
-                <strong>{{ memberStats.withAccount }}</strong>
-            </article>
-            <article class="admin-stat">
-                <span>Sans accès</span>
-                <strong>{{ memberStats.withoutAccount }}</strong>
-            </article>
+            <article class="admin-stat"><span>Total</span><strong>{{ memberStats.total }}</strong></article>
+            <article class="admin-stat"><span>Incubateurs</span><strong>{{ memberStats.incubators }}</strong></article>
+            <article class="admin-stat"><span>Anciens</span><strong>{{ memberStats.alumni }}</strong></article>
+            <article class="admin-stat"><span>Avec accès</span><strong>{{ memberStats.withAccount }}</strong></article>
+            <article class="admin-stat"><span>Sans accès</span><strong>{{ memberStats.withoutAccount }}</strong></article>
         </div>
 
-        {% if is_granted('ROLE_ADMIN') %}
-            <article class="admin-card delegate-card">
-                <h2>Délégué des Incubateurs</h2>
-                <form class="admin-form admin-form-inline" method="post">
-                    <input type="hidden" name="type" value="set_delegate">
-                    <input type="hidden" name="_token" value="{{ csrf_token('admin_set_delegate') }}">
-
-                    <label>
-                        Membre délégué unique
-                        <select name="portfolioId" required>
-                            {% for portfolio in allPortfolios %}
-                                {% set memberUser = usersByEmail[portfolio.email|lower] ?? null %}
-                                {% if memberUser and 'ROLE_ADMIN' not in memberUser.roles %}
-                                    <option value="{{ portfolio.id }}" {{ delegatePortfolioId == portfolio.id ? 'selected' : '' }}>
-                                        {{ portfolio.firstName }} {{ portfolio.lastName }} - {{ portfolio.role }}
-                                    </option>
-                                {% endif %}
-                            {% endfor %}
-                        </select>
-                    </label>
-
-                    <button class="button primary" type="submit">Définir</button>
-                </form>
-            </article>
-        {% endif %}
-
-        <article class="admin-card admin-card-wide">
-            <h2>Ajouter un membre</h2>
+        <details class="admin-card admin-card-wide admin-create-panel">
+            <summary class="admin-panel-summary">
+                <span>Ajouter un membre</span>
+                <span class="button primary">Ouvrir</span>
+            </summary>
             <form class="admin-form admin-member-create-form" method="post">
                 <input type="hidden" name="type" value="portfolio">
                 <input type="hidden" name="_token" value="{{ csrf_token('admin_portfolio') }}">
@@ -114,6 +76,7 @@
                 <label>Email obligatoire <input type="email" name="email" required></label>
                 <label>Portfolio obligatoire <input type="url" name="url" required></label>
                 <label>Profil LinkedIn optionnel <input type="url" name="linkedinUrl" placeholder="https://www.linkedin.com/in/..."></label>
+                <label>Code postal optionnel <input name="postalCode" inputmode="text" maxlength="12" placeholder="57000 ou L-1234"></label>
                 <div class="password-field" data-password-tools>
                     <label>
                         Mot de passe obligatoire
@@ -126,10 +89,37 @@
                     </div>
                 </div>
                 <label>Confirmer le mot de passe obligatoire <input type="password" name="passwordConfirmation" data-password-confirm required minlength="12" autocomplete="new-password"></label>
-
                 <button class="button primary" type="submit">Ajouter</button>
             </form>
-        </article>
+        </details>
+
+        {% if is_granted('ROLE_ADMIN') %}
+            <details class="admin-card admin-card-wide admin-create-panel">
+                <summary class="admin-panel-summary">
+                    <span>Délégué des Incubateurs</span>
+                    <span class="button secondary">Gérer</span>
+                </summary>
+                <form class="admin-form admin-form-inline" method="post">
+                    <input type="hidden" name="type" value="set_delegate">
+                    <input type="hidden" name="_token" value="{{ csrf_token('admin_set_delegate') }}">
+
+                    <label>
+                        Membre délégué unique
+                        <select name="portfolioId" required>
+                            {% for portfolio in allPortfolios %}
+                                {% set memberUser = usersByEmail[portfolio.email|lower] ?? null %}
+                                {% if memberUser and 'ROLE_ADMIN' not in memberUser.roles %}
+                                    <option value="{{ portfolio.id }}" {{ delegatePortfolioId == portfolio.id ? 'selected' : '' }}>
+                                        {{ portfolio.firstName }} {{ portfolio.lastName }} - {{ portfolio.role }}
+                                    </option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <button class="button primary" type="submit">Définir</button>
+                </form>
+            </details>
+        {% endif %}
 
         <article class="admin-card admin-card-wide">
             <div class="admin-section-heading">
@@ -139,6 +129,16 @@
                 </div>
                 <a class="button secondary" href="{{ path('app_admin_members') }}">Réinitialiser</a>
             </div>
+
+            <nav class="admin-quick-filters" aria-label="Filtres rapides">
+                <a class="{{ filters.status == '' and filters.account == '' and filters.profile == '' ? 'is-active' : '' }}" href="{{ path('app_admin_members') }}">Tous</a>
+                <a class="{{ filters.status == 'Incubateur' ? 'is-active' : '' }}" href="{{ path('app_admin_members', {status: 'Incubateur'}) }}">Incubateurs</a>
+                <a class="{{ filters.status == 'Ancien étudiant' ? 'is-active' : '' }}" href="{{ path('app_admin_members', {status: 'Ancien étudiant'}) }}">Anciens</a>
+                <a class="{{ filters.profile == 'without_photo' ? 'is-active' : '' }}" href="{{ path('app_admin_members', {profile: 'without_photo'}) }}">Sans photo</a>
+                <a class="{{ filters.profile == 'without_linkedin' ? 'is-active' : '' }}" href="{{ path('app_admin_members', {profile: 'without_linkedin'}) }}">Sans LinkedIn</a>
+                <a class="{{ filters.account == 'without_account' ? 'is-active' : '' }}" href="{{ path('app_admin_members', {account: 'without_account'}) }}">Sans accès</a>
+                <a class="{{ filters.account == 'delegate' ? 'is-active' : '' }}" href="{{ path('app_admin_members', {account: 'delegate'}) }}">Délégué</a>
+            </nav>
 
             <form class="admin-form admin-filters" method="get">
                 <label>Recherche <input name="q" value="{{ filters.q }}" placeholder="Nom, prénom, email..."></label>
@@ -169,84 +169,85 @@
                         <option value="delegate" {{ filters.account == 'delegate' ? 'selected' : '' }}>Délégué</option>
                     </select>
                 </label>
+                <input type="hidden" name="profile" value="{{ filters.profile }}">
                 <button class="button primary" type="submit">Filtrer</button>
             </form>
 
-            <ul class="admin-list admin-member-list">
+            <ul class="admin-list admin-member-list admin-member-list-compact">
                 {% for portfolio in portfolios %}
                     {% set memberUser = usersByEmail[portfolio.email|lower] ?? null %}
                     {% set userRoles = memberUser ? memberUser.roles : [] %}
                     {% set canEditPortfolio = is_granted('ROLE_ADMIN') or portfolio.id not in adminPortfolioIds %}
                     <li>
-                        <div class="admin-member-row">
-                            <div class="admin-member-main">
-                                <strong>{{ portfolio.firstName }} {{ portfolio.lastName }}</strong>
-                                <div class="admin-member-tags">
-                                    <span>{{ portfolio.role }}</span>
-                                    <span>{{ portfolio.promotion ? 'Promotion ' ~ portfolio.promotion : 'Promotion à définir' }}</span>
-                                    {% if 'ROLE_ADMIN' in userRoles %}
-                                        <span>Administrateur</span>
-                                    {% elseif 'ROLE_DELEGATE' in userRoles %}
-                                        <span>Délégué</span>
-                                    {% elseif memberUser %}
-                                        <span>Compte actif</span>
-                                    {% else %}
-                                        <span>Sans accès</span>
-                                    {% endif %}
-                                </div>
-                                <span>{{ portfolio.email }}</span>
-                                {% if portfolio.linkedinUrl %}
-                                    <span>LinkedIn renseigné</span>
+                        <div class="admin-member-row admin-member-row-compact">
+                            <div class="admin-member-identity">
+                                {% if portfolio.photoFilename %}
+                                    <img class="admin-member-photo" src="/uploads/portfolios/{{ portfolio.photoFilename }}" alt="Photo de {{ portfolio.firstName }} {{ portfolio.lastName }}" width="96" height="96" loading="lazy" decoding="async">
+                                {% else %}
+                                    <span class="admin-member-avatar">{{ (portfolio.firstName|first ~ portfolio.lastName|first)|upper }}</span>
                                 {% endif %}
+                                <div class="admin-member-main">
+                                    <strong>{{ portfolio.firstName }} {{ portfolio.lastName }}</strong>
+                                    <span>{{ portfolio.email }}</span>
+                                    <div class="admin-member-tags">
+                                        <span>{{ portfolio.role }}</span>
+                                        <span>{{ portfolio.promotion ? 'Promotion ' ~ portfolio.promotion : 'Promotion à définir' }}</span>
+                                        {% if 'ROLE_ADMIN' in userRoles %}
+                                            <span>Administrateur</span>
+                                        {% elseif 'ROLE_DELEGATE' in userRoles %}
+                                            <span>Délégué</span>
+                                        {% elseif memberUser %}
+                                            <span>Compte actif</span>
+                                        {% else %}
+                                            <span>Sans accès</span>
+                                        {% endif %}
+                                        {% if not portfolio.photoFilename %}
+                                            <span>Sans photo</span>
+                                        {% endif %}
+                                        {% if not portfolio.linkedinUrl %}
+                                            <span>Sans LinkedIn</span>
+                                        {% endif %}
+                                        {% if portfolio.postalCode %}
+                                            <span>{{ portfolio.postalCode }}</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="admin-row-actions">
                                 {% if canEditPortfolio %}
-                                    <details class="admin-edit-panel">
-                                        <summary class="button secondary">Modifier</summary>
-                                        <form class="admin-form admin-form-compact" method="post">
-                                            <input type="hidden" name="type" value="update_portfolio">
-                                            <input type="hidden" name="portfolioId" value="{{ portfolio.id }}">
-                                            <input type="hidden" name="_token" value="{{ csrf_token('admin_update_portfolio') }}">
-
-                                            <label>Prénom obligatoire <input name="firstName" value="{{ portfolio.firstName }}" required></label>
-                                            <label>Nom obligatoire <input name="lastName" value="{{ portfolio.lastName }}" required></label>
-                                            <label>Promotion obligatoire <input name="promotion" value="{{ portfolio.promotion }}" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" placeholder="2026" required></label>
-                                            {% if is_granted('ROLE_ADMIN') %}
-                                                <label>
-                                                    Statut obligatoire
-                                                    <select name="role" required>
-                                                        <option value="Incubateur" {{ portfolio.role == 'Incubateur' ? 'selected' : '' }}>Incubateur</option>
-                                                        <option value="Ancien étudiant" {{ portfolio.role == 'Ancien étudiant' ? 'selected' : '' }}>Ancien étudiant</option>
-                                                    </select>
-                                                </label>
-                                            {% endif %}
-                                            <label>Email obligatoire <input type="email" name="email" value="{{ portfolio.email }}" required></label>
-                                            <label>Portfolio obligatoire <input type="url" name="url" value="{{ portfolio.url }}" required></label>
-                                            <label>Profil LinkedIn optionnel <input type="url" name="linkedinUrl" value="{{ portfolio.linkedinUrl }}" placeholder="https://www.linkedin.com/in/..."></label>
-
-                                            <button class="button primary" type="submit">Enregistrer</button>
-                                        </form>
-                                    </details>
+                                    <a class="button primary" href="{{ path('app_admin_member_edit', {id: portfolio.id}) }}">Modifier</a>
                                 {% endif %}
 
-                                {% if is_granted('ROLE_ADMIN') and portfolio.role == 'Incubateur' %}
-                                    <form method="post">
-                                        <input type="hidden" name="type" value="graduate_portfolio">
-                                        <input type="hidden" name="portfolioId" value="{{ portfolio.id }}">
-                                        <input type="hidden" name="_token" value="{{ csrf_token('admin_graduate_portfolio') }}">
-                                        <button class="button secondary" type="submit">Passer ancien</button>
-                                    </form>
-                                {% endif %}
-
-                                {% if is_granted('ROLE_ADMIN') %}
-                                    <form method="post" onsubmit="return confirm('Supprimer ce membre ?');">
-                                        <input type="hidden" name="type" value="delete_portfolio">
-                                        <input type="hidden" name="portfolioId" value="{{ portfolio.id }}">
-                                        <input type="hidden" name="_token" value="{{ csrf_token('admin_delete_portfolio') }}">
-                                        <button class="button danger" type="submit">Supprimer</button>
-                                    </form>
-                                {% endif %}
+                                <details class="admin-actions-menu">
+                                    <summary class="button secondary">Actions</summary>
+                                    <div class="admin-actions-menu-panel">
+                                        {% if is_granted('ROLE_ADMIN') and portfolio.role == 'Incubateur' %}
+                                            <form method="post">
+                                                <input type="hidden" name="type" value="graduate_portfolio">
+                                                <input type="hidden" name="portfolioId" value="{{ portfolio.id }}">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('admin_graduate_portfolio') }}">
+                                                <button class="button secondary" type="submit">Passer ancien</button>
+                                            </form>
+                                        {% endif %}
+                                        {% if portfolio.photoFilename %}
+                                            <form method="post" onsubmit="return confirm('Supprimer la photo de ce membre ?');">
+                                                <input type="hidden" name="type" value="delete_portfolio_photo">
+                                                <input type="hidden" name="portfolioId" value="{{ portfolio.id }}">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('admin_delete_portfolio_photo') }}">
+                                                <button class="button danger" type="submit">Supprimer photo</button>
+                                            </form>
+                                        {% endif %}
+                                        {% if is_granted('ROLE_ADMIN') %}
+                                            <form method="post" onsubmit="return confirm('Supprimer ce membre ?');">
+                                                <input type="hidden" name="type" value="delete_portfolio">
+                                                <input type="hidden" name="portfolioId" value="{{ portfolio.id }}">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('admin_delete_portfolio') }}">
+                                                <button class="button danger" type="submit">Supprimer membre</button>
+                                            </form>
+                                        {% endif %}
+                                    </div>
+                                </details>
                             </div>
                         </div>
                     </li>

@@ -69,6 +69,7 @@
         grid-template-columns: 1fr;
         gap: 34px;
         background-position: 58% center;
+        background-attachment: scroll;
     }
 
     h1 {
@@ -105,6 +106,7 @@
     .split-section,
     .latest-news-card,
     .front-highlights-grid,
+    .member-map-card,
     .portfolio-grid,
     .content-grid,
     .legal-grid,
@@ -155,9 +157,29 @@
         display: grid;
     }
 
+    .member-map-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .admin-panel-summary {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
     .admin-member-row {
         display: grid;
         grid-template-columns: 1fr;
+    }
+
+    .admin-member-identity,
+    .admin-member-edit-form {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-actions-menu-panel {
+        position: static;
+        width: 100%;
     }
 
     .admin-form-compact {
@@ -240,5 +262,33 @@
 
     .network-stat-card {
         min-height: 136px;
+    }
+
+    .portfolio-identity,
+    .portfolio-details {
+        grid-template-columns: 1fr;
+    }
+
+    .portfolio-card {
+        grid-template-rows: auto;
+    }
+
+    .portfolio-identity {
+        height: auto;
+    }
+
+    .portfolio-avatar {
+        width: 58px;
+        height: 58px;
+        font-size: 20px;
+    }
+
+    .portfolio-photo {
+        width: 58px;
+        height: 58px;
+    }
+
+    .member-profile-preview {
+        grid-template-columns: 1fr;
     }
 }

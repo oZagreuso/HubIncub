@@ -291,8 +291,9 @@
     position: relative;
     padding: 26px;
     min-height: 100%;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: 30px 112px auto 1fr;
+    align-content: start;
     background:
         linear-gradient(180deg, var(--surface) 0%, var(--surface-soft) 100%);
 }
@@ -426,6 +427,7 @@
 }
 
 .portfolio-card-header {
+    min-height: 30px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -434,6 +436,109 @@
 
 .portfolio-card span {
     font-size: 14px;
+}
+
+.portfolio-identity {
+    min-width: 0;
+    margin-top: 18px;
+    height: 94px;
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 16px;
+    align-items: center;
+}
+
+.portfolio-avatar {
+    width: 64px;
+    height: 64px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 90, 0, 0.28);
+    border-radius: 8px;
+    color: var(--white);
+    background:
+        linear-gradient(135deg, var(--orange), var(--teal));
+    box-shadow: 0 16px 34px rgba(26, 35, 42, 0.16);
+    font-size: 22px;
+    font-weight: 900;
+}
+
+.portfolio-photo {
+    width: 64px;
+    height: 64px;
+    display: block;
+    border: 1px solid rgba(255, 90, 0, 0.28);
+    border-radius: 8px;
+    object-fit: cover;
+    box-shadow: 0 16px 34px rgba(26, 35, 42, 0.16);
+}
+
+.portfolio-identity h2 {
+    margin: 0 0 10px;
+    font-size: 24px;
+    line-height: 1.12;
+}
+
+.portfolio-tags {
+    min-height: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.portfolio-tag {
+    min-height: 30px;
+    padding: 0 10px;
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid rgba(15, 124, 122, 0.18);
+    border-radius: 8px;
+    color: var(--teal);
+    background: var(--teal-soft);
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.portfolio-tag-muted {
+    color: var(--muted);
+    background: var(--surface-soft);
+    border-color: var(--line);
+}
+
+.portfolio-details {
+    margin: 22px 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.portfolio-details div {
+    min-width: 0;
+    min-height: 74px;
+    padding: 13px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.72);
+}
+
+.portfolio-details div:nth-child(3):last-child {
+    grid-column: 1 / -1;
+}
+
+.portfolio-details dt {
+    margin-bottom: 5px;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.portfolio-details dd {
+    margin: 0;
+    color: var(--navy);
+    font-weight: 850;
+    overflow-wrap: anywhere;
 }
 
 .portfolio-card .presence-badge {
@@ -460,10 +565,62 @@
     box-shadow: 0 0 0 4px rgba(182, 106, 33, 0.14);
 }
 
+.portfolio-card .presence-badge-muted {
+    color: var(--muted);
+    background: var(--surface-soft);
+    border-color: var(--line);
+}
+
+.portfolio-card .presence-badge-muted::before {
+    background: var(--subtle);
+    box-shadow: none;
+}
+
 .portfolio-actions {
     margin-top: auto;
+    align-self: end;
     display: grid;
     gap: 12px;
+}
+
+.portfolio-contact-link {
+    min-width: 0;
+    min-height: 66px;
+    padding: 13px 14px;
+    display: grid;
+    gap: 3px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    color: var(--navy);
+    background: rgba(255, 255, 255, 0.72);
+    font-weight: 850;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+    transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.portfolio-contact-link span {
+    color: var(--orange-dark);
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.portfolio-contact-link:hover {
+    border-color: rgba(255, 90, 0, 0.42);
+    box-shadow: 0 12px 28px rgba(26, 35, 42, 0.1);
+    transform: translateY(-1px);
+}
+
+.portfolio-contact-empty {
+    color: var(--muted);
+    background: rgba(247, 250, 251, 0.72);
+}
+
+.portfolio-contact-empty:hover {
+    border-color: var(--line);
+    box-shadow: none;
+    transform: none;
 }
 
 .event-list time {
@@ -494,6 +651,14 @@
     width: 100%;
 }
 
+.portfolio-button-muted {
+    color: var(--muted);
+    background: var(--surface-soft);
+    border: 1px solid var(--line);
+    box-shadow: none;
+    cursor: default;
+}
+
 .portfolio-card .button.secondary {
     color: var(--white);
     background: linear-gradient(135deg, var(--orange), var(--orange-dark));
@@ -503,4 +668,14 @@
 
 .portfolio-card .button.secondary:hover {
     background: linear-gradient(135deg, var(--orange-dark), var(--orange-hover));
+}
+
+.portfolio-card .portfolio-button-muted,
+.portfolio-card .portfolio-button-muted:hover {
+    color: var(--muted);
+    background: var(--surface-soft);
+    border: 1px solid var(--line);
+    box-shadow: none;
+    transform: none;
+    cursor: default;
 }

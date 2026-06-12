@@ -145,6 +145,7 @@ body.is-scrolled .site-header {
         linear-gradient(135deg, rgba(255, 121, 0, 0.18), transparent 34%),
         linear-gradient(105deg, transparent 52%, rgba(182, 106, 33, 0.22) 100%),
         url("/images/layout/logo-cover.jpg") right center / cover no-repeat;
+    background-attachment: scroll, scroll, scroll, fixed;
     border-bottom: 1px solid rgba(43, 33, 24, 0.1);
     box-shadow: inset 0 -44px 86px rgba(89, 58, 33, 0.1);
 }

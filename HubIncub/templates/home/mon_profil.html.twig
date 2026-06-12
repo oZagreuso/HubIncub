@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon profil - HubIncub{% endblock %}
+
+{% block body %}
+<header class="site-header" data-header>
+    <a class="brand" href="{{ path('app_home') }}" aria-label="Accueil HubIncub">
+        <img src="/images/branding/logo-hubincub.png" alt="HubIncub" width="1448" height="1086" decoding="async">
+        <span>HubIncub</span>
+    </a>
+
+    <button class="menu-toggle" type="button" aria-controls="main-menu" aria-expanded="false" data-menu-toggle>
+        <span class="menu-toggle-label">Ouvrir le menu</span>
+        <span aria-hidden="true"></span>
+    </button>
+
+    <nav id="main-menu" class="main-nav" aria-label="Navigation principale" data-main-nav>
+        <a href="{{ path('app_anciens') }}">Portfolios</a>
+        <a href="{{ path('app_projets') }}">Projets</a>
+        <a href="{{ path('app_evenements') }}">Événements</a>
+        <a href="{{ path('app_actualites') }}">Actualités</a>
+        <a class="nav-action" href="{{ path('app_logout') }}">Déconnexion</a>
+    </nav>
+</header>
+
+<main>
+    <section class="admin-shell">
+        <div class="admin-heading admin-card">
+            <div>
+                <p class="eyebrow">Espace membre</p>
+                <h1>Mon profil</h1>
+                <p class="hero-text">Gérez la photo affichée sur votre fiche dans l'annuaire HubIncub.</p>
+            </div>
+        </div>
+
+        {% for message in app.flashes('success') %}
+            <p class="form-success">{{ message }}</p>
+        {% endfor %}
+        {% for message in app.flashes('error') %}
+            <p class="form-alert">{{ message }}</p>
+        {% endfor %}
+
+        <article class="admin-card member-profile-card">
+            <div class="member-profile-preview">
+                {% if portfolio.photoFilename %}
+                    <img src="/uploads/portfolios/{{ portfolio.photoFilename }}" alt="Photo de {{ portfolio.firstName }} {{ portfolio.lastName }}" width="320" height="320" decoding="async">
+                {% else %}
+                    <div class="portfolio-avatar" aria-hidden="true">{{ (portfolio.firstName|first ~ portfolio.lastName|first)|upper }}</div>
+                {% endif %}
+                <div>
+                    <h2>{{ portfolio.firstName }} {{ portfolio.lastName }}</h2>
+                    <p>{{ portfolio.role }}{% if portfolio.promotion %} - Promotion {{ portfolio.promotion }}{% endif %}</p>
+                </div>
+            </div>
+
+            <form class="admin-form" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="type" value="photo">
+                <input type="hidden" name="_token" value="{{ csrf_token('member_photo') }}">
+
+                <label>Photo de profil <input type="file" name="photo" accept="image/*" required></label>
+                <p class="field-help">Formats image acceptés. Taille maximale : 2 Mo.</p>
+                <button class="button primary" type="submit">{{ portfolio.photoFilename ? 'Remplacer la photo' : 'Ajouter une photo' }}</button>
+            </form>
+
+            <form class="admin-form" method="post">
+                <input type="hidden" name="type" value="location">
+                <input type="hidden" name="_token" value="{{ csrf_token('member_location') }}">
+
+                <label>Code postal optionnel <input name="postalCode" value="{{ portfolio.postalCode }}" inputmode="text" maxlength="12" placeholder="57000 ou L-1234"></label>
+                <p class="field-help">Ce code postal sert uniquement à afficher une position approximative sur la carte des membres.</p>
+                <button class="button primary" type="submit">{{ portfolio.postalCode ? 'Mettre à jour la localisation' : 'Ajouter une localisation' }}</button>
+            </form>
+
+            {% if portfolio.photoFilename %}
+                <form method="post" onsubmit="return confirm('Supprimer votre photo de profil ?');">
+                    <input type="hidden" name="type" value="delete_photo">
+                    <input type="hidden" name="_token" value="{{ csrf_token('member_delete_photo') }}">
+                    <button class="button danger" type="submit">Supprimer la photo</button>
+                </form>
+            {% endif %}
+        </article>
+    </section>
+</main>
+{% endblock %}

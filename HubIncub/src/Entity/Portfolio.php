@@ -41,6 +41,12 @@ class Portfolio
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $promotion = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $photoFilename = null;
+
+    #[ORM\Column(length: 12, nullable: true)]
+    private ?string $postalCode = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -130,6 +136,30 @@ class Portfolio
     public function setPromotion(?string $promotion): self
     {
         $this->promotion = $promotion;
+
+        return $this;
+    }
+
+    public function getPhotoFilename(): ?string
+    {
+        return $this->photoFilename;
+    }
+
+    public function setPhotoFilename(?string $photoFilename): self
+    {
+        $this->photoFilename = $photoFilename;
+
+        return $this;
+    }
+
+    public function getPostalCode(): ?string
+    {
+        return $this->postalCode;
+    }
+
+    public function setPostalCode(?string $postalCode): self
+    {
+        $this->postalCode = $postalCode;
 
         return $this;
     }

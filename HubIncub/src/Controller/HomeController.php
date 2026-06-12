@@ -7,7 +7,10 @@ use App\Repository\PortfolioRepository;
 use App\Repository\ProjectRepository;
 use App\Repository\EventRepository;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -107,11 +110,80 @@ final class HomeController extends AbstractController
                 <=> [strtolower($right->getLastName()), strtolower($right->getFirstName())];
         });
 
+        $memberMapData = $this->buildMemberMapData($portfolios);
+
         return $this->render('home/anciens.html.twig', [
             'adminEmails' => $adminEmails,
             'delegateEmails' => $delegateEmails,
+            'localizedMemberCount' => $memberMapData['localizedMemberCount'],
+            'mapAreas' => $memberMapData['areas'],
+            'portfolioMapAreas' => $memberMapData['portfolioAreas'],
             'onlineEmails' => $onlineEmails,
             'portfolios' => $portfolios,
+        ]);
+    }
+
+    #[Route('/mon-profil', name: 'app_member_profile', methods: ['GET', 'POST'])]
+    public function memberProfile(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        PortfolioRepository $portfolioRepository,
+    ): Response {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
+        $user = $this->getUser();
+        $email = method_exists($user, 'getUserIdentifier') ? strtolower($user->getUserIdentifier()) : '';
+        $portfolio = $portfolioRepository->findOneBy(['email' => $email]);
+
+        if (!$portfolio) {
+            throw $this->createNotFoundException('Fiche membre introuvable.');
+        }
+
+        if ($request->isMethod('POST')) {
+            $type = (string) $request->request->get('type');
+
+            if (!$this->isCsrfTokenValid('member_'.$type, (string) $request->request->get('_token'))) {
+                throw $this->createAccessDeniedException('Jeton CSRF invalide.');
+            }
+
+            if ('photo' === $type) {
+                $photoFilename = $this->uploadMemberPhoto($request->files->get('photo'), $portfolio->getFirstName().' '.$portfolio->getLastName());
+
+                if ($photoFilename) {
+                    $this->deleteMemberPhotoFile($portfolio->getPhotoFilename());
+                    $portfolio->setPhotoFilename($photoFilename);
+                    $entityManager->persist($portfolio);
+                    $entityManager->flush();
+                    $this->addFlash('success', 'Photo de profil mise à jour.');
+                }
+            }
+
+            if ('delete_photo' === $type) {
+                $this->deleteMemberPhotoFile($portfolio->getPhotoFilename());
+                $portfolio->setPhotoFilename(null);
+                $entityManager->persist($portfolio);
+                $entityManager->flush();
+                $this->addFlash('success', 'Photo de profil supprimée.');
+            }
+
+            if ('location' === $type) {
+                $postalCode = $this->normalizePostalCode($this->optionalField($request, 'postalCode'));
+
+                if ($postalCode && !$this->isSupportedPostalCode($postalCode)) {
+                    $this->addFlash('error', 'Le code postal doit être français sur 5 chiffres ou luxembourgeois au format L-1234.');
+                } else {
+                    $portfolio->setPostalCode($postalCode);
+                    $entityManager->persist($portfolio);
+                    $entityManager->flush();
+                    $this->addFlash('success', 'Localisation mise à jour.');
+                }
+            }
+
+            return $this->redirectToRoute('app_member_profile');
+        }
+
+        return $this->render('home/mon_profil.html.twig', [
+            'portfolio' => $portfolio,
         ]);
     }
 
@@ -143,5 +215,131 @@ final class HomeController extends AbstractController
     public function mentionsLegales(): Response
     {
         return $this->render('home/mentions_legales.html.twig');
+    }
+
+    private function uploadMemberPhoto(mixed $file, string $label): ?string
+    {
+        if (!$file instanceof UploadedFile) {
+            $this->addFlash('error', 'Sélectionnez une image à téléverser.');
+
+            return null;
+        }
+
+        if ($file->getSize() && $file->getSize() > 2097152) {
+            $this->addFlash('error', 'La photo doit peser 2 Mo maximum.');
+
+            return null;
+        }
+
+        if (!str_starts_with((string) $file->getMimeType(), 'image/')) {
+            $this->addFlash('error', 'Le fichier transmis doit être une image.');
+
+            return null;
+        }
+
+        $extension = $file->guessExtension() ?: 'bin';
+        $filename = $this->slugify($label).'-'.bin2hex(random_bytes(6)).'.'.$extension;
+        $uploadDirectory = $this->getParameter('kernel.project_dir').'/public/uploads/portfolios';
+
+        if (!is_dir($uploadDirectory)) {
+            mkdir($uploadDirectory, 0775, true);
+        }
+
+        $file->move($uploadDirectory, $filename);
+
+        return $filename;
+    }
+
+    private function deleteMemberPhotoFile(?string $filename): void
+    {
+        if (!$filename) {
+            return;
+        }
+
+        $path = $this->getParameter('kernel.project_dir').'/public/uploads/portfolios/'.$filename;
+
+        if (is_file($path)) {
+            unlink($path);
+        }
+    }
+
+    private function optionalField(Request $request, string $name): ?string
+    {
+        $value = trim((string) $request->request->get($name));
+
+        return '' === $value ? null : $value;
+    }
+
+    private function normalizePostalCode(?string $postalCode): ?string
+    {
+        if (!$postalCode) {
+            return null;
+        }
+
+        $postalCode = strtoupper(str_replace(' ', '', $postalCode));
+
+        if (1 === preg_match('/^\d{4}$/', $postalCode)) {
+            return 'L-'.$postalCode;
+        }
+
+        return $postalCode;
+    }
+
+    private function isSupportedPostalCode(string $postalCode): bool
+    {
+        return 1 === preg_match('/^\d{5}$/', $postalCode) || 1 === preg_match('/^L-\d{4}$/', $postalCode);
+    }
+
+    /**
+     * @param list<\App\Entity\Portfolio> $portfolios
+     *
+     * @return array{areas: array<string, int>, portfolioAreas: array<int, string>, localizedMemberCount: int}
+     */
+    private function buildMemberMapData(array $portfolios): array
+    {
+        $areas = [];
+        $portfolioAreas = [];
+        $localizedMemberCount = 0;
+
+        foreach ($portfolios as $portfolio) {
+            $postalCode = $portfolio->getPostalCode();
+
+            if (!$postalCode) {
+                continue;
+            }
+
+            $area = str_starts_with($postalCode, 'L-') ? 'LU' : $this->frenchPostalArea($postalCode);
+
+            $areas[$area] = ($areas[$area] ?? 0) + 1;
+            $portfolioAreas[(int) $portfolio->getId()] = $area;
+            ++$localizedMemberCount;
+        }
+
+        ksort($areas);
+
+        return [
+            'areas' => $areas,
+            'portfolioAreas' => $portfolioAreas,
+            'localizedMemberCount' => $localizedMemberCount,
+        ];
+    }
+
+    private function frenchPostalArea(string $postalCode): string
+    {
+        if (str_starts_with($postalCode, '20')) {
+            return str_starts_with($postalCode, '202') ? '2B' : '2A';
+        }
+
+        return substr($postalCode, 0, 2);
+    }
+
+    private function slugify(string $value): string
+    {
+        $value = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $value) ?: $value;
+        $value = strtolower($value);
+        $value = preg_replace('/[^a-z0-9]+/', '-', $value) ?? '';
+        $value = trim($value, '-');
+
+        return '' === $value ? 'photo-membre' : $value;
     }
 }

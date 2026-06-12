@@ -42,7 +42,7 @@ final class AdminController extends AbstractController
     ): Response {
         if ($request->isMethod('POST')) {
             $this->denyAccessUnlessGranted('ROLE_USER');
-            $this->handleAdminPost($request, $entityManager, $portfolioRepository, $userRepository, $passwordHasher);
+            $this->handleAdminPost($request, $entityManager, $portfolioRepository, $projectRepository, $eventRepository, $newsRepository, $userRepository, $passwordHasher);
 
             return $this->redirectToRoute('app_admin');
         }
@@ -69,7 +69,7 @@ final class AdminController extends AbstractController
     ): Response {
         if ($request->isMethod('POST')) {
             $this->denyAccessUnlessGranted('ROLE_USER');
-            $this->handleAdminPost($request, $entityManager, $portfolioRepository, $userRepository, $passwordHasher);
+            $this->handleAdminPost($request, $entityManager, $portfolioRepository, null, null, null, $userRepository, $passwordHasher);
 
             return $this->redirectToRoute('app_admin_members', $request->query->all());
         }
@@ -90,8 +90,45 @@ final class AdminController extends AbstractController
                 'status' => (string) $request->query->get('status'),
                 'promotion' => (string) $request->query->get('promotion'),
                 'account' => (string) $request->query->get('account'),
+                'profile' => (string) $request->query->get('profile'),
             ],
             'promotions' => $this->listPromotions($portfolios),
+        ]);
+    }
+
+    #[Route('/members/{id}', name: 'app_admin_member_edit', methods: ['GET', 'POST'])]
+    public function editMember(
+        int $id,
+        Request $request,
+        EntityManagerInterface $entityManager,
+        PortfolioRepository $portfolioRepository,
+        UserRepository $userRepository,
+        UserPasswordHasherInterface $passwordHasher,
+    ): Response {
+        $portfolio = $portfolioRepository->find($id);
+
+        if (!$portfolio) {
+            throw $this->createNotFoundException('Membre introuvable.');
+        }
+
+        $linkedUser = $userRepository->findOneBy(['email' => $portfolio->getEmail()]);
+
+        if (!$this->isGranted('ROLE_ADMIN') && $linkedUser && in_array('ROLE_ADMIN', $linkedUser->getRoles(), true)) {
+            throw $this->createAccessDeniedException('Seul l’administrateur peut modifier cette fiche.');
+        }
+
+        if ($request->isMethod('POST')) {
+            $this->denyAccessUnlessGranted('ROLE_USER');
+            $this->handleAdminPost($request, $entityManager, $portfolioRepository, null, null, null, $userRepository, $passwordHasher);
+
+            return $this->redirectToRoute('app_admin_member_edit', ['id' => $id]);
+        }
+
+        return $this->render('admin/member_edit.html.twig', [
+            'portfolio' => $portfolio,
+            'linkedUser' => $linkedUser,
+            'isAdminPortfolio' => $linkedUser && in_array('ROLE_ADMIN', $linkedUser->getRoles(), true),
+            'isDelegatePortfolio' => $linkedUser && in_array('ROLE_DELEGATE', $linkedUser->getRoles(), true),
         ]);
     }
 
@@ -99,6 +136,9 @@ final class AdminController extends AbstractController
         Request $request,
         EntityManagerInterface $entityManager,
         PortfolioRepository $portfolioRepository,
+        ?ProjectRepository $projectRepository,
+        ?EventRepository $eventRepository,
+        ?NewsRepository $newsRepository,
         UserRepository $userRepository,
         UserPasswordHasherInterface $passwordHasher,
     ): void {
@@ -113,11 +153,18 @@ final class AdminController extends AbstractController
             'portfolio' => $this->createPortfolio($request, $entityManager, $portfolioRepository, $userRepository, $passwordHasher),
             'update_portfolio' => $this->updatePortfolio($request, $entityManager, $portfolioRepository, $userRepository),
             'delete_portfolio' => $this->deletePortfolio($request, $entityManager, $portfolioRepository, $userRepository),
+            'delete_portfolio_photo' => $this->deletePortfolioPhoto($request, $entityManager, $portfolioRepository),
             'graduate_portfolio' => $this->graduatePortfolio($request, $entityManager, $portfolioRepository),
             'set_delegate' => $this->setDelegate($request, $entityManager, $portfolioRepository, $userRepository),
             'project' => $this->createProject($request, $entityManager),
+            'update_project' => $this->updateProject($request, $entityManager, $projectRepository),
+            'delete_project' => $this->deleteProject($request, $entityManager, $projectRepository),
             'event' => $this->createEvent($request, $entityManager),
+            'update_event' => $this->updateEvent($request, $entityManager, $eventRepository),
+            'delete_event' => $this->deleteEvent($request, $entityManager, $eventRepository),
             'news' => $this->createNews($request, $entityManager),
+            'update_news' => $this->updateNews($request, $entityManager, $newsRepository),
+            'delete_news' => $this->deleteNews($request, $entityManager, $newsRepository),
             default => null,
         };
 
@@ -138,6 +185,7 @@ final class AdminController extends AbstractController
         $firstName = $this->field($request, 'firstName');
         $lastName = $this->field($request, 'lastName');
         $promotion = $this->field($request, 'promotion');
+        $postalCode = $this->normalizePostalCode($this->optionalField($request, 'postalCode'));
 
         if ($portfolioRepository->findOneBy(['email' => $email]) || $userRepository->findOneBy(['email' => $email])) {
             $this->addFlash('error', 'Ce membre existe déjà avec cet email.');
@@ -169,6 +217,12 @@ final class AdminController extends AbstractController
             return;
         }
 
+        if ($postalCode && !$this->isSupportedPostalCode($postalCode)) {
+            $this->addFlash('error', 'Le code postal doit être français sur 5 chiffres ou luxembourgeois au format L-1234.');
+
+            return;
+        }
+
         $portfolio = (new Portfolio())
             ->setFirstName($firstName)
             ->setLastName($lastName)
@@ -176,7 +230,8 @@ final class AdminController extends AbstractController
             ->setPromotion($promotion)
             ->setEmail($email)
             ->setUrl($this->field($request, 'url'))
-            ->setLinkedinUrl($linkedinUrl);
+            ->setLinkedinUrl($linkedinUrl)
+            ->setPostalCode($postalCode);
 
         $user = (new User())
             ->setEmail($email)
@@ -215,6 +270,7 @@ final class AdminController extends AbstractController
         $firstName = $this->field($request, 'firstName');
         $lastName = $this->field($request, 'lastName');
         $promotion = $this->field($request, 'promotion');
+        $postalCode = $this->normalizePostalCode($this->optionalField($request, 'postalCode'));
         $existingPortfolio = $portfolioRepository->findOneBy(['email' => $email]);
         $existingUser = $userRepository->findOneBy(['email' => $email]);
 
@@ -242,6 +298,12 @@ final class AdminController extends AbstractController
             return;
         }
 
+        if ($postalCode && !$this->isSupportedPostalCode($postalCode)) {
+            $this->addFlash('error', 'Le code postal doit être français sur 5 chiffres ou luxembourgeois au format L-1234.');
+
+            return;
+        }
+
         if ($this->isGranted('ROLE_ADMIN')) {
             $portfolio->setRole($this->field($request, 'role'));
         }
@@ -257,7 +319,8 @@ final class AdminController extends AbstractController
             ->setPromotion($promotion)
             ->setEmail($email)
             ->setUrl($this->field($request, 'url'))
-            ->setLinkedinUrl($linkedinUrl);
+            ->setLinkedinUrl($linkedinUrl)
+            ->setPostalCode($postalCode);
 
         $entityManager->persist($portfolio);
         $this->addFlash('success', 'Fiche membre mise à jour.');
@@ -285,8 +348,28 @@ final class AdminController extends AbstractController
             $entityManager->remove($user);
         }
 
+        $this->deleteUploadedFile('portfolios', $portfolio->getPhotoFilename());
         $entityManager->remove($portfolio);
         $this->addFlash('success', 'Membre supprimé.');
+    }
+
+    private function deletePortfolioPhoto(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        PortfolioRepository $portfolioRepository,
+    ): void {
+        $portfolio = $portfolioRepository->find((int) $request->request->get('portfolioId'));
+
+        if (!$portfolio) {
+            $this->addFlash('error', 'Le membre est introuvable.');
+
+            return;
+        }
+
+        $this->deleteUploadedFile('portfolios', $portfolio->getPhotoFilename());
+        $portfolio->setPhotoFilename(null);
+        $entityManager->persist($portfolio);
+        $this->addFlash('success', 'Photo membre supprimée.');
     }
 
     private function graduatePortfolio(
@@ -370,6 +453,49 @@ final class AdminController extends AbstractController
         $this->addFlash('success', 'Ajout enregistré.');
     }
 
+    private function updateProject(Request $request, EntityManagerInterface $entityManager, ?ProjectRepository $projectRepository): void
+    {
+        $project = $projectRepository?->find((int) $request->request->get('projectId'));
+
+        if (!$project) {
+            $this->addFlash('error', 'Le projet à modifier est introuvable.');
+
+            return;
+        }
+
+        $name = $this->field($request, 'name');
+        $imageFilename = $this->uploadImage($request->files->get('image'), $name, 'projects');
+
+        if ($imageFilename) {
+            $this->deleteUploadedFile('projects', $project->getImageFilename());
+            $project->setImageFilename($imageFilename);
+        }
+
+        $project
+            ->setName($name)
+            ->setDescription($this->field($request, 'description'))
+            ->setUrl($this->optionalField($request, 'url'))
+            ->setImageAlt($this->optionalField($request, 'imageAlt') ?? 'Illustration du projet '.$name);
+
+        $entityManager->persist($project);
+        $this->addFlash('success', 'Projet mis à jour.');
+    }
+
+    private function deleteProject(Request $request, EntityManagerInterface $entityManager, ?ProjectRepository $projectRepository): void
+    {
+        $project = $projectRepository?->find((int) $request->request->get('projectId'));
+
+        if (!$project) {
+            $this->addFlash('error', 'Le projet à supprimer est introuvable.');
+
+            return;
+        }
+
+        $this->deleteUploadedFile('projects', $project->getImageFilename());
+        $entityManager->remove($project);
+        $this->addFlash('success', 'Projet supprimé.');
+    }
+
     private function createEvent(Request $request, EntityManagerInterface $entityManager): void
     {
         $startsAt = $this->optionalField($request, 'startsAt');
@@ -388,6 +514,50 @@ final class AdminController extends AbstractController
         $this->addFlash('success', 'Ajout enregistré.');
     }
 
+    private function updateEvent(Request $request, EntityManagerInterface $entityManager, ?EventRepository $eventRepository): void
+    {
+        $event = $eventRepository?->find((int) $request->request->get('eventId'));
+
+        if (!$event) {
+            $this->addFlash('error', 'L’événement à modifier est introuvable.');
+
+            return;
+        }
+
+        $startsAt = $this->optionalField($request, 'startsAt');
+        $title = $this->field($request, 'title');
+        $imageFilename = $this->uploadImage($request->files->get('image'), $title, 'events');
+
+        if ($imageFilename) {
+            $this->deleteUploadedFile('events', $event->getImageFilename());
+            $event->setImageFilename($imageFilename);
+        }
+
+        $event
+            ->setTitle($title)
+            ->setDescription($this->field($request, 'description'))
+            ->setStartsAt($startsAt ? new \DateTimeImmutable($startsAt) : null)
+            ->setImageAlt($this->optionalField($request, 'imageAlt') ?? 'Illustration de l’événement '.$title);
+
+        $entityManager->persist($event);
+        $this->addFlash('success', 'Événement mis à jour.');
+    }
+
+    private function deleteEvent(Request $request, EntityManagerInterface $entityManager, ?EventRepository $eventRepository): void
+    {
+        $event = $eventRepository?->find((int) $request->request->get('eventId'));
+
+        if (!$event) {
+            $this->addFlash('error', 'L’événement à supprimer est introuvable.');
+
+            return;
+        }
+
+        $this->deleteUploadedFile('events', $event->getImageFilename());
+        $entityManager->remove($event);
+        $this->addFlash('success', 'Événement supprimé.');
+    }
+
     private function createNews(Request $request, EntityManagerInterface $entityManager): void
     {
         $publishedAt = $this->optionalField($request, 'publishedAt');
@@ -404,6 +574,50 @@ final class AdminController extends AbstractController
 
         $entityManager->persist($news);
         $this->addFlash('success', 'Ajout enregistré.');
+    }
+
+    private function updateNews(Request $request, EntityManagerInterface $entityManager, ?NewsRepository $newsRepository): void
+    {
+        $news = $newsRepository?->find((int) $request->request->get('newsId'));
+
+        if (!$news) {
+            $this->addFlash('error', 'L’actualité à modifier est introuvable.');
+
+            return;
+        }
+
+        $publishedAt = $this->optionalField($request, 'publishedAt');
+        $title = $this->field($request, 'title');
+        $imageFilename = $this->uploadImage($request->files->get('image'), $title, 'news');
+
+        if ($imageFilename) {
+            $this->deleteUploadedFile('news', $news->getImageFilename());
+            $news->setImageFilename($imageFilename);
+        }
+
+        $news
+            ->setTitle($title)
+            ->setContent($this->field($request, 'content'))
+            ->setPublishedAt($publishedAt ? new \DateTimeImmutable($publishedAt) : $news->getPublishedAt())
+            ->setImageAlt($this->optionalField($request, 'imageAlt') ?? 'Illustration de l’actualité '.$title);
+
+        $entityManager->persist($news);
+        $this->addFlash('success', 'Actualité mise à jour.');
+    }
+
+    private function deleteNews(Request $request, EntityManagerInterface $entityManager, ?NewsRepository $newsRepository): void
+    {
+        $news = $newsRepository?->find((int) $request->request->get('newsId'));
+
+        if (!$news) {
+            $this->addFlash('error', 'L’actualité à supprimer est introuvable.');
+
+            return;
+        }
+
+        $this->deleteUploadedFile('news', $news->getImageFilename());
+        $entityManager->remove($news);
+        $this->addFlash('success', 'Actualité supprimée.');
     }
 
     private function field(Request $request, string $name): string
@@ -436,6 +650,26 @@ final class AdminController extends AbstractController
         return 1 === preg_match('/^\d{4}$/', $promotion);
     }
 
+    private function normalizePostalCode(?string $postalCode): ?string
+    {
+        if (!$postalCode) {
+            return null;
+        }
+
+        $postalCode = strtoupper(str_replace(' ', '', $postalCode));
+
+        if (1 === preg_match('/^\d{4}$/', $postalCode)) {
+            return 'L-'.$postalCode;
+        }
+
+        return $postalCode;
+    }
+
+    private function isSupportedPostalCode(string $postalCode): bool
+    {
+        return 1 === preg_match('/^\d{5}$/', $postalCode) || 1 === preg_match('/^L-\d{4}$/', $postalCode);
+    }
+
     /**
      * @return array<string, User>
      */
@@ -462,8 +696,9 @@ final class AdminController extends AbstractController
         $status = (string) $request->query->get('status');
         $promotion = (string) $request->query->get('promotion');
         $account = (string) $request->query->get('account');
+        $profile = (string) $request->query->get('profile');
 
-        return array_values(array_filter($portfolios, function (Portfolio $portfolio) use ($usersByEmail, $query, $status, $promotion, $account): bool {
+        return array_values(array_filter($portfolios, function (Portfolio $portfolio) use ($usersByEmail, $query, $status, $promotion, $account, $profile): bool {
             $email = strtolower($portfolio->getEmail());
             $user = $usersByEmail[$email] ?? null;
 
@@ -501,6 +736,14 @@ final class AdminController extends AbstractController
             }
 
             if ('delegate' === $account && (!$user || !in_array('ROLE_DELEGATE', $user->getRoles(), true))) {
+                return false;
+            }
+
+            if ('without_photo' === $profile && null !== $portfolio->getPhotoFilename()) {
+                return false;
+            }
+
+            if ('without_linkedin' === $profile && null !== $portfolio->getLinkedinUrl()) {
                 return false;
             }
 
@@ -600,10 +843,14 @@ final class AdminController extends AbstractController
         return $adminPortfolioIds;
     }
 
-    private function uploadImage(mixed $file, string $label, string $module): ?string
+    private function uploadImage(mixed $file, string $label, string $module, int $maxBytes = 3145728): ?string
     {
         if (!$file instanceof UploadedFile) {
             return null;
+        }
+
+        if ($file->getSize() && $file->getSize() > $maxBytes) {
+            throw $this->createAccessDeniedException('Le fichier transmis est trop volumineux.');
         }
 
         if (!str_starts_with((string) $file->getMimeType(), 'image/')) {
@@ -622,6 +869,21 @@ final class AdminController extends AbstractController
         $file->move($uploadDirectory, $filename);
 
         return $filename;
+    }
+
+    private function deleteUploadedFile(string $module, ?string $filename): void
+    {
+        if (!$filename) {
+            return;
+        }
+
+        $baseDirectory = $this->getParameter('kernel.project_dir').'/public/uploads';
+        $directory = 'portfolios' === $module ? $baseDirectory.'/portfolios' : $baseDirectory.'/admin/'.$module;
+        $path = $directory.'/'.$filename;
+
+        if (is_file($path)) {
+            unlink($path);
+        }
     }
 
     private function slugify(string $value): string
