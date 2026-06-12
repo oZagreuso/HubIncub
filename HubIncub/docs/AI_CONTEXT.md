@@ -205,3 +205,257 @@ docker compose exec php php bin/console doctrine:migrations:migrate --no-interac
 docker compose exec php php bin/console doctrine:schema:validate
 docker compose exec php php bin/console debug:router
 ```
+
+## État Courant Vérifié
+
+Cette section décrit l'état du projet à maintenir comme référence opérationnelle pour les interventions futures. Le style attendu est professionnel, factuel et impersonnel.
+
+### Positionnement
+
+HubIncub est présenté comme le hub des anciens de l'Incubateur de MNS.
+
+Le titre principal de la page d'accueil est :
+
+```text
+Le hub des anciens de l'Incubateur de MNS
+```
+
+La page d'accueil doit mettre en avant le réseau, les derniers contenus administrés et l'accès aux principales rubriques sans adopter une logique de page marketing déconnectée du produit.
+
+### Architecture Applicative
+
+Le projet est une application Symfony organisée selon une structure classique :
+
+- `src/Controller` contient les contrôleurs HTTP.
+- `src/Entity` contient les entités Doctrine.
+- `src/Repository` contient les dépôts Doctrine.
+- `src/Security` contient l'authentificateur personnalisé.
+- `src/EventSubscriber` contient le suivi de présence utilisateur.
+- `templates` contient les vues Twig.
+- `public/styles/modules` contient les modules CSS.
+- `public/images` contient les images statiques.
+- `public/uploads/admin` contient les images administrées.
+- `migrations` contient l'historique des changements de schéma et des données initiales.
+
+Le projet ne doit pas être transformé en application JavaScript côté client. Les vues Twig, le CSS natif et les traitements Symfony doivent rester l'approche principale.
+
+### Contrôleurs Publics
+
+`App\Controller\HomeController` expose les pages publiques et protégées suivantes :
+
+- `app_home` sur `/`, avec affichage de la dernière actualité, du dernier projet et du dernier événement.
+- `app_anciens` sur `/anciens`, protégé par `ROLE_USER`.
+- `app_projets` sur `/projets`.
+- `app_evenements` sur `/evenements`.
+- `app_actualites` sur `/actualites`.
+- `app_mentions_legales` sur `/mentions-legales`.
+
+La page `/anciens` trie les portfolios avec priorité aux administrateurs, puis au délégué, puis aux autres membres. La présence en ligne est calculée à partir des utilisateurs dont `lastSeenAt` date de moins de cinq minutes.
+
+### Administration
+
+`App\Controller\AdminController` centralise l'administration sous `/admin`.
+
+Deux écrans principaux existent :
+
+- `/admin` : tableau de gestion des contenus, membres, projets, événements et actualités.
+- `/admin/members` : gestion dédiée des membres avec filtres et statistiques.
+
+Les formulaires d'administration utilisent un champ `type` et des jetons CSRF de la forme `admin_{type}`. Les actions POST sont distribuées par `handleAdminPost`.
+
+Actions prises en charge :
+
+- création de membre ;
+- modification de fiche membre ;
+- suppression de membre ;
+- passage en ancien étudiant ;
+- désignation du délégué ;
+- création de projet ;
+- création d'événement ;
+- création d'actualité.
+
+Les règles d'autorisation sont les suivantes :
+
+- `ROLE_ADMIN` conserve tous les droits d'administration.
+- `ROLE_DELEGATE` peut accéder à l'administration et ajouter des contenus ou des membres.
+- `ROLE_DELEGATE` ne doit pas pouvoir supprimer un membre, changer un statut, désigner un délégué ou modifier la fiche liée à un compte administrateur.
+- L'administrateur attendu reste Olivier Dal Ferro.
+- Le rôle `ROLE_DELEGATE` doit rester unique.
+
+### Modèle de Données
+
+`Portfolio` représente un membre affiché dans l'annuaire. L'email est unique. Les statuts valides sont exclusivement :
+
+- `Incubateur`
+- `Ancien étudiant`
+
+Les champs métier principaux sont `firstName`, `lastName`, `role`, `url`, `email`, `linkedinUrl` et `promotion`.
+
+`User` représente un compte authentifiable. Il contient l'email, les rôles, le mot de passe haché et `lastSeenAt`. La méthode `getRoles` ajoute toujours `ROLE_USER`. La méthode `isOnline` considère un utilisateur connecté si la dernière activité date de moins de cinq minutes.
+
+`Project` représente un projet administré. Les champs principaux sont `name`, `description`, `url`, `imageFilename` et `imageAlt`.
+
+`Event` représente un événement administré. Les champs principaux sont `title`, `startsAt`, `description`, `imageFilename` et `imageAlt`.
+
+`News` représente une actualité administrée. Les champs principaux sont `title`, `content`, `publishedAt`, `imageFilename` et `imageAlt`. La dernière actualité publiée est utilisée sur la page d'accueil.
+
+### Validation Métier
+
+Lors de la création d'un membre :
+
+- l'email est normalisé en minuscules ;
+- l'email doit être unique côté `Portfolio` et côté `User` ;
+- le mot de passe doit être confirmé ;
+- le mot de passe doit respecter la règle CNIL utilisée par le projet : au moins 12 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial ;
+- l'URL LinkedIn doit être une URL HTTPS dont l'hôte est `linkedin.com` ou un sous-domaine de `linkedin.com` ;
+- la promotion doit être une année sur quatre chiffres ;
+- un compte `User` avec `ROLE_USER` est créé en même temps que la fiche `Portfolio`.
+
+Lors de la modification d'un membre :
+
+- l'email reste synchronisé entre `Portfolio` et `User` si un utilisateur lié existe ;
+- un délégué ne doit pas modifier la fiche d'un administrateur ;
+- seul un administrateur peut modifier le statut.
+
+### Authentification et Sécurité
+
+L'authentification est gérée par `App\Security\LoginFormAuthenticator`.
+
+Le formulaire de connexion valide :
+
+- le captcha arithmétique stocké en session ;
+- le jeton CSRF `authenticate` ;
+- l'email ;
+- le mot de passe.
+
+Après connexion réussie, la session supprime `admin_captcha_answer`. La redirection utilise le chemin cible si présent, sinon `/admin`.
+
+Les règles de sécurité principales sont :
+
+- `/admin` nécessite `ROLE_ADMIN` ou `ROLE_DELEGATE`.
+- `/anciens` nécessite `ROLE_USER`.
+- les mots de passe doivent rester hachés ;
+- aucun mot de passe en clair ne doit être ajouté dans les contrôleurs, templates, migrations ou documentation durable.
+
+### Téléversements
+
+Les images administrées sont stockées sur disque :
+
+- projets : `public/uploads/admin/projects`
+- événements : `public/uploads/admin/events`
+- actualités : `public/uploads/admin/news`
+
+Le nom de fichier est généré par slug ASCII du libellé, suivi d'un suffixe aléatoire de 6 octets encodés en hexadécimal. Le fichier doit être une image selon son type MIME.
+
+La base de données ne stocke jamais l'image binaire. Elle stocke uniquement `imageFilename` et `imageAlt`.
+
+### Interface et Contenus
+
+Les templates publics sont situés dans `templates/home`.
+
+La navigation principale de la page d'accueil donne accès à :
+
+- Réseau ;
+- Projets ;
+- Événements ;
+- Actualités ;
+- Administration.
+
+La page d'accueil utilise :
+
+- le logo HubIncub ;
+- les logos partenaires Metz Numeric School et IFA Business School ;
+- un flux éditorial `À la une` si au moins une actualité, un projet ou un événement existe ;
+- trois cartes de réseau menant vers anciens, projets et événements.
+
+Les images Twig doivent conserver des attributs utiles à la performance et à l'accessibilité : `alt`, `width`, `height`, `loading` lorsque pertinent et `decoding="async"`.
+
+### Palette et Direction Visuelle
+
+La palette est centralisée dans `public/styles/modules/colors.css`.
+
+L'orange de marque courant est plus vif que la version initiale :
+
+```css
+--orange: #ff5a00;
+--orange-dark: #d64a00;
+--orange-hover: #aa3900;
+--orange-soft: #ffe6d8;
+--orange-wash: #fff3ec;
+```
+
+Le contrepoint secondaire courant est un bleu-vert :
+
+```css
+--teal: #0f7c7a;
+--teal-soft: #e2f5f3;
+--teal-wash: #f1fbfa;
+```
+
+Les neutres ont été refroidis pour éviter une interface trop brune :
+
+```css
+--navy: #20242a;
+--navy-hover: #15191f;
+--navy-soft: #edf1f4;
+--navy-ink: #171b20;
+--ink: #262a2f;
+--muted: #66717b;
+--subtle: #8a96a1;
+--line: #dce3e8;
+--line-strong: #c5d0d8;
+--page: #fff7f1;
+--surface: #ffffff;
+--surface-soft: #f7fafb;
+--surface-warm: #ffe9dc;
+```
+
+Les futures évolutions visuelles doivent préserver une interface sobre, professionnelle, lisible et cohérente avec l'identité orange de HubIncub.
+
+### Conventions CSS
+
+`public/styles/app.css` doit rester limité aux imports.
+
+Les styles doivent être ajoutés dans le module pertinent :
+
+- `colors.css` pour les variables ;
+- `base.css` pour la base globale ;
+- `layout.css` pour l'en-tête, les héros, sections et structures générales ;
+- `components.css` pour boutons, cartes, grilles et composants réutilisables ;
+- `pages.css` pour les vues spécifiques ;
+- `responsive.css` pour les adaptations responsive.
+
+Les modifications visuelles doivent réutiliser les variables existantes autant que possible.
+
+### Migrations et Données
+
+Toute modification du schéma Doctrine doit être accompagnée d'une migration.
+
+Les migrations existantes ne doivent pas être supprimées. Les données de démonstration et contenus initiaux déjà présents doivent être traités comme un historique applicatif, sauf demande explicite contraire.
+
+### Vérifications Attendues
+
+Après une modification backend, les vérifications recommandées sont :
+
+```powershell
+docker compose exec php php bin/console doctrine:migrations:migrate --no-interaction
+docker compose exec php php bin/console doctrine:schema:validate
+docker compose exec php php bin/console debug:router
+```
+
+Après une modification PHP ciblée, vérifier au minimum la syntaxe du ou des fichiers modifiés.
+
+Après une modification de Twig ou CSS, vérifier le rendu des pages concernées lorsque l'environnement local est disponible.
+
+### Principes d'Intervention
+
+Les interventions futures doivent :
+
+- conserver une formulation professionnelle et impersonnelle dans la documentation projet ;
+- limiter les modifications au besoin exprimé ;
+- éviter les refontes larges non demandées ;
+- préserver les règles de sécurité et d'accès ;
+- éviter la duplication de logique métier ;
+- ne pas déplacer les responsabilités sans nécessité ;
+- ne pas convertir la base Twig/CSS en architecture frontend lourde ;
+- documenter les changements durables dans ce fichier lorsque cela améliore les interventions futures.

@@ -1,32 +1,32 @@
 /* Jetons de design partagés par tous les modules CSS. */
 :root {
     /* Palette de marque. */
-    --orange: #ff7900;
-    --orange-dark: #cc5d00;
-    --orange-hover: #a84600;
-    --orange-soft: #fff0df;
-    --orange-wash: #fff6ec;
-    --teal: #b66a21;
-    --teal-soft: #fff0dc;
-    --teal-wash: #fff7ea;
+    --orange: #ff5a00;
+    --orange-dark: #d64a00;
+    --orange-hover: #aa3900;
+    --orange-soft: #ffe6d8;
+    --orange-wash: #fff3ec;
+    --teal: #0f7c7a;
+    --teal-soft: #e2f5f3;
+    --teal-wash: #f1fbfa;
 
     /* Couleurs de structure et de texte. */
-    --navy: #2b2118;
-    --navy-hover: #1f160f;
-    --navy-soft: #f7eadc;
-    --navy-ink: #241810;
-    --ink: #2d241c;
-    --muted: #7a6554;
-    --subtle: #9b8572;
-    --line: #ead8c4;
-    --line-strong: #d6b996;
-    --page: #fff3e4;
-    --surface: #fffaf3;
-    --surface-soft: #fff4e6;
-    --surface-warm: #ffead5;
+    --navy: #20242a;
+    --navy-hover: #15191f;
+    --navy-soft: #edf1f4;
+    --navy-ink: #171b20;
+    --ink: #262a2f;
+    --muted: #66717b;
+    --subtle: #8a96a1;
+    --line: #dce3e8;
+    --line-strong: #c5d0d8;
+    --page: #fff7f1;
+    --surface: #ffffff;
+    --surface-soft: #f7fafb;
+    --surface-warm: #ffe9dc;
     --white: #ffffff;
-    --shadow-soft: 0 20px 48px rgba(89, 58, 33, 0.12);
-    --shadow-lift: 0 30px 78px rgba(89, 58, 33, 0.2);
+    --shadow-soft: 0 20px 48px rgba(26, 35, 42, 0.12);
+    --shadow-lift: 0 30px 78px rgba(26, 35, 42, 0.2);
     --danger: #8a1f11;
     --danger-hover: #6f170d;
     --danger-soft: #fff0ec;
