@@ -169,6 +169,80 @@
     text-transform: uppercase;
 }
 
+.network-stats-section {
+    padding: 46px max(32px, calc((100vw - 1180px) / 2));
+    display: grid;
+    grid-template-columns: minmax(260px, 0.8fr) minmax(0, 1.4fr);
+    gap: 32px;
+    align-items: stretch;
+    background:
+        linear-gradient(135deg, var(--navy) 0%, var(--navy-hover) 52%, #2f3a41 100%);
+    color: var(--white);
+}
+
+.network-stats-heading {
+    min-width: 0;
+    align-self: center;
+}
+
+.network-stats-heading h2 {
+    margin-bottom: 0;
+    color: var(--white);
+    font-size: 34px;
+}
+
+.network-stats-heading .eyebrow {
+    color: #ffb56b;
+}
+
+.network-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.network-stat-card {
+    min-width: 0;
+    min-height: 164px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 8px;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.06));
+    box-shadow: 0 22px 46px rgba(0, 0, 0, 0.2);
+}
+
+.network-stat-card span {
+    color: #ffb56b;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.network-stat-card strong {
+    display: block;
+    margin: 14px 0 8px;
+    color: var(--white);
+    font-size: 42px;
+    line-height: 1;
+}
+
+.network-stat-card p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 14px;
+    line-height: 1.45;
+}
+
+.network-stat-event {
+    background:
+        linear-gradient(180deg, rgba(255, 90, 0, 0.28), rgba(15, 124, 122, 0.16));
+}
+
 /* Conteneurs de grille réutilisables. */
 .features,
 .event-list,

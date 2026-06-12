@@ -365,6 +365,7 @@ La page d'accueil utilise :
 
 - le logo HubIncub ;
 - les logos partenaires Metz Numeric School et IFA Business School ;
+- une section `Réseau en chiffres` alimentée par les données réelles : membres, promotions représentées, projets publiés et prochain événement programmé ;
 - un flux éditorial `À la une` si au moins une actualité, un projet ou un événement existe ;
 - trois cartes de réseau menant vers anciens, projets et événements.
 

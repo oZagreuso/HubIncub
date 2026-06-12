@@ -64,6 +64,44 @@
         </aside>
     </section>
 
+    <section class="network-stats-section" aria-label="Indicateurs du réseau">
+        <div class="network-stats-heading">
+            <p class="eyebrow">Réseau en chiffres</p>
+            <h2>Une communauté suivie depuis les données du hub.</h2>
+        </div>
+
+        <div class="network-stats-grid">
+            <article class="network-stat-card">
+                <span>Membres</span>
+                <strong>{{ networkStats.members }}</strong>
+                <p>profils référencés dans l'annuaire</p>
+            </article>
+
+            <article class="network-stat-card">
+                <span>Promotions</span>
+                <strong>{{ networkStats.promotions }}</strong>
+                <p>années représentées dans le réseau</p>
+            </article>
+
+            <article class="network-stat-card">
+                <span>Projets</span>
+                <strong>{{ networkStats.projects }}</strong>
+                <p>initiatives publiées par la communauté</p>
+            </article>
+
+            <article class="network-stat-card network-stat-event">
+                <span>Prochain événement</span>
+                {% if networkStats.upcomingEvent %}
+                    <strong>{{ networkStats.upcomingEvent.startsAt|date('d/m') }}</strong>
+                    <p>{{ networkStats.upcomingEvent.title }}</p>
+                {% else %}
+                    <strong>À venir</strong>
+                    <p>aucun événement programmé pour le moment</p>
+                {% endif %}
+            </article>
+        </div>
+    </section>
+
     {% if latestNews or latestProject or latestEvent %}
         {# Flux éditorial regroupant les derniers contenus administrés sous un même rythme visuel. #}
         <section class="front-feed-section">

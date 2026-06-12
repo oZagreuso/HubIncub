@@ -16,14 +16,39 @@ final class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(
         NewsRepository $newsRepository,
+        PortfolioRepository $portfolioRepository,
         ProjectRepository $projectRepository,
         EventRepository $eventRepository,
     ): Response
     {
+        $upcomingEvent = $eventRepository->createQueryBuilder('e')
+            ->andWhere('e.startsAt IS NOT NULL')
+            ->andWhere('e.startsAt >= :now')
+            ->setParameter('now', new \DateTimeImmutable())
+            ->orderBy('e.startsAt', 'ASC')
+            ->addOrderBy('e.title', 'ASC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        $promotionCount = (int) $portfolioRepository->createQueryBuilder('p')
+            ->select('COUNT(DISTINCT p.promotion)')
+            ->andWhere('p.promotion IS NOT NULL')
+            ->andWhere('p.promotion <> :empty')
+            ->setParameter('empty', '')
+            ->getQuery()
+            ->getSingleScalarResult();
+
         return $this->render('home/index.html.twig', [
             'latestEvent' => $eventRepository->findOneBy([], ['startsAt' => 'DESC', 'title' => 'ASC']),
             'latestNews' => $newsRepository->findLatest(),
             'latestProject' => $projectRepository->findOneBy([], ['id' => 'DESC']),
+            'networkStats' => [
+                'members' => $portfolioRepository->count([]),
+                'promotions' => $promotionCount,
+                'projects' => $projectRepository->count([]),
+                'upcomingEvent' => $upcomingEvent,
+            ],
         ]);
     }
 

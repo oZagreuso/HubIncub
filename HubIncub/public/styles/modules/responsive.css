@@ -83,6 +83,7 @@
     .section,
     .split-section,
     .join-section,
+    .network-stats-section,
     .front-feed-section,
     .directory-hero {
         padding: 58px 22px;
@@ -100,6 +101,7 @@
 
     .features,
     .event-list,
+    .network-stats-section,
     .split-section,
     .latest-news-card,
     .front-highlights-grid,
@@ -116,6 +118,10 @@
     .admin-lists,
     .auth-shell {
         grid-template-columns: 1fr;
+    }
+
+    .network-stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .admin-heading {
@@ -220,10 +226,19 @@
     .content-card > div,
     .features article,
     .event-list article,
+    .network-stat-card,
     .portfolio-card,
     .latest-news-card,
     .legal-card,
     .admin-card {
         padding: 20px;
+    }
+
+    .network-stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .network-stat-card {
+        min-height: 136px;
     }
 }
