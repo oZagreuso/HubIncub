@@ -323,11 +323,6 @@
     backdrop-filter: blur(10px);
 }
 
-.error-brand img {
-    filter: none;
-    mix-blend-mode: multiply;
-}
-
 .error-brand span {
     color: var(--navy);
 }

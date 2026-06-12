@@ -18,23 +18,16 @@ body.is-scrolled .site-header {
     box-shadow: 0 12px 32px rgba(43, 33, 24, 0.1);
 }
 
-/* Bloc de marque associant le logo HubIncub et le libellé texte. */
+/* Bloc de marque textuel renvoyant vers l'accueil. */
 .brand {
     min-width: 0;
     display: inline-flex;
     align-items: center;
-    gap: 12px;
     color: var(--ink);
     text-decoration: none;
     font-size: 18px;
     font-weight: 850;
     letter-spacing: 0;
-}
-
-.brand img {
-    width: 118px;
-    height: 38px;
-    object-fit: contain;
 }
 
 /* Navigation principale. Le style des appels à l'action est défini dans components.css. */
